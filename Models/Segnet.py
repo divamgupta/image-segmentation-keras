@@ -79,6 +79,11 @@ def segnetModel(nClasses , optimizer=None , input_height=360, input_width=480 ):
 
 
 	model.add(Convolution2D( nClasses , 1, 1, border_mode='valid',))
+
+	model.outputHeight = model.output_shape[-2]
+	model.outputWidth = model.output_shape[-1]
+
+
 	model.add(Reshape(( nClasses ,  model.output_shape[-2]*model.output_shape[-1]   ), input_shape=( nClasses , model.output_shape[-2], model.output_shape[-1]  )))
 	
 	model.add(Permute((2, 1)))
