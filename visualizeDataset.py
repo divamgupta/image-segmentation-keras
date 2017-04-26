@@ -3,7 +3,7 @@ import glob
 import numpy as np
 import cv2
 import random
-
+import argparse
 
 def imageSegmentationGenerator( images_path , segs_path ,  n_classes ):
 
@@ -24,6 +24,7 @@ def imageSegmentationGenerator( images_path , segs_path ,  n_classes ):
 
 		img = cv2.imread( im_fn )
 		seg = cv2.imread( seg_fn )
+		print np.unique( seg )
 
 		seg_img = np.zeros_like( seg )
 
@@ -37,4 +38,20 @@ def imageSegmentationGenerator( images_path , segs_path ,  n_classes ):
 		cv2.waitKey()
 
 
-imageSegmentationGenerator( "data/clothes_seg/prepped/images_prepped_train/" ,  "data/clothes_seg/prepped/annotations_prepped_train/" ,  10  ) 
+"""
+
+python visualizeDataset.py \
+ --images="data/clothes_seg/prepped/images_prepped_train/" \
+ --annotations="data/clothes_seg/prepped/annotations_prepped_train/" \
+ --n_classes=10 
+
+"""
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--images", type = str  )
+parser.add_argument("--annotations", type = str  )
+parser.add_argument("--n_classes", type=int )
+args = parser.parse_args()
+
+
+imageSegmentationGenerator(args.images ,  args.annotations  ,  args.n_classes   ) 

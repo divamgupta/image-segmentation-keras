@@ -48,7 +48,7 @@ if validate:
 	val_segs_path = args.val_annotations
 	val_batch_size = args.val_batch_size
 
-m = Models.VGGSegnet.VGGSegnet( 10  , use_vgg_weights=True ,  optimizer='adadelta' , input_image_size=( input_height , input_width )  )
+m = Models.VGGSegnet.VGGSegnet( n_classes  , use_vgg_weights=True ,  optimizer='adadelta' , input_image_size=( input_height , input_width )  )
 
 output_height = m.outputHeight
 output_width = m.outputWidth
