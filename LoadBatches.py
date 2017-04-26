@@ -66,7 +66,7 @@ def imageSegmentationGenerator( images_path , segs_path ,  batch_size,  n_classe
 
 	assert len( images ) == len(segmentations)
 	for im , seg in zip(images,segmentations):
-		assert(  im.split('/')[-1] ==  seg.split('/')[-1] )
+		assert(  im.split('/')[-1].split(".")[0] ==  seg.split('/')[-1].split(".")[0] )
 
 	zipped = itertools.cycle( zip(images,segmentations) )
 
