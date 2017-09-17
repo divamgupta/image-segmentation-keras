@@ -8,6 +8,8 @@ THEANO_FLAGS=device=gpu0,floatX=float32  python train.py \
  --save_weights_path=weights/ex1 \
  --train_images="data/clothes_seg/prepped/images_prepped_train/" \
  --train_annotations="data/clothes_seg/prepped/annotations_prepped_train/" \
+ --val_images="data/clothes_seg/prepped/images_prepped_test/" \
+ --val_annotations="data/clothes_seg/prepped/annotations_prepped_test/" \
  --n_classes=10 \
  --input_height=800 \
  --input_width=550 
@@ -59,8 +61,13 @@ G  = LoadBatches.imageSegmentationGenerator( train_images_path , train_segs_path
 if validate:
 	G2  = LoadBatches.imageSegmentationGenerator( val_images_path , val_segs_path ,  val_batch_size,  n_classes , input_height , input_width , output_height , output_width   )
 
+if not validate:
+	for ep in range( epochs ):
+		m.fit_generator( G , 512  , nb_epoch=1 )
+		m.save_weights( save_weights_path + "." + str( ep ) )
+else:
+	for ep in range( epochs ):
+		m.fit_generator( G , 512  , validation_data=G2 , nb_val_samples=200 ,  nb_epoch=1 )
+		m.save_weights( save_weights_path + "." + str( ep )  )
 
-for ep in range( epochs ):
-	m.fit_generator( G , 512  , nb_epoch=1 )
-	m.save_weights( save_weights_path + "." + str( ep ) )
 
