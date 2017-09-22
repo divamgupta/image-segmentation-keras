@@ -82,7 +82,7 @@ wget "https://github.com/fchollet/deep-learning-models/releases/download/v0.1/vg
 
 To train the model run the following command:
 
-```python
+```
 python train.py \
  --save_weights_path=weights/ex1 \
  --train_images="data/dataset1/images_prepped_train/" \
