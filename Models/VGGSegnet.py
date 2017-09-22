@@ -9,22 +9,11 @@ from keras.layers import *
 
 import os
 file_path = os.path.dirname( os.path.abspath(__file__) )
-
-VGG_Weights_path = file_path+"/../../data/vgg16_weights_th_dim_ordering_th_kernels.h5"
-
-
-# for input(360,480) output will be  ( 170 , 240)
-
-# input_image_size -> ( height , width )
+VGG_Weights_path = file_path+"/../data/vgg16_weights_th_dim_ordering_th_kernels.h5"
 
 
-def VGGSegnet( nClasses ,  input_height=416, input_width=608 , vgg_level=3):
+def VGGSegnet( n_classes ,  input_height=416, input_width=608 , vgg_level=3):
 
-	assert input_height%32 == 0
-	assert input_width%32 == 0
-
-	# https://github.com/fchollet/deep-learning-models/releases/download/v0.1/vgg16_weights_th_dim_ordering_th_kernels.h5
-	n_classes = 3
 	img_input = Input(shape=(3,input_height,input_width))
 
 	x = Conv2D(64, (3, 3), activation='relu', padding='same', name='block1_conv1', data_format='channels_first' )(img_input)
@@ -95,7 +84,7 @@ def VGGSegnet( nClasses ,  input_height=416, input_width=608 , vgg_level=3):
 	outputHeight = o_shape[2]
 	outputWidth = o_shape[3]
 
-	o = (Reshape((  n_classes , outputHeight*outputWidth   )))(o)
+	o = (Reshape((  -1  , outputHeight*outputWidth   )))(o)
 	o = (Permute((2, 1)))(o)
 	o = (Activation('softmax'))(o)
 	model = Model( img_input , o )
@@ -103,3 +92,12 @@ def VGGSegnet( nClasses ,  input_height=416, input_width=608 , vgg_level=3):
 	model.outputHeight = outputHeight
 
 	return model
+
+
+
+
+if __name__ == '__main__':
+	m = VGGSegnet( 101 )
+	from keras.utils import plot_model
+	plot_model( m , show_shapes=True , to_file='model.png')
+

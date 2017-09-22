@@ -2,20 +2,6 @@ import argparse
 import Models , LoadBatches
 
 
-"""
-
-THEANO_FLAGS=device=gpu0,floatX=float32  python train.py \
- --save_weights_path=weights/ex1 \
- --train_images="data/clothes_seg/prepped/images_prepped_train/" \
- --train_annotations="data/clothes_seg/prepped/annotations_prepped_train/" \
- --val_images="data/clothes_seg/prepped/images_prepped_test/" \
- --val_annotations="data/clothes_seg/prepped/annotations_prepped_test/" \
- --n_classes=10 \
- --input_height=800 \
- --input_width=550 
-
-
-"""
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--save_weights_path", type = str  )
@@ -62,7 +48,7 @@ if validate:
 modelFns = { 'vgg_segnet':Models.VGGSegnet.VGGSegnet , 'vgg_unet':Models.VGGUnet.VGGUnet , 'vgg_unet2':Models.VGGUnet.VGGUnet2 , 'fcn8':Models.FCN8.FCN8 , 'fcn32':Models.FCN32.FCN32   }
 modelFN = modelFns[ model_name ]
 
-m = modelFN( n_classes  input_height=input_height, input_width=input_width   )
+m = modelFN( n_classes , input_height=input_height, input_width=input_width   )
 m.compile(loss='categorical_crossentropy',
       optimizer= optimizer_name ,
       metrics=['accuracy'])
@@ -70,6 +56,9 @@ m.compile(loss='categorical_crossentropy',
 
 if len( load_weights ) > 0:
 	m.load_weights(load_weights)
+
+
+print "Model output shape" ,  m.output_shape
 
 output_height = m.outputHeight
 output_width = m.outputWidth
@@ -82,11 +71,13 @@ if validate:
 
 if not validate:
 	for ep in range( epochs ):
-		m.fit_generator( G , 512  , nb_epoch=1 )
+		m.fit_generator( G , 512  , epochs=1 )
 		m.save_weights( save_weights_path + "." + str( ep ) )
+		m.save( save_weights_path + ".model." + str( ep ) )
 else:
 	for ep in range( epochs ):
-		m.fit_generator( G , 512  , validation_data=G2 , nb_val_samples=200 ,  nb_epoch=1 )
+		m.fit_generator( G , 512  , validation_data=G2 , validation_steps=200 ,  epochs=1 )
 		m.save_weights( save_weights_path + "." + str( ep )  )
+		m.save( save_weights_path + ".model." + str( ep ) )
 
 

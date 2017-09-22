@@ -1,4 +1,4 @@
-# Image Segentation Keras : Implementation of Segnet, FCN, UNet and others in Keras.
+# Image Segentation Keras : Implementation of Segnet, FCN, UNet and other models in Keras.
 
 Implememnation of various Deep Image Segmentation models in keras. 
 
@@ -17,10 +17,11 @@ Implememnation of various Deep Image Segmentation models in keras.
 
 * Keras 2.0
 * opencv for python
+* Theano 
 
 ```shell
 sudo apt-get install python-opencv
-sudo pip install --upgrade tensorflow-gpu
+sudo pip install --upgrade theano
 sudo pip install --upgrade keras
 ```
 
@@ -51,7 +52,13 @@ cv2.imwrite( "ann_1.png" ,ann_img )
 
 Only use bmp or png format for the annotation images.
 
+### Download the sample prepared dataset
 
+Download and extract the following:
+
+https://drive.google.com/file/d/0B0d9ZiqAgFkiOHR1NTJhWVJMNEU/view?usp=sharing
+
+Place the dataset1/ folder in data/
 
 ## Visualizing the prepared data
 
@@ -83,19 +90,33 @@ wget "https://github.com/fchollet/deep-learning-models/releases/download/v0.1/vg
 To train the model run the following command:
 
 ```shell
-python train.py \
+THEANO_FLAGS=device=gpu,floatX=float32  python  train.py \
  --save_weights_path=weights/ex1 \
  --train_images="data/dataset1/images_prepped_train/" \
  --train_annotations="data/dataset1/annotations_prepped_train/" \
  --val_images="data/dataset1/images_prepped_test/" \
  --val_annotations="data/dataset1/annotations_prepped_test/" \
  --n_classes=10 \
- --input_height=800 \
- --input_width=550 \
+ --input_height=320 \
+ --input_width=640 \
  --model_name="vgg_segnet" 
 ```
 
 Choose model_name from vgg_segnet  vgg_unet, vgg_unet2, fcn8, fcn32
 
+## Getting the predictions
 
+To get the predictions of a trained model
+
+```shell
+THEANO_FLAGS=device=gpu,floatX=float32  python  predict.py \
+ --save_weights_path=weights/ex1 \
+ --epoch_number=0 \
+ --test_images="data/dataset1/images_prepped_test/" \
+ --output_path="data/predictions/" \
+ --n_classes=10 \
+ --input_height=320 \
+ --input_width=640 \
+ --model_name="vgg_segnet" 
+```
 

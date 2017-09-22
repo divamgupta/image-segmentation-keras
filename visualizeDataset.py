@@ -38,14 +38,6 @@ def imageSegmentationGenerator( images_path , segs_path ,  n_classes ):
 		cv2.waitKey()
 
 
-"""
-
-python visualizeDataset.py \
- --images="data/clothes_seg/prepped/images_prepped_train/" \
- --annotations="data/clothes_seg/prepped/annotations_prepped_train/" \
- --n_classes=10 
-
-"""
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--images", type = str  )
