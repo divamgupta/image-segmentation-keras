@@ -18,7 +18,7 @@ Implememnation of various Deep Image Segmentation models in keras.
 * Keras 2.0
 * opencv for python
 
-```
+```shell
 sudo apt-get install python-opencv
 sudo pip install --upgrade tensorflow-gpu
 sudo pip install --upgrade keras
@@ -55,9 +55,9 @@ Only use bmp or png format for the annotation images.
 
 ## Visualizing the prepared data
 
-You can also visulize your prepared annotations for verification of the prepared data.
+You can also visualize your prepared annotations for verification of the prepared data.
 
-```
+```shell
 python visualizeDataset.py \
  --images="data/dataset1/images_prepped_train/" \
  --annotations="data/dataset1/annotations_prepped_train/" \
@@ -70,7 +70,7 @@ python visualizeDataset.py \
 
 You need to download the pretrained VGG-16 weights trained on imagenet if you want to use VGG based models
 
-```
+```shell
 mkdir data
 cd data
 wget "https://github.com/fchollet/deep-learning-models/releases/download/v0.1/vgg16_weights_th_dim_ordering_th_kernels.h5"
@@ -82,7 +82,7 @@ wget "https://github.com/fchollet/deep-learning-models/releases/download/v0.1/vg
 
 To train the model run the following command:
 
-```
+```shell
 python train.py \
  --save_weights_path=weights/ex1 \
  --train_images="data/dataset1/images_prepped_train/" \
@@ -92,8 +92,10 @@ python train.py \
  --n_classes=10 \
  --input_height=800 \
  --input_width=550 \
- --model_name="vgg_segnet"
+ --model_name="vgg_segnet" 
 ```
+
+Choose model_name from vgg_segnet  vgg_unet, vgg_unet2, fcn8, fcn32
 
 
 

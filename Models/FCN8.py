@@ -1,6 +1,6 @@
 
 # https://github.com/wkentaro/pytorch-fcn/blob/master/torchfcn/models/fcn32s.py
-# assert 0 == 1 # fc weights into the 1x1 convs  , get_upsampling_weight 
+# fc weights into the 1x1 convs  , get_upsampling_weight 
 
 
 
@@ -89,7 +89,7 @@ def FCN8( nClasses ,  input_height=416, input_width=608 , vgg_level=3):
 	x = Dense( 1024 , activation='softmax', name='predictions')(x)
 
 	vgg  = Model(  img_input , x  )
-	# vgg.load_weights(VGG_Weights_path)
+	vgg.load_weights(VGG_Weights_path)
 
 	o = f5
 
