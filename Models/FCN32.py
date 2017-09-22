@@ -1,5 +1,6 @@
 
-
+# https://github.com/wkentaro/pytorch-fcn/blob/master/torchfcn/models/fcn32s.py
+# assert 0 == 1 # fc weights into the 1x1 convs  , get_upsampling_weight 
 
 
 
@@ -18,7 +19,7 @@ VGG_Weights_path = file_path+"/../../data/vgg16_weights_th_dim_ordering_th_kerne
 # input_image_size -> ( height , width )
 
 
-def VGGSegnet( nClasses ,  input_height=416, input_width=608 , vgg_level=3):
+def FCN32( nClasses ,  input_height=416, input_width=608 , vgg_level=3):
 
 	assert input_height%32 == 0
 	assert input_width%32 == 0
@@ -64,42 +65,35 @@ def VGGSegnet( nClasses ,  input_height=416, input_width=608 , vgg_level=3):
 	x = Dense( 1024 , activation='softmax', name='predictions')(x)
 
 	vgg  = Model(  img_input , x  )
-	vgg.load_weights(VGG_Weights_path)
+	# vgg.load_weights(VGG_Weights_path)
 
-	levels = [f1 , f2 , f3 , f4 , f5 ]
+	o = f5
 
-	o = levels[ vgg_level ]
-	
-	o = ( ZeroPadding2D( (1,1) , data_format='channels_first' ))(o)
-	o = ( Conv2D(512, (3, 3), padding='valid', data_format='channels_first'))(o)
-	o = ( BatchNormalization())(o)
+	o = ( Conv2D( 4096 , ( 7 , 7 ) , activation='relu' , padding='same', data_format='channels_first'))(o)
+	o = Dropout(0.5)(o)
+	o = ( Conv2D( 4096 , ( 1 , 1 ) , activation='relu' , padding='same', data_format='channels_first'))(o)
+	o = Dropout(0.5)(o)
 
-	o = ( UpSampling2D( (2,2), data_format='channels_first'))(o)
-	o = ( ZeroPadding2D( (1,1), data_format='channels_first'))(o)
-	o = ( Conv2D( 256, (3, 3), padding='valid', data_format='channels_first'))(o)
-	o = ( BatchNormalization())(o)
-
-	o = ( UpSampling2D((2,2)  , data_format='channels_first' ) )(o)
-	o = ( ZeroPadding2D((1,1) , data_format='channels_first' ))(o)
-	o = ( Conv2D( 128 , (3, 3), padding='valid' , data_format='channels_first' ))(o)
-	o = ( BatchNormalization())(o)
-
-	o = ( UpSampling2D((2,2)  , data_format='channels_first' ))(o)
-	o = ( ZeroPadding2D((1,1)  , data_format='channels_first' ))(o)
-	o = ( Conv2D( 64 , (3, 3), padding='valid'  , data_format='channels_first' ))(o)
-	o = ( BatchNormalization())(o)
-
-
-	o =  Conv2D( n_classes , (3, 3) , padding='same', data_format='channels_first' )( o )
+	o = ( Conv2D( nClasses ,  ( 1 , 1 ) ,kernel_initializer='he_normal' , data_format='channels_first'))(o)
+	o = Conv2DTranspose( nClasses , kernel_size=(64,64) ,  strides=(32,32) , use_bias=False ,  data_format='channels_first' )(o)
 	o_shape = Model(img_input , o ).output_shape
+	
 	outputHeight = o_shape[2]
 	outputWidth = o_shape[3]
 
-	o = (Reshape((  n_classes , outputHeight*outputWidth   )))(o)
-	o = (Permute((2, 1)))(o)
-	o = (Activation('softmax'))(o)
+	print "koko" , o_shape
+
+	o = (Reshape(( -1  , outputHeight*outputWidth   )))(o)
+	# o = (Permute((2, 1)))(o)
+	# o = (Activation('softmax'))(o)
 	model = Model( img_input , o )
 	model.outputWidth = outputWidth
 	model.outputHeight = outputHeight
 
 	return model
+
+
+if __name__ == '__main__':
+	m = FCN32( 101 )
+	from keras.utils import plot_model
+	plot_model( m , show_shapes=True , to_file='model.png')

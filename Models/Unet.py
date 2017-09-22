@@ -1,6 +1,6 @@
 
 
-
+# todo upgrade to keras 2.0
 
 from keras.models import Sequential
 from keras.layers import Reshape
@@ -23,7 +23,7 @@ from keras import backend as K
 
 
 
-def unet_2d (nClasses , optimizer=None , input_width=360 , input_height=480 , nChannels=1 ): 
+def Unet (nClasses , optimizer=None , input_width=360 , input_height=480 , nChannels=1 ): 
     
     inputs = Input((nChannels, input_height, input_width))
     conv1 = Convolution2D(32, 3, 3, activation='relu', border_mode='same')(inputs)

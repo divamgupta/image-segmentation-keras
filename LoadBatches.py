@@ -5,7 +5,7 @@ import glob
 import itertools
 
 
-def getImageArr( path , width , height , imgNorm="sub_mean" ):
+def getImageArr( path , width , height , imgNorm="sub_mean" , odering='channels_first' ):
 
 	try:
 		img = cv2.imread(path, 1)
@@ -23,12 +23,14 @@ def getImageArr( path , width , height , imgNorm="sub_mean" ):
 			img = img.astype(np.float32)
 			img = img/255.0
 
-		img = np.rollaxis(img, 2, 0)
+		if odering == 'channels_first':
+			img = np.rollaxis(img, 2, 0)
 		return img
 	except Exception, e:
 		print path , e
 		img = np.zeros((  height , width  , 3 ))
-		img = np.rollaxis(img, 2, 0)
+		if odering == 'channels_first':
+			img = np.rollaxis(img, 2, 0)
 		return img
 
 

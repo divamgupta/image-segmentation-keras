@@ -1,5 +1,5 @@
 
-
+# todo upgrade to keras 2.0
 
 
 from keras.models import Sequential
@@ -22,7 +22,7 @@ from keras import backend as K
 
 
 
-def segnetModel(nClasses , optimizer=None , input_height=360, input_width=480 ):
+def segnet(nClasses , optimizer=None , input_height=360, input_width=480 ):
 
 	kernel = 3
 	filter_size = 64
