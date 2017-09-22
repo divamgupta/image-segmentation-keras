@@ -1,10 +1,12 @@
 # Image Segentation Keras : Implementation of Segnet, FCN, UNet and other models in Keras.
 
+Implememnation of various Deep Image Segmentation models in keras. 
+
+
 <p align="center">
-  <img src="https://raw.githubusercontent.com/sunshineatnoon/Paper-Collection/master/images/FCN1.png">
+  <img src="https://raw.githubusercontent.com/sunshineatnoon/Paper-Collection/master/images/FCN1.png" width="50%" >
 </p>
 
-Implememnation of various Deep Image Segmentation models in keras. 
 
 ## Models 
 
