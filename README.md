@@ -1,4 +1,4 @@
-# Image Segentation Keras : Implementation of Segnet, FCN, UNet and other models in Keras.
+# Image Segmentation Keras : Implementation of Segnet, FCN, UNet and other models in Keras.
 
 Implememnation of various Deep Image Segmentation models in keras. 
 
