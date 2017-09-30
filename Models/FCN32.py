@@ -58,7 +58,7 @@ def FCN32( n_classes ,  input_height=416, input_width=608 , vgg_level=3):
 	x = Flatten(name='flatten')(x)
 	x = Dense(4096, activation='relu', name='fc1')(x)
 	x = Dense(4096, activation='relu', name='fc2')(x)
-	x = Dense( 1024 , activation='softmax', name='predictions')(x)
+	x = Dense( 1000 , activation='softmax', name='predictions')(x)
 
 	vgg  = Model(  img_input , x  )
 	vgg.load_weights(VGG_Weights_path)
