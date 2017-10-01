@@ -1,26 +1,25 @@
-
 import glob
 import numpy as np
 import cv2
 import random
 import argparse
 
-def imageSegmentationGenerator( images_path , segs_path ,  n_classes ):
 
+def imageSegmentationGenerator( images_path , segs_path ,  n_classes ):
 	assert images_path[-1] == '/'
 	assert segs_path[-1] == '/'
 
-	images = glob.glob( images_path + "*.jpg"  ) + glob.glob( images_path + "*.png"  ) +  glob.glob( images_path + "*.jpeg"  )
+	images = glob.glob(os.path.join(images_path, "*.jpg")) + glob.glob(os.path.join(images_path, "*.png")) + glob.glob(os.path.join(images_path, "*.jpeg"))
 	images.sort()
-	segmentations  = glob.glob( segs_path + "*.jpg"  ) + glob.glob( segs_path + "*.png"  ) +  glob.glob( segs_path + "*.jpeg"  )
+	segmentations  = glob.glob(os.path.join(segs_path, "*.jpg")) + glob.glob(os.path.join(segs_path, "*.png")) + glob.glob(os.path.join(segs_path, "*.jpeg"))
 	segmentations.sort()
 
-	colors = [  ( random.randint(0,255),random.randint(0,255),random.randint(0,255)   ) for _ in range(n_classes)  ]
+	colors = [( random.randint(0,255),random.randint(0,255),random.randint(0,255)) for _ in range(n_classes)]
 
-	assert len( images ) == len(segmentations)
+	assert len(images) == len(segmentations)
 
 	for im_fn , seg_fn in zip(images,segmentations):
-		assert(  im_fn.split('/')[-1] ==  seg_fn.split('/')[-1] )
+		assert( im_fn.split('/')[-1] ==  seg_fn.split('/')[-1])
 
 		img = cv2.imread( im_fn )
 		seg = cv2.imread( seg_fn )
@@ -38,12 +37,10 @@ def imageSegmentationGenerator( images_path , segs_path ,  n_classes ):
 		cv2.waitKey()
 
 
-
 parser = argparse.ArgumentParser()
 parser.add_argument("--images", type = str  )
 parser.add_argument("--annotations", type = str  )
 parser.add_argument("--n_classes", type=int )
 args = parser.parse_args()
 
-
-imageSegmentationGenerator(args.images ,  args.annotations  ,  args.n_classes   ) 
+imageSegmentationGenerator(args.images, args.annotations, args.n_classes) 

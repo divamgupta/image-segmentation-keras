@@ -5,13 +5,12 @@ import os
 file_path = os.path.dirname( os.path.abspath(__file__) )
 
 
-VGG_Weights_path = file_path+"/../data/vgg16_weights_th_dim_ordering_th_kernels.h5"
+VGG_Weights_path = os.path.join(file_path, "..", "data", "vgg16_weights_th_dim_ordering_th_kernels.h5")
 
 IMAGE_ORDERING = 'channels_first'
 
 
 def VGGUnet( n_classes ,  input_height=416, input_width=608 , vgg_level=3):
-
 	assert input_height%32 == 0
 	assert input_width%32 == 0
 
@@ -22,6 +21,7 @@ def VGGUnet( n_classes ,  input_height=416, input_width=608 , vgg_level=3):
 	x = Conv2D(64, (3, 3), activation='relu', padding='same', name='block1_conv2', data_format=IMAGE_ORDERING )(x)
 	x = MaxPooling2D((2, 2), strides=(2, 2), name='block1_pool', data_format=IMAGE_ORDERING )(x)
 	f1 = x
+
 	# Block 2
 	x = Conv2D(128, (3, 3), activation='relu', padding='same', name='block2_conv1', data_format=IMAGE_ORDERING )(x)
 	x = Conv2D(128, (3, 3), activation='relu', padding='same', name='block2_conv2', data_format=IMAGE_ORDERING )(x)
@@ -83,7 +83,6 @@ def VGGUnet( n_classes ,  input_height=416, input_width=608 , vgg_level=3):
 	o = ( Conv2D( 64 , (3, 3), padding='valid'  , data_format=IMAGE_ORDERING ))(o)
 	o = ( BatchNormalization())(o)
 
-
 	o =  Conv2D( n_classes , (3, 3) , padding='same', data_format=IMAGE_ORDERING )( o )
 	o_shape = Model(img_input , o ).output_shape
 	outputHeight = o_shape[2]
@@ -96,13 +95,10 @@ def VGGUnet( n_classes ,  input_height=416, input_width=608 , vgg_level=3):
 	model.outputWidth = outputWidth
 	model.outputHeight = outputHeight
 
-
-
 	return model
 
 
 def VGGUnet2( n_classes ,  input_height=416, input_width=608 , vgg_level=3):
-
 	assert input_height%32 == 0
 	assert input_width%32 == 0
 
@@ -113,6 +109,7 @@ def VGGUnet2( n_classes ,  input_height=416, input_width=608 , vgg_level=3):
 	x = Conv2D(64, (3, 3), activation='relu', padding='same', name='block1_conv2', data_format=IMAGE_ORDERING )(x)
 	x = MaxPooling2D((2, 2), strides=(2, 2), name='block1_pool', data_format=IMAGE_ORDERING )(x)
 	f1 = x
+
 	# Block 2
 	x = Conv2D(128, (3, 3), activation='relu', padding='same', name='block2_conv1', data_format=IMAGE_ORDERING )(x)
 	x = Conv2D(128, (3, 3), activation='relu', padding='same', name='block2_conv2', data_format=IMAGE_ORDERING )(x)
@@ -174,7 +171,6 @@ def VGGUnet2( n_classes ,  input_height=416, input_width=608 , vgg_level=3):
 	o = ( Conv2D( 64 , (3, 3), padding='valid'  , data_format=IMAGE_ORDERING ))(o)
 	o = ( BatchNormalization())(o)
 
-
 	o =  Conv2D( n_classes , (3, 3) , padding='same', data_format=IMAGE_ORDERING )( o )
 	o_shape = Model(img_input , o ).output_shape
 	outputHeight = o_shape[2]
@@ -187,7 +183,4 @@ def VGGUnet2( n_classes ,  input_height=416, input_width=608 , vgg_level=3):
 	model.outputWidth = outputWidth
 	model.outputHeight = outputHeight
 
-
-
 	return model
-
