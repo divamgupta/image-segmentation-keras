@@ -7,6 +7,9 @@ Implememnation of various Deep Image Segmentation models in keras.
   <img src="https://raw.githubusercontent.com/sunshineatnoon/Paper-Collection/master/images/FCN1.png" width="50%" >
 </p>
 
+## Our Other Repositories 
+- [Attention based Language Translation in Keras](https://github.com/divamgupta/attention-translation-keras)
+
 
 ## Models 
 
