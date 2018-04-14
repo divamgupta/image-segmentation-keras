@@ -1,7 +1,3 @@
-
-
-# todo upgrade to keras 2.0
-
 from keras.models import Sequential
 from keras.layers import Reshape
 from keras.models import Model
@@ -18,9 +14,6 @@ from keras.layers.embeddings import Embedding
 from keras.utils import np_utils
 from keras.regularizers import ActivityRegularizer
 from keras import backend as K
-
-
-
 
 
 def Unet (nClasses , optimizer=None , input_width=360 , input_height=480 , nChannels=1 ): 
@@ -54,7 +47,6 @@ def Unet (nClasses , optimizer=None , input_width=360 , input_height=480 , nChan
     conv6 = core.Reshape((nClasses,input_height*input_width))(conv6)
     conv6 = core.Permute((2,1))(conv6)
 
-
     conv7 = core.Activation('softmax')(conv6)
 
     model = Model(input=inputs, output=conv7)
@@ -63,7 +55,3 @@ def Unet (nClasses , optimizer=None , input_width=360 , input_height=480 , nChan
 	    model.compile(loss="categorical_crossentropy", optimizer= optimizer , metrics=['accuracy'] )
 	
     return model
-	
-	
-	
-

@@ -1,7 +1,3 @@
-
-# todo upgrade to keras 2.0
-
-
 from keras.models import Sequential
 from keras.layers import Reshape
 from keras.layers import Merge
@@ -15,11 +11,7 @@ from keras.layers.advanced_activations import LeakyReLU
 from keras.optimizers import Adam , SGD
 from keras.layers.embeddings import Embedding
 from keras.utils import np_utils
-# from keras.regularizers import ActivityRegularizer
 from keras import backend as K
-
-
-
 
 
 def segnet(nClasses , optimizer=None , input_height=360, input_width=480 ):
@@ -56,7 +48,6 @@ def segnet(nClasses , optimizer=None , input_height=360, input_width=480 ):
 	model.add(BatchNormalization())
 	model.add(Activation('relu'))
 
-
 	# decoder
 	model.add( ZeroPadding2D(padding=(pad,pad)))
 	model.add( Convolution2D(512, kernel, kernel, border_mode='valid'))
@@ -77,12 +68,10 @@ def segnet(nClasses , optimizer=None , input_height=360, input_width=480 ):
 	model.add( Convolution2D(filter_size, kernel, kernel, border_mode='valid'))
 	model.add( BatchNormalization())
 
-
 	model.add(Convolution2D( nClasses , 1, 1, border_mode='valid',))
 
 	model.outputHeight = model.output_shape[-2]
 	model.outputWidth = model.output_shape[-1]
-
 
 	model.add(Reshape(( nClasses ,  model.output_shape[-2]*model.output_shape[-1]   ), input_shape=( nClasses , model.output_shape[-2], model.output_shape[-1]  )))
 	
@@ -93,4 +82,3 @@ def segnet(nClasses , optimizer=None , input_height=360, input_width=480 ):
 		model.compile(loss="categorical_crossentropy", optimizer= optimizer , metrics=['accuracy'] )
 	
 	return model
-
