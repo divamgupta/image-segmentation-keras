@@ -71,10 +71,14 @@ def predict( model=None , inp=None , out_fname=None , checkpoints_path=None  ):
 	return pr
 
 
-def predict_multiple( model=None , inps=None , out_dir=None , checkpoints_path=None  ):
+def predict_multiple( model=None , inps=None , inp_dir=None, out_dir=None , checkpoints_path=None  ):
 
 	if model is None and ( not checkpoints_path is None ):
 		model = model_from_checkpoint_path(checkpoints_path)
+
+
+	if inps is None and ( not inp_dir is None ):
+		inps = glob.glob( os.path.join(inp_dir,"*.jpg")  ) + glob.glob( os.path.join(inp_dir,"*.png")  ) +  glob.glob( os.path.join(inp_dir,"*.jpeg")  )
 
 	assert type(inps) is list
 	

@@ -40,35 +40,29 @@ def get_pairs_from_paths( images_path , segs_path ):
 
 def get_image_arr( path , width , height , imgNorm="sub_mean" , odering='channels_first' ):
 
-	try:
 
-		if type( path ) is np.ndarray:
-			img = path
-		else:
-			img = cv2.imread(path, 1)
+	if type( path ) is np.ndarray:
+		img = path
+	else:
+		img = cv2.imread(path, 1)
 
-		if imgNorm == "sub_and_divide":
-			img = np.float32(cv2.resize(img, ( width , height ))) / 127.5 - 1
-		elif imgNorm == "sub_mean":
-			img = cv2.resize(img, ( width , height ))
-			img = img.astype(np.float32)
-			img[:,:,0] -= 103.939
-			img[:,:,1] -= 116.779
-			img[:,:,2] -= 123.68
-		elif imgNorm == "divide":
-			img = cv2.resize(img, ( width , height ))
-			img = img.astype(np.float32)
-			img = img/255.0
+	if imgNorm == "sub_and_divide":
+		img = np.float32(cv2.resize(img, ( width , height ))) / 127.5 - 1
+	elif imgNorm == "sub_mean":
+		img = cv2.resize(img, ( width , height ))
+		img = img.astype(np.float32)
+		img[:,:,0] -= 103.939
+		img[:,:,1] -= 116.779
+		img[:,:,2] -= 123.68
+	elif imgNorm == "divide":
+		img = cv2.resize(img, ( width , height ))
+		img = img.astype(np.float32)
+		img = img/255.0
 
-		if odering == 'channels_first':
-			img = np.rollaxis(img, 2, 0)
-		return img
-	except Exception, e:
-		print path , e
-		img = np.zeros((  height , width  , 3 ))
-		if odering == 'channels_first':
-			img = np.rollaxis(img, 2, 0)
-		return img
+	if odering == 'channels_first':
+		img = np.rollaxis(img, 2, 0)
+	return img
+
 
 
 
@@ -77,21 +71,19 @@ def get_image_arr( path , width , height , imgNorm="sub_mean" , odering='channel
 def get_segmentation_arr( path , nClasses ,  width , height , no_reshape=False ):
 
 	seg_labels = np.zeros((  height , width  , nClasses ))
-	try:
 		
-		if type( path ) is np.ndarray:
-			img = path
-		else:
-			img = cv2.imread(path, 1)
+	if type( path ) is np.ndarray:
+		img = path
+	else:
+		img = cv2.imread(path, 1)
 
-		img = cv2.resize(img, ( width , height ))
-		img = img[:, : , 0]
+	img = cv2.resize(img, ( width , height ))
+	img = img[:, : , 0]
 
-		for c in range(nClasses):
-			seg_labels[: , : , c ] = (img == c ).astype(int)
+	for c in range(nClasses):
+		seg_labels[: , : , c ] = (img == c ).astype(int)
 
-	except Exception, e:
-		print e
+
 	
 	if no_reshape:
 		return seg_labels
