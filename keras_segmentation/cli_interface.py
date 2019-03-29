@@ -22,19 +22,19 @@ def cli_train():
 	parser.add_argument("--input_height", type=int , default = None  )
 	parser.add_argument("--input_width", type=int , default = None )
 
-	parser.add_argument('--verify_dataset',action='store_true')
+	parser.add_argument('--not_verify_dataset',action='store_false')
 	parser.add_argument("--checkpoints_path", type = str  , default = None   )
 	parser.add_argument("--epochs", type = int, default = 5 )
 	parser.add_argument("--batch_size", type = int, default = 2 )
 	
 
-	parser.add_argument('--validate',action='store_false')
+	parser.add_argument('--validate',action='store_true')
 	parser.add_argument("--val_images", type = str , default = "")
 	parser.add_argument("--val_annotations", type = str , default = "")
 		
 	parser.add_argument("--val_batch_size", type = int, default = 2 )
 	parser.add_argument("--load_weights", type = str , default = None )
-	parser.add_argument('--auto_resume_checkpoint',action='store_false')
+	parser.add_argument('--auto_resume_checkpoint',action='store_true')
 
 	parser.add_argument("--steps_per_epoch", type = int, default = 512 )
 	parser.add_argument("--optimizer_name", type = str , default = "adadelta")
@@ -111,7 +111,7 @@ def cli_visualize_dataset():
 	parser.add_argument("--images_path", type = str   )
 	parser.add_argument("--segs_path", type = str   )
 	parser.add_argument("--n_classes", type=int  )
-	parser.add_argument('--do_augment',action='store_false')
+	parser.add_argument('--do_augment',action='store_true')
 
 	args = parser.parse_args()
 
