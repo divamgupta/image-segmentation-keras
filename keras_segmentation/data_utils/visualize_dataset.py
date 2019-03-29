@@ -5,8 +5,8 @@ import cv2
 import random
 import argparse
 
-from augmentation import augment_seg
-from data_loader import get_pairs_from_paths
+from .augmentation import augment_seg
+from .data_loader import get_pairs_from_paths
 
 random.seed(0)
 class_colors = [  ( random.randint(0,255),random.randint(0,255),random.randint(0,255)   ) for _ in range(5000)  ]

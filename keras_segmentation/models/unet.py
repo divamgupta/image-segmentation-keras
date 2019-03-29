@@ -132,5 +132,4 @@ if __name__ == '__main__':
 	m = _unet( 101 , get_vgg_encoder )
 	m = _unet( 101 , get_resnet50_encoder )
 	
-	print "all good"
 

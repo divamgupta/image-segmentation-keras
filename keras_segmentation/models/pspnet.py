@@ -79,21 +79,21 @@ def _pspnet( n_classes , encoder ,  input_height=384, input_width=576  ):
 
 
 
-def pspnet(  n_classes ,  input_height=416, input_width=608  ) : 
+def pspnet(  n_classes ,  input_height=384, input_width=576  ) : 
 	
 	model =  _pspnet( n_classes , vanilla_encoder ,  input_height=input_height, input_width=input_width  )
 	model.model_name = "pspnet"
 	return model
 
 
-def vgg_pspnet( n_classes ,  input_height=416, input_width=608 ):
+def vgg_pspnet( n_classes ,  input_height=384, input_width=576 ):
 
 	model =  _pspnet( n_classes , get_vgg_encoder ,  input_height=input_height, input_width=input_width  )
 	model.model_name = "vgg_pspnet"
 	return model
 
 
-def resnet50_pspnet( n_classes ,  input_height=416, input_width=608 ):
+def resnet50_pspnet( n_classes ,  input_height=384, input_width=576 ):
 
 	model =  _pspnet( n_classes , get_resnet50_encoder ,  input_height=input_height, input_width=input_width  )
 	model.model_name = "resnet50_pspnet"
@@ -101,11 +101,11 @@ def resnet50_pspnet( n_classes ,  input_height=416, input_width=608 ):
 
 
 
-def mobilenet_pspnet( n_classes ,  input_height=224, input_width=224 ):
+# def mobilenet_pspnet( n_classes ,  input_height=224, input_width=224 ):
 
-	model =  _pspnet( n_classes , get_mobilenet_encoder ,  input_height=input_height, input_width=input_width  )
-	model.model_name = "mobilenet_pspnet"
-	return model
+# 	model =  _pspnet( n_classes , get_mobilenet_encoder ,  input_height=input_height, input_width=input_width  )
+# 	model.model_name = "mobilenet_pspnet"
+# 	return model
 
 
 
@@ -117,7 +117,6 @@ if __name__ == '__main__':
 	m = _pspnet( 101 , get_vgg_encoder )
 	m = _pspnet( 101 , get_resnet50_encoder )
 	
-	print "all good"
 
 
 

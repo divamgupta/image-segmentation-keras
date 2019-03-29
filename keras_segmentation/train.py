@@ -1,9 +1,9 @@
 import argparse
 import json
-from data_utils.data_loader import image_segmentation_generator , verify_segmentation_dataset
+from .data_utils.data_loader import image_segmentation_generator , verify_segmentation_dataset
 from .models import model_from_name
 import os
-
+import six
 
 def find_latest_checkpoint( checkpoints_path ):
 	ep = 0
@@ -40,7 +40,7 @@ def train( model  ,
 	):
 
 
-	if type(model ) is str or type( model ) is unicode: # check if user gives model name insteead of the model object
+	if  isinstance(model, six.string_types) : # check if user gives model name insteead of the model object
 		# create the model from the name
 		assert ( not n_classes is None ) , "Please provide the n_classes"
 		if (not input_height is None ) and ( not input_width is None):

@@ -15,7 +15,7 @@ from .models.config import IMAGE_ORDERING
 from . import  metrics 
 from .models import model_from_name
 
-
+import six
 
 random.seed(0)
 class_colors = [  ( random.randint(0,255),random.randint(0,255),random.randint(0,255)   ) for _ in range(5000)  ]
@@ -39,26 +39,26 @@ def predict( model=None , inp=None , out_fname=None , checkpoints_path=None  ):
 		model = model_from_checkpoint_path(checkpoints_path)
 
 	assert ( not inp is None )
-	assert( (type(inp) is np.ndarray ) or (type(inp) is str ) or (type(inp) is unicode ) ) , "Inupt should be the CV image or the input file name"
- 	
- 	if (type(inp) is str ) or (type(inp) is unicode ) :
- 		inp = cv2.imread(inp )
+	assert( (type(inp) is np.ndarray ) or  isinstance( inp , six.string_types)  ) , "Inupt should be the CV image or the input file name"
+	
+	if isinstance( inp , six.string_types)  :
+		inp = cv2.imread(inp )
 
 
- 	output_width = model.output_width
+	output_width = model.output_width
 	output_height  = model.output_height
 	input_width = model.input_width
 	input_height = model.input_height
 	n_classes = model.n_classes
 
- 	x = get_image_arr( inp , input_width  , input_height , odering=IMAGE_ORDERING )
- 	pr = model.predict( np.array([x]) )[0]
- 	pr = pr.reshape(( output_height ,  output_width , n_classes ) ).argmax( axis=2 )
+	x = get_image_arr( inp , input_width  , input_height , odering=IMAGE_ORDERING )
+	pr = model.predict( np.array([x]) )[0]
+	pr = pr.reshape(( output_height ,  output_width , n_classes ) ).argmax( axis=2 )
 
- 	seg_img = np.zeros( ( output_height , output_width , 3  ) )
- 	colors = class_colors
+	seg_img = np.zeros( ( output_height , output_width , 3  ) )
+	colors = class_colors
 
- 	for c in range(n_classes):
+	for c in range(n_classes):
 		seg_img[:,:,0] += ( (pr[:,: ] == c )*( colors[c][0] )).astype('uint8')
 		seg_img[:,:,1] += ((pr[:,: ] == c )*( colors[c][1] )).astype('uint8')
 		seg_img[:,:,2] += ((pr[:,: ] == c )*( colors[c][2] )).astype('uint8')
@@ -88,7 +88,7 @@ def predict_multiple( model=None , inps=None , inp_dir=None, out_dir=None , chec
 		if out_dir is None:
 			out_fname = None
 		else:
-			if (type(inp) is str ) or (type(inp) is unicode ) :
+			if isinstance( inp , six.string_types)  :
 				out_fname = os.path.join( out_dir , os.path.basename(inp) )
 			else :
 				out_fname = os.path.join( out_dir , str(i)+ ".jpg" )

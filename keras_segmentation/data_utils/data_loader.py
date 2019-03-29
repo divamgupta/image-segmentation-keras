@@ -7,7 +7,7 @@ import os
 from tqdm import tqdm
 
 from ..models.config import IMAGE_ORDERING
-from augmentation import augment_seg
+from .augmentation import augment_seg
 import random
 
 random.seed(0)
@@ -119,7 +119,7 @@ def image_segmentation_generator( images_path , segs_path ,  batch_size,  n_clas
 		X = []
 		Y = []
 		for _ in range( batch_size) :
-			im , seg = zipped.next()
+			im , seg = next(zipped) 
 
 			im = cv2.imread(im , 1 )
 			seg = cv2.imread(seg , 1 )

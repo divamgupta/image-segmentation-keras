@@ -21,7 +21,7 @@ def test_verify():
 def test_datag():
 	g = image_segmentation_generator( images_path=tr_im , segs_path=tr_an ,  batch_size=3 ,  n_classes=50 , input_height=224 , input_width=324 , output_height=114 , output_width=134  , do_augment=False )
 
-	x , y = g.next()
+	x , y = next(g)
 	assert x.shape[0] == 3
 	assert y.shape[0] == 3
 
