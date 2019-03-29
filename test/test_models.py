@@ -52,7 +52,7 @@ def test_model( ):
 	predict_multiple(inp_dir=te_im  , checkpoints_path=check_path  , out_dir="/tmp")
 	predict_multiple(inps=[np.zeros((h , w , 3 ))]*3  , checkpoints_path=check_path  , out_dir="/tmp")
 
-	o = predict(np.zeros((h , w , 3 ))   , checkpoints_path=check_path   )
+	o = predict(inp=np.zeros((h , w , 3 ))   , checkpoints_path=check_path   )
 	o.shape
 
 
