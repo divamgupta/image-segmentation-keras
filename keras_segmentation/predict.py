@@ -45,8 +45,8 @@ def predict( model=None , inp=None , out_fname=None , checkpoints_path=None  ):
  		inp = cv2.imread(inp )
 
 
- 	output_height = model.output_width
-	output_width = model.output_height
+ 	output_width = model.output_width
+	output_height  = model.output_height
 	input_width = model.input_width
 	input_height = model.input_height
 	n_classes = model.n_classes

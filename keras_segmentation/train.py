@@ -106,7 +106,6 @@ def train( model  ,
 			model.fit_generator( train_gen , steps_per_epoch  , epochs=1 )
 			if not checkpoints_path is None:
 				model.save_weights( checkpoints_path + "." + str( ep ) )
-				model.save( checkpoints_path + ".model." + str( ep ) )
 				print("saved " , checkpoints_path + ".model." + str( ep ) )
 			print("Finished Epoch" , ep )
 	else:
@@ -115,7 +114,6 @@ def train( model  ,
 			model.fit_generator( train_gen , steps_per_epoch  , validation_data=val_gen , validation_steps=200 ,  epochs=1 )
 			if not checkpoints_path is None:
 				model.save_weights( checkpoints_path + "." + str( ep )  )
-				model.save( checkpoints_path + ".model." + str( ep ) )
 				print("saved " , checkpoints_path + ".model." + str( ep ) )
 			print("Finished Epoch" , ep )
 

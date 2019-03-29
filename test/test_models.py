@@ -30,7 +30,7 @@ def test_datag():
 
 
 def test_model( ):
-	model_name = "unet_mini"
+	model_name = "fcn_8"
 	h = 224
 	w = 256
 	n_c = 100

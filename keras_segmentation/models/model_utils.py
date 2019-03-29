@@ -4,6 +4,7 @@ from keras.layers import *
 import keras.backend as K
 from types import MethodType
 
+
 from .config import IMAGE_ORDERING
 from ..train import train
 from ..predict import predict , predict_multiple , evaluate
@@ -21,12 +22,16 @@ def resize_image( inp ,  s , data_format ):
 
 	except Exception as e:
 
-		return Lambda( lambda x: K.resize_images(x, 
-			height_factor=s[0], 
-			width_factor=s[1], 
-			data_format=data_format ) )( inp )
+		# if keras is old , then rely on the tf function ... sorry theono/cntk users . 
+		assert data_format == 'channels_last'
+		assert IMAGE_ORDERING == 'channels_last'
 
-	
+		import tensorflow as tf
+
+		return Lambda( 
+			lambda x: tf.image.resize_images(
+				x , ( K.int_shape(x)[1]*s[0] ,K.int_shape(x)[2]*s[1] ))  
+			)( inp )
 
 
 def get_segmentation_model( input , output ):

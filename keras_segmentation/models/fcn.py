@@ -15,12 +15,21 @@ from .resnet50 import get_resnet50_encoder
 # crop o1 wrt o2
 def crop( o1 , o2 , i  ):
 	o_shape2 = Model( i  , o2 ).output_shape
-	output_height2 = o_shape2[2]
-	output_width2 = o_shape2[3]
+
+	if IMAGE_ORDERING == 'channels_first':
+		output_height2 = o_shape2[2]
+		output_width2 = o_shape2[3]
+	else:
+		output_height2 = o_shape2[1]
+		output_width2 = o_shape2[2]
 
 	o_shape1 = Model( i  , o1 ).output_shape
-	output_height1 = o_shape1[2]
-	output_width1 = o_shape1[3]
+	if IMAGE_ORDERING == 'channels_first':
+		output_height1 = o_shape1[2]
+		output_width1 = o_shape1[3]
+	else:
+		output_height1 = o_shape1[1]
+		output_width1 = o_shape1[2]
 
 	cx = abs( output_width1 - output_width2 )
 	cy = abs( output_height2 - output_height1 )
