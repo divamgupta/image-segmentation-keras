@@ -24,7 +24,6 @@ def test_datag():
 	x , y = next(g)
 	assert x.shape[0] == 3
 	assert y.shape[0] == 3
-
 	assert y.shape[-1] == 50
 
 
