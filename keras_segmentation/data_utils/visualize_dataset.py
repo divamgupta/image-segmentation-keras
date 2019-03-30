@@ -41,6 +41,37 @@ def visualize_segmentation_dataset( images_path , segs_path ,  n_classes , do_au
 		cv2.waitKey()
 
 
+
+def visualize_segmentation_dataset_one( images_path , segs_path ,  n_classes , do_augment=False , no_show=False ):
+
+	img_seg_pairs = get_pairs_from_paths( images_path , segs_path )
+
+	colors = class_colors
+
+	im_fn , seg_fn = random.choice(img_seg_pairs) 
+
+	img = cv2.imread( im_fn )
+	seg = cv2.imread( seg_fn )
+	print("Found the following classes" , np.unique( seg ))
+
+	seg_img = np.zeros_like( seg )
+
+	if do_augment:
+		img , seg[:,:,0] = augment_seg( img , seg[:,:,0] )
+
+	for c in range(n_classes):
+		seg_img[:,:,0] += ( (seg[:,:,0] == c )*( colors[c][0] )).astype('uint8')
+		seg_img[:,:,1] += ((seg[:,:,0] == c )*( colors[c][1] )).astype('uint8')
+		seg_img[:,:,2] += ((seg[:,:,0] == c )*( colors[c][2] )).astype('uint8')
+
+	if not no_show:
+		cv2.imshow("img" , img )
+		cv2.imshow("seg_img" , seg_img )
+		cv2.waitKey()
+
+	return img , seg_img
+
+
 if __name__ == "__main__":
 
 	parser = argparse.ArgumentParser()

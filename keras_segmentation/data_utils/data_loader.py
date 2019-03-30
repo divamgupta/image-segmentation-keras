@@ -16,9 +16,6 @@ class_colors = [  ( random.randint(0,255),random.randint(0,255),random.randint(0
 
 
 
-
-
-
 def get_pairs_from_paths( images_path , segs_path ):
 	images = glob.glob( os.path.join(images_path,"*.jpg")  ) + glob.glob( os.path.join(images_path,"*.png")  ) +  glob.glob( os.path.join(images_path,"*.jpeg")  )
 	segmentations  =  glob.glob( os.path.join(segs_path,"*.png")  ) 
@@ -77,7 +74,7 @@ def get_segmentation_arr( path , nClasses ,  width , height , no_reshape=False )
 	else:
 		img = cv2.imread(path, 1)
 
-	img = cv2.resize(img, ( width , height ))
+	img = cv2.resize(img, ( width , height ) , interpolation=cv2.INTER_NEAREST )
 	img = img[:, : , 0]
 
 	for c in range(nClasses):
@@ -105,7 +102,7 @@ def verify_segmentation_dataset( images_path , segs_path , n_classes ):
 		seg = cv2.imread( seg_fn )
 
 		assert ( img.shape[0]==seg.shape[0] and img.shape[1]==seg.shape[1] ) , "The size of image and the annotation does not match or they are corrupt "+ im_fn + " " + seg_fn
-		assert ( np.max(seg[:,:,0]) < n_classes) , "The pixel values of seg image should be from 0 to "+str(n_classes-1)
+		assert ( np.max(seg[:,:,0]) < n_classes) , "The pixel values of seg image should be from 0 to "+str(n_classes-1) + " . Found pixel value "+str(np.max(seg[:,:,0]))
 
 	print("Dataset verified! ")
 
