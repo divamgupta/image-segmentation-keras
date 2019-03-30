@@ -55,7 +55,7 @@ def cli_train():
 		input_height=args.input_height  , 
 		input_width=args.input_width  , 
 		n_classes=args.n_classes ,
-		verify_dataset=args.verify_dataset ,
+		verify_dataset=args.not_verify_dataset ,
 		checkpoints_path=args.checkpoints_path  , 
 		epochs = args.epochs ,
 		batch_size = args.batch_size ,
@@ -89,7 +89,7 @@ def cli_predict():
 	if ".jpg" in args.input_path or ".png" in args.input_path or ".jpeg" in args.input_path:
 		predict.predict( inp=args.input_path  , out_fname=args.output_path  , checkpoints_path=args.checkpoints_path  )
 	else:
-		predict.predict_multiple( inp_dir=args.input_images , out_dir=args.output_path  , checkpoints_path=args.checkpoints_path   )
+		predict.predict_multiple( inp_dir=args.input_path , out_dir=args.output_path  , checkpoints_path=args.checkpoints_path   )
 
 
 def cli_verify_dataset():
