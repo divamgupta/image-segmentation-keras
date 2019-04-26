@@ -1,6 +1,6 @@
-# Image Segmentation Keras : Implementation of Segnet, FCN, UNet and other models in Keras.
+# Image Segmentation Keras : Implementation of Segnet, FCN, UNet, PSPNet and other models in Keras.
 
-Implememnation of various Deep Image Segmentation models in keras. 
+Implementation of various Deep Image Segmentation models in keras. 
 
 
 <p align="center">
@@ -9,16 +9,37 @@ Implememnation of various Deep Image Segmentation models in keras.
 
 ## Our Other Repositories 
 - [Attention based Language Translation in Keras](https://github.com/divamgupta/attention-translation-keras)
+- [Ladder Network in Keras](https://github.com/divamgupta/ladder_network_keras)  model achives 98% test accuracy on MNIST with just 100 labeled examples
 
 
 ## Models 
 
-* FCN8
-* FCN32
-* Simple Segnet
-* VGG Segnet 
-* U-Net
-* VGG U-Net
+Following models are supported:
+
+| model_name       | Base Model        | Segmentation Model |
+|------------------|-------------------|--------------------|
+| fcn_8            | Vanilla CNN       | FCN8               |
+| fcn_32           | Vanilla CNN       | FCN8               |
+| fcn_8_vgg        | VGG 16            | FCN8               |
+| fcn_32_vgg       | VGG 16            | FCN32              |
+| fcn_8_resnet50   | Resnet-50         | FCN32              |
+| fcn_32_resnet50  | Resnet-50         | FCN32              |
+| fcn_8_mobilenet  | MobileNet         | FCN32              |
+| fcn_32_mobilenet | MobileNet         | FCN32              |
+| pspnet           | Vanilla CNN       | PSPNet             |
+| vgg_pspnet       | VGG 16            | PSPNet             |
+| resnet50_pspnet  | Resnet-50         | PSPNet             |
+| unet_mini        | Vanilla Mini CNN  | U-Net              |
+| unet             | Vanilla CNN       | U-Net              |
+| vgg_unet         | VGG 16            | U-Net              |
+| resnet50_unet    | Resnet-50         | U-Net              |
+| mobilenet_unet   | MobileNet         | U-Net              |
+| segnet           | Vanilla CNN       | Segnet             |
+| vgg_segnet       | VGG 16            | Segnet             |
+| resnet50_segnet  | Resnet-50         | Segnet             |
+| mobilenet_segnet | MobileNet         | Segnet             |
+
+
 
 ## Getting Started
 
@@ -26,13 +47,36 @@ Implememnation of various Deep Image Segmentation models in keras.
 
 * Keras 2.0
 * opencv for python
-* Theano 
+* Theano / Tensorflow / CNTK 
 
 ```shell
 sudo apt-get install python-opencv
-sudo pip install --upgrade theano
 sudo pip install --upgrade keras
 ```
+
+### Installing
+
+Install the module
+```shell
+git clone https://github.com/divamgupta/image-segmentation-keras
+python setup.py install
+```
+pip install will be available soon!
+
+
+## Pre-trained models:
+```python
+import keras_segmentation
+
+model = keras_segmentation.pretrained.resnet_pspnet_VOC12_v0_1() # load the pretrained model
+
+out = model.predict_segmentation(
+    inp="voc_prepped/images_prepped_test/2007_000738.jpg",
+    out_fname="out.png"
+)
+
+```
+
 
 ### Preparing the data for training
 
@@ -61,71 +105,98 @@ cv2.imwrite( "ann_1.png" ,ann_img )
 
 Only use bmp or png format for the annotation images.
 
-### Download the sample prepared dataset
+## Download the sample prepared dataset
 
 Download and extract the following:
 
 https://drive.google.com/file/d/0B0d9ZiqAgFkiOHR1NTJhWVJMNEU/view?usp=sharing
 
-Place the dataset1/ folder in data/
+You will get a folder named dataset1/ 
 
-## Visualizing the prepared data
+
+## Using the python module
+
+You can import keras_segmentation in  your python script and use the API
+
+```python
+import keras_segmentation
+
+model = keras_segmentation.models.unet.vgg_unet(n_classes=51 ,  input_height=416, input_width=608  )
+
+model.train( 
+    train_images =  "dataset1/images_prepped_train/",
+    train_annotations = "dataset1/annotations_prepped_train/",
+    checkpoints_path = "/tmp/vgg_unet_1" , epochs=5
+)
+
+out = model.predict_segmentation(
+    inp="dataset1/images_prepped_test/0016E5_07965.png",
+    out_fname="/tmp/out.png"
+)
+
+
+import matplotlib.pyplot as plt
+plt.imshow(out)
+
+```
+
+
+## Usage via command line 
+You can also use the tool just using command line
+
+### Visualizing the prepared data
 
 You can also visualize your prepared annotations for verification of the prepared data.
 
+
 ```shell
-python visualizeDataset.py \
- --images="data/dataset1/images_prepped_train/" \
- --annotations="data/dataset1/annotations_prepped_train/" \
- --n_classes=10 
+python -m keras_segmentation verify_dataset \
+ --images_path="dataset1/images_prepped_train/" \
+ --segs_path="dataset1/annotations_prepped_train/"  \
+ --n_classes=50
+```
+
+```shell
+python -m keras_segmentation visualize_dataset \
+ --images_path="dataset1/images_prepped_train/" \
+ --segs_path="dataset1/annotations_prepped_train/"  \
+ --n_classes=50
 ```
 
 
 
-## Downloading the Pretrained VGG Weights
-
-You need to download the pretrained VGG-16 weights trained on imagenet if you want to use VGG based models
-
-```shell
-mkdir data
-cd data
-wget "https://github.com/fchollet/deep-learning-models/releases/download/v0.1/vgg16_weights_th_dim_ordering_th_kernels.h5"
-```
-
-
-
-## Training the Model
+### Training the Model
 
 To train the model run the following command:
 
 ```shell
-THEANO_FLAGS=device=gpu,floatX=float32  python  train.py \
- --save_weights_path=weights/ex1 \
- --train_images="data/dataset1/images_prepped_train/" \
- --train_annotations="data/dataset1/annotations_prepped_train/" \
- --val_images="data/dataset1/images_prepped_test/" \
- --val_annotations="data/dataset1/annotations_prepped_test/" \
- --n_classes=10 \
+python -m keras_segmentation train \
+ --checkpoints_path="path_to_checkpoints" \
+ --train_images="dataset1/images_prepped_train/" \
+ --train_annotations="dataset1/annotations_prepped_train/" \
+ --val_images="dataset1/images_prepped_test/" \
+ --val_annotations="dataset1/annotations_prepped_test/" \
+ --n_classes=50 \
  --input_height=320 \
  --input_width=640 \
- --model_name="vgg_segnet" 
+ --model_name="vgg_unet"
 ```
 
-Choose model_name from vgg_segnet  vgg_unet, vgg_unet2, fcn8, fcn32
+Choose model_name from the table above
 
-## Getting the predictions
+
+
+### Getting the predictions
 
 To get the predictions of a trained model
 
 ```shell
-THEANO_FLAGS=device=gpu,floatX=float32  python  predict.py \
- --save_weights_path=weights/ex1 \
- --epoch_number=0 \
- --test_images="data/dataset1/images_prepped_test/" \
- --output_path="data/predictions/" \
- --n_classes=10 \
- --input_height=320 \
- --input_width=640 \
- --model_name="vgg_segnet" 
+python -m keras_segmentation predict \
+ --checkpoints_path="path_to_checkpoints" \
+ --input_path="dataset1/images_prepped_test/" \
+ --output_path="path_to_predictions"
+
 ```
+
+
 
