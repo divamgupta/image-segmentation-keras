@@ -1,6 +1,6 @@
 # Image Segmentation Keras : Implementation of Segnet, FCN, UNet, PSPNet and other models in Keras.
 
-Implememnation of various Deep Image Segmentation models in keras. 
+Implementation of various Deep Image Segmentation models in keras. 
 
 
 <p align="center">
