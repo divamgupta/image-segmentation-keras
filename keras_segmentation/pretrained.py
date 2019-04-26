@@ -23,7 +23,7 @@ def resnet_pspnet_VOC12_v0_1():
         "output_width": 144
     }
 
-    model_url = "https://transfer.sh/yGEE8/r2_voc12_resnetpspnet_384x576.24"
+    model_url = "https://github.com/divamgupta/image-segmentation-keras/releases/download/pretrained_model_1/r2_voc12_resnetpspnet_384x576.24"
     latest_weights =  keras.utils.get_file( model_url.split("/")[-1] , model_url  )
     
     return model_from_checkpoint_path( model_config , latest_weights  )
