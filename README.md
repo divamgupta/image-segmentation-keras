@@ -1,4 +1,4 @@
-# Image Segmentation Keras : Implementation of Segnet, FCN, UNet and other models in Keras.
+# Image Segmentation Keras : Implementation of Segnet, FCN, UNet, PSPNet and other models in Keras.
 
 Implememnation of various Deep Image Segmentation models in keras. 
 
@@ -9,18 +9,37 @@ Implememnation of various Deep Image Segmentation models in keras.
 
 ## Our Other Repositories 
 - [Attention based Language Translation in Keras](https://github.com/divamgupta/attention-translation-keras)
+- [Ladder Network in Keras](https://github.com/divamgupta/ladder_network_keras)  model achives 98% test accuracy on MNIST with just 100 labeled examples
 
 
 ## Models 
 
-* FCN8
-* FCN32
-* Simple Segnet
-* VGG / Resnet / Mobilenet Segnet 
-* U-Net
-* VGG / Resnet / Mobilenet U-Net
-* PSPNet
-* VGG / Resnet / Mobilenet PSPNet
+Following models are supported:
+
+| model_name       | Base Model        | Segmentation Model |
+|------------------|-------------------|--------------------|
+| fcn_8            | Vanilla CNN       | FCN8               |
+| fcn_32           | Vanilla CNN       | FCN8               |
+| fcn_8_vgg        | VGG 16            | FCN8               |
+| fcn_32_vgg       | VGG 16            | FCN32              |
+| fcn_8_resnet50   | Resnet-50         | FCN32              |
+| fcn_32_resnet50  | Resnet-50         | FCN32              |
+| fcn_8_mobilenet  | MobileNet         | FCN32              |
+| fcn_32_mobilenet | MobileNet         | FCN32              |
+| pspnet           | Vanilla CNN       | PSPNet             |
+| vgg_pspnet       | VGG 16            | PSPNet             |
+| resnet50_pspnet  | Resnet-50         | PSPNet             |
+| unet_mini        | Vanilla Mini CNN  | U-Net              |
+| unet             | Vanilla CNN       | U-Net              |
+| vgg_unet         | VGG 16            | U-Net              |
+| resnet50_unet    | Resnet-50         | U-Net              |
+| mobilenet_unet   | MobileNet         | U-Net              |
+| segnet           | Vanilla CNN       | Segnet             |
+| vgg_segnet       | VGG 16            | Segnet             |
+| resnet50_segnet  | Resnet-50         | Segnet             |
+| mobilenet_segnet | MobileNet         | Segnet             |
+
+
 
 ## Getting Started
 
@@ -42,6 +61,12 @@ Install the module
 git clone https://github.com/divamgupta/image-segmentation-keras
 python setup.py install
 ```
+pip install will be available soon!
+
+
+## Pre-trained models:
+Comming soon!
+
 
 ### Preparing the data for training
 
@@ -70,7 +95,7 @@ cv2.imwrite( "ann_1.png" ,ann_img )
 
 Only use bmp or png format for the annotation images.
 
-### Download the sample prepared dataset
+## Download the sample prepared dataset
 
 Download and extract the following:
 
@@ -79,7 +104,37 @@ https://drive.google.com/file/d/0B0d9ZiqAgFkiOHR1NTJhWVJMNEU/view?usp=sharing
 You will get a folder named dataset1/ 
 
 
-## Visualizing the prepared data
+## Using the python module
+
+You can import keras_segmentation in  your python script and use the API
+
+```python
+import keras_segmentation
+
+model = keras_segmentation.models.unet.vgg_unet(n_classes=51 ,  input_height=416, input_width=608  )
+
+model.train( 
+    train_images =  "dataset1/images_prepped_train/",
+    train_annotations = "dataset1/annotations_prepped_train/",
+    checkpoints_path = "/tmp/vgg_unet_1" , epochs=5
+)
+
+out = model.predict_segmentation(
+    inp="dataset1/images_prepped_test/0016E5_07965.png",
+    out_fname="/tmp/out.png"
+)
+
+
+import matplotlib.pyplot as plt
+plt.imshow(out)
+
+```
+
+
+## Usage via command line 
+You can also use the tool just using command line
+
+### Visualizing the prepared data
 
 You can also visualize your prepared annotations for verification of the prepared data.
 
@@ -100,7 +155,7 @@ python -m keras_segmentation visualize_dataset \
 
 
 
-## Training the Model
+### Training the Model
 
 To train the model run the following command:
 
@@ -117,9 +172,11 @@ python -m keras_segmentation train \
  --model_name="vgg_unet"
 ```
 
-Choose model_name from vgg_segnet  vgg_unet, vgg_unet , fcn8, fcn32
+Choose model_name from the table above
 
-## Getting the predictions
+
+
+### Getting the predictions
 
 To get the predictions of a trained model
 
@@ -130,4 +187,6 @@ python -m keras_segmentation predict \
  --output_path="path_to_predictions"
 
 ```
+
+
 
