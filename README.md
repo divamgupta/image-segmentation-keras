@@ -65,7 +65,17 @@ pip install will be available soon!
 
 
 ## Pre-trained models:
-Comming soon!
+```python
+import keras_segmentation
+
+model = keras_segmentation.pretrained.resnet_pspnet_VOC12_v0_1() # load the pretrained model
+
+out = model.predict_segmentation(
+    inp="voc_prepped/images_prepped_test/2007_000738.jpg",
+    out_fname="out.png"
+)
+
+```
 
 
 ### Preparing the data for training
