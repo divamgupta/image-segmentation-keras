@@ -202,4 +202,6 @@ python -m keras_segmentation predict \
 ```
 
 
+### Contributors 
 
+Divam Gupta : https://divamgupta.com
