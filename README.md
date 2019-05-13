@@ -14,6 +14,10 @@ Implementation of various Deep Image Segmentation models in keras.
 - [Attention based Language Translation in Keras](https://github.com/divamgupta/attention-translation-keras)
 - [Ladder Network in Keras](https://github.com/divamgupta/ladder_network_keras)  model achives 98% test accuracy on MNIST with just 100 labeled examples
 
+### Contributors 
+
+Divam Gupta : https://divamgupta.com
+
 
 ## Models 
 
@@ -202,6 +206,3 @@ python -m keras_segmentation predict \
 ```
 
 
-### Contributors 
-
-Divam Gupta : https://divamgupta.com
