@@ -51,6 +51,7 @@ def get_image_arr( path , width , height , imgNorm="sub_mean" , odering='channel
 		img[:,:,0] -= 103.939
 		img[:,:,1] -= 116.779
 		img[:,:,2] -= 123.68
+		img = img[ : , : , ::-1 ]
 	elif imgNorm == "divide":
 		img = cv2.resize(img, ( width , height ))
 		img = img.astype(np.float32)

@@ -101,6 +101,35 @@ def resnet50_pspnet( n_classes ,  input_height=384, input_width=576 ):
 
 
 
+def pspnet_50( n_classes ,  input_height=473, input_width=473 ):
+    from ._pspnet_2 import _build_pspnet
+    
+    nb_classes = n_classes
+    resnet_layers = 50
+    input_shape=(input_height, input_width)
+    model = _build_pspnet(nb_classes=nb_classes,
+                                     resnet_layers=resnet_layers,
+                                     input_shape=input_shape)
+    model.model_name = "pspnet_50"
+    return model
+
+
+def pspnet_101( n_classes ,  input_height=473, input_width=473 ):
+    from ._pspnet_2 import _build_pspnet
+    
+    nb_classes = n_classes
+    resnet_layers = 101
+    input_shape=(input_height, input_width)
+    model = _build_pspnet(nb_classes=nb_classes,
+                                     resnet_layers=resnet_layers,
+                                     input_shape=input_shape)
+    model.model_name = "pspnet_101"
+    return model
+
+
+
+
+
 # def mobilenet_pspnet( n_classes ,  input_height=224, input_width=224 ):
 
 # 	model =  _pspnet( n_classes , get_mobilenet_encoder ,  input_height=input_height, input_width=input_width  )
