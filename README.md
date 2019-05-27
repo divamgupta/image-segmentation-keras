@@ -47,6 +47,13 @@ Following models are supported:
 | mobilenet_segnet | MobileNet         | Segnet             |
 
 
+Example results for the pre-trained models provided :
+
+Input Image            |  Output Segmentation Image 
+:-------------------------:|:-------------------------:
+![](sample_images/1_input.jpg)  |  ![](sample_images/1_output.png)
+![](sample_images/3_input.jpg)  |  ![](sample_images/3_output.png)
+
 
 ## Getting Started
 
