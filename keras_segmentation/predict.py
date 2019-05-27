@@ -33,7 +33,7 @@ def model_from_checkpoint_path( checkpoints_path ):
 	return model
 
 
-def predict( model=None , inp=None , out_fname=None , checkpoints_path=None  ):
+def predict( model=None , inp=None , out_fname=None , checkpoints_path=None    ):
 
 	if model is None and ( not checkpoints_path is None ):
 		model = model_from_checkpoint_path(checkpoints_path)
@@ -43,6 +43,10 @@ def predict( model=None , inp=None , out_fname=None , checkpoints_path=None  ):
 	
 	if isinstance( inp , six.string_types)  :
 		inp = cv2.imread(inp )
+
+	assert len(inp.shape) == 3 , "Image should be h,w,3 "
+	orininal_h = inp.shape[0]
+	orininal_w = inp.shape[1]
 
 
 	output_width = model.output_width
@@ -62,7 +66,8 @@ def predict( model=None , inp=None , out_fname=None , checkpoints_path=None  ):
 		seg_img[:,:,0] += ( (pr[:,: ] == c )*( colors[c][0] )).astype('uint8')
 		seg_img[:,:,1] += ((pr[:,: ] == c )*( colors[c][1] )).astype('uint8')
 		seg_img[:,:,2] += ((pr[:,: ] == c )*( colors[c][2] )).astype('uint8')
-	seg_img = cv2.resize(seg_img  , (input_width , input_height ))
+
+	seg_img = cv2.resize(seg_img  , (orininal_w , orininal_h ))
 
 	if not out_fname is None:
 		cv2.imwrite(  out_fname , seg_img )

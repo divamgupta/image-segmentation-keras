@@ -236,8 +236,7 @@ def build_pyramid_pooling_module(res, input_shape):
     # ---PSPNet concat layers with Interpolation
     feature_map_size = tuple(int(ceil(input_dim / 8.0))
                              for input_dim in input_shape)
-    print("PSP module will interpolate to a final feature map size of %s" %
-          (feature_map_size, ))
+
 
     interp_block1 = interp_block(res, 1, feature_map_size, input_shape)
     interp_block2 = interp_block(res, 2, feature_map_size, input_shape)
@@ -262,7 +261,6 @@ def _build_pspnet(nb_classes, resnet_layers, input_shape, activation='softmax' )
     
     
     res = ResNet(inp, layers=resnet_layers)
-    print res
     
     psp = build_pyramid_pooling_module(res, input_shape)
 
