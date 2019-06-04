@@ -1,5 +1,6 @@
 # Image Segmentation Keras : Implementation of Segnet, FCN, UNet, PSPNet and other models in Keras.
 
+[![PyPI version](https://badge.fury.io/py/keras-segmentation.svg)](https://badge.fury.io/py/keras-segmentation)
 [![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://saythanks.io/to/divamgupta)
 [![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](http://perso.crans.org/besson/LICENSE.html)
 
@@ -71,6 +72,13 @@ sudo pip install --upgrade keras
 ### Installing
 
 Install the module
+
+```shell
+pip install keras-segmentation
+```
+
+### or
+
 ```shell
 git clone https://github.com/divamgupta/image-segmentation-keras
 cd image-segmentation-keras
