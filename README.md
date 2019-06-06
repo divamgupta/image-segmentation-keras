@@ -7,6 +7,8 @@
 
 Implementation of various Deep Image Segmentation models in keras. 
 
+Link to the full blog post with tutorial : https://divamgupta.com/image-segmentation/2019/06/06/deep-learning-semantic-segmentation-keras.html
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/sunshineatnoon/Paper-Collection/master/images/FCN1.png" width="50%" >
 </p>
