@@ -10,6 +10,38 @@ from ..train import train
 from ..predict import predict , predict_multiple , evaluate
 
 
+from tqdm import tqdm
+
+
+
+# source m1 , dest m2
+def transfer_weights( m1 , m2 , verbose=True ):
+
+	assert len( m1.layers ) == len(m2.layers) , "Both models should have same number of layers"
+
+	nSet = 0
+	nNotSet = 0
+
+	if verbose:
+		print("Copying weights ")
+		bar = tqdm(zip( m1.layers, m2.layers))
+	else:
+		bar = zip( m1.layers, m2.layers)
+
+	for l , ll  in bar:
+
+		if  not any([  w.shape != ww.shape  for w,ww in zip( list(l.weights) , list(ll.weights) ) ] ):
+			if len( list(l.weights) ) > 0:
+				ll.set_weights( l.get_weights())
+				nSet += 1
+		else:
+			nNotSet += 1
+
+	if verbose:
+		print("Copied weights of %d layers and skipped %d layers"%(nSet , nNotSet ))
+
+		
+
 def resize_image( inp ,  s , data_format ):
 
 	try:
