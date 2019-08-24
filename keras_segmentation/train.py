@@ -40,6 +40,8 @@ def train(
     load_weights=None,
     steps_per_epoch=512,
     optimizer_name="adadelta",
+    loss="categorical_crossentropy",
+    metrics=None,
 ):
 
     if isinstance(
@@ -69,6 +71,20 @@ def train(
             loss="categorical_crossentropy",
             optimizer=optimizer_name,
             metrics=["accuracy"],
+        )
+
+    if not loss is None:
+        model.compile(
+            loss=loss,
+            optimizer=optimizer_name,
+            metrics=["accuracy"],
+        )
+
+    if not metrics is None:
+        model.compile(
+            loss=loss,
+            optimizer=optimizer_name,
+            metrics=metrics,
         )
 
     if not checkpoints_path is None:
