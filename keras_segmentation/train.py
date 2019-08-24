@@ -7,7 +7,7 @@ from .data_utils.data_loader import (
 from .models import model_from_name
 import os
 import six
-import .metrics as mets
+import metrics as mets
 
 
 def find_latest_checkpoint(checkpoints_path):
