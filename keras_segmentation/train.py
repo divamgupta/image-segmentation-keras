@@ -7,8 +7,11 @@ from .data_utils.data_loader import (
 from .models import model_from_name
 import os
 import six
-from .metrics import metrics as mets
-
+from .metrics.metrics import (
+    loss_jaccard,
+    ternaus_loss,
+    indice_jaccard,
+)
 
 def find_latest_checkpoint(checkpoints_path):
     ep = 0
@@ -77,9 +80,9 @@ def train(
     if not loss is None:
 
         if loss is "jaccard":
-            loss = mets.loss_jaccard
+            loss = loss_jaccard
         if loss is "ternaus":
-            loss = mets.ternaus_loss
+            loss = ternaus_loss
         
         model.compile(
             loss=loss,
@@ -90,7 +93,7 @@ def train(
     if not metrics is None:
 
         if metrics is "jaccard":
-            metrics = list(mets.indice_jaccard)
+            metrics = list(indice_jaccard)
 
         model.compile(
             loss=loss,
