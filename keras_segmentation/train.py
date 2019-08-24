@@ -89,7 +89,7 @@ def train(
     if not metrics is None:
 
         if metrics is "jaccard":
-            metrics = list(mets.indice_jaccard)
+            metrics = [mets.indice_jaccard]
 
         model.compile(
             loss=loss,
