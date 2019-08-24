@@ -18,7 +18,7 @@ dependencies:
   - bleach=3.1.0=py_0
   - bzip2=1.0.8=h516909a_0
   - c-ares=1.15.0=h516909a_1001
-  - ca-certificates=2019.5.15=1
+  - ca-certificates=2019.6.16=hecc5488_0
   - cairo=1.16.0=h18b612c_1001
   - certifi=2019.6.16=py37_1
   - cffi=1.12.3=py37h2e261b9_0
@@ -40,6 +40,7 @@ dependencies:
   - gast=0.2.2=py_0
   - gcc_impl_linux-64=7.3.0=habb00fd_1
   - gcc_linux-64=7.3.0=h553295d_8
+  - geos=3.7.2=he1b5a44_1
   - gettext=0.19.8.1=hc5be6a0_1002
   - giflib=5.1.9=h516909a_0
   - glib=2.58.3=h6f030ca_1002
@@ -58,6 +59,7 @@ dependencies:
   - icu=58.2=hf484d3e_1000
   - idna=2.8=py37_0
   - imageio=2.5.0=py37_0
+  - imgaug=0.2.9=py_1
   - ipykernel=5.1.2=py37h5ca1d4c_0
   - ipython=7.7.0=py37h5ca1d4c_0
   - ipython_genutils=0.2.0=py_1
@@ -116,7 +118,7 @@ dependencies:
   - olefile=0.46=py_0
   - opencv=4.1.1=py37ha799480_1
   - openh264=1.8.0=hdbcaa40_1000
-  - openssl=1.1.1c=h7b6447c_1
+  - openssl=1.1.1c=h516909a_0
   - pandas=0.25.0=py37hb3f55d8_0
   - pandoc=2.7.3=0
   - pandocfilters=1.4.2=py_1
@@ -158,6 +160,7 @@ dependencies:
   - seaborn=0.9.0=py_0
   - send2trash=1.5.0=py_0
   - setuptools=41.0.1=py37_0
+  - shapely=1.6.4=py37hec07ddf_1006
   - sip=4.19.8=py37hf484d3e_1000
   - six=1.12.0=py37_1000
   - sqlite=3.29.0=h7b6447c_0
@@ -199,3 +202,5 @@ dependencies:
   - zeromq=4.3.2=he1b5a44_2
   - zlib=1.2.11=h7b6447c_3
   - zstd=1.4.0=h3b9ef0a_0
+prefix: /home/edwinb/anaconda3/envs/keras_segmentation
+
