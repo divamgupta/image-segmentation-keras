@@ -42,7 +42,7 @@ def train(
     steps_per_epoch=512,
     optimizer_name="adadelta",
     loss="categorical_crossentropy",
-    metrics=None,
+    metrics=["accuracy"],
 ):
 
     if isinstance(
