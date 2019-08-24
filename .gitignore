@@ -104,4 +104,5 @@ ENV/
 # Rope project settings
 .ropeproject
 
-
+# vscode data
+*.vscode/
