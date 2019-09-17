@@ -9,7 +9,6 @@ from keras.layers.merge import Concatenate, Add
 from keras.models import Model
 from keras.optimizers import SGD
 
-from keras.backend import tf as ktf
 import tensorflow as tf
 
 
@@ -36,7 +35,7 @@ class Interp(layers.Layer):
 
     def call(self, inputs, **kwargs):
         new_height, new_width = self.new_size
-        resized = ktf.image.resize_images(inputs, [new_height, new_width],
+        resized = tf.image.resize_images(inputs, [new_height, new_width],
                                           align_corners=True)
         return resized
 
@@ -51,7 +50,7 @@ class Interp(layers.Layer):
 
 # def Interp(x, shape):
 #    new_height, new_width = shape
-#    resized = ktf.image.resize_images(x, [new_height, new_width],
+#    resized = tf.image.resize_images(x, [new_height, new_width],
 #                                      align_corners=True)
 #    return resized
 
