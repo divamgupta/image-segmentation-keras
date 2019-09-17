@@ -255,3 +255,34 @@ new_model.train(
 
 ```
 
+## Projects using keras-segmentation 
+Here are a few projects which are using our library :
+* https://github.com/SteliosTsop/QF-image-segmentation-keras [paper](https://arxiv.org/pdf/1908.02242.pdf)
+* https://github.com/willembressers/bouquet_quality
+* https://github.com/jqueguiner/image-segmentation
+* https://github.com/theerawatramchuen/Keras_Segmentation
+* https://github.com/neheller/labels18
+* https://github.com/shsh-a/segmentation-over-web
+* https://github.com/chenwe73/deep_active_learning_segmentation
+* https://github.com/vigneshrajap/vision-based-navigation-agri-fields
+* https://github.com/ronalddas/Pneumonia-Detection
+* https://github.com/Aiwiscal/ECG_UNet
+* https://github.com/TianzhongSong/Unet-for-Person-Segmentation
+* https://github.com/Guyanqi/GMDNN
+* https://github.com/kozemzak/prostate-lesion-segmentation
+* https://github.com/lixiaoyu12138/fcn-date
+* https://github.com/sagarbhokre/LyftChallenge
+* https://github.com/TianzhongSong/Person-Segmentation-Keras
+* https://github.com/divyanshpuri02/COCO_2018-Stuff-Segmentation-Challenge
+* https://github.com/XiangbingJi/Stanford-cs230-final-project
+* https://github.com/lsh1994/keras-segmentation
+* https://github.com/SpirinEgor/mobile_semantic_segmentation
+* https://github.com/LeadingIndiaAI/COCO-DATASET-STUFF-SEGMENTATION-CHALLENGE
+* https://github.com/lidongyue12138/Image-Segmentation-by-Keras
+* https://github.com/laoj2/segnet_crfasrnn
+* https://github.com/rancheng/AirSimProjects
+* https://github.com/RadiumScriptTang/cartoon_segmentation
+* https://github.com/dquail/NerveSegmentation
+
+If you use our code in a publicly available project, please add the link here ( by posting an issue or creating a PR )
+
