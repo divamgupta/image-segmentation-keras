@@ -13,7 +13,8 @@ class_colors = [(random.randint(0, 255), random.randint(
     0, 255), random.randint(0, 255)) for _ in range(5000)]
 
 
-def visualize_segmentation_dataset(images_path, segs_path,  n_classes, do_augment=False):
+def visualize_segmentation_dataset(images_path, segs_path, n_classes,
+                                   do_augment=False):
 
     img_seg_pairs = get_pairs_from_paths(images_path, segs_path)
 
@@ -44,7 +45,8 @@ def visualize_segmentation_dataset(images_path, segs_path,  n_classes, do_augmen
         cv2.waitKey()
 
 
-def visualize_segmentation_dataset_one(images_path, segs_path,  n_classes, do_augment=False, no_show=False):
+def visualize_segmentation_dataset_one(images_path, segs_path, n_classes,
+                                       do_augment=False, no_show=False):
 
     img_seg_pairs = get_pairs_from_paths(images_path, segs_path)
 

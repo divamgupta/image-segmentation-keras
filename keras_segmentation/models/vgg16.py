@@ -7,9 +7,13 @@ from .config import IMAGE_ORDERING
 
 
 if IMAGE_ORDERING == 'channels_first':
-    pretrained_url = "https://github.com/fchollet/deep-learning-models/releases/download/v0.1/vgg16_weights_th_dim_ordering_th_kernels_notop.h5"
+    pretrained_url = "https://github.com/fchollet/deep-learning-models/" \
+                     "releases/download/v0.1/" \
+                     "vgg16_weights_th_dim_ordering_th_kernels_notop.h5"
 elif IMAGE_ORDERING == 'channels_last':
-    pretrained_url = "https://github.com/fchollet/deep-learning-models/releases/download/v0.1/vgg16_weights_tf_dim_ordering_tf_kernels_notop.h5"
+    pretrained_url = "https://github.com/fchollet/deep-learning-models/" \
+                     "releases/download/v0.1/" \
+                     "vgg16_weights_tf_dim_ordering_tf_kernels_notop.h5"
 
 
 def get_vgg_encoder(input_height=224,  input_width=224, pretrained='imagenet'):

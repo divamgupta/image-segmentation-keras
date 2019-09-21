@@ -29,9 +29,10 @@ def model_from_checkpoint_path(checkpoints_path):
     model_config = json.loads(
         open(checkpoints_path+"_config.json", "r").read())
     latest_weights = find_latest_checkpoint(checkpoints_path)
-    assert (not latest_weights is None), "Checkpoint not found."
+    assert (latest_weights is not None), "Checkpoint not found."
     model = model_from_name[model_config['model_class']](
-        model_config['n_classes'], input_height=model_config['input_height'], input_width=model_config['input_width'])
+        model_config['n_classes'], input_height=model_config['input_height'],
+        input_width=model_config['input_width'])
     print("loaded weights ", latest_weights)
     model.load_weights(latest_weights)
     return model
@@ -39,10 +40,10 @@ def model_from_checkpoint_path(checkpoints_path):
 
 def predict(model=None, inp=None, out_fname=None, checkpoints_path=None):
 
-    if model is None and (not checkpoints_path is None):
+    if model is None and (checkpoints_path is not None):
         model = model_from_checkpoint_path(checkpoints_path)
 
-    assert (not inp is None)
+    assert (inp is not None)
     assert((type(inp) is np.ndarray) or isinstance(inp, six.string_types)
            ), "Inupt should be the CV image or the input file name"
 
@@ -73,20 +74,22 @@ def predict(model=None, inp=None, out_fname=None, checkpoints_path=None):
 
     seg_img = cv2.resize(seg_img, (orininal_w, orininal_h))
 
-    if not out_fname is None:
+    if out_fname is not None:
         cv2.imwrite(out_fname, seg_img)
 
     return pr
 
 
-def predict_multiple(model=None, inps=None, inp_dir=None, out_dir=None, checkpoints_path=None):
+def predict_multiple(model=None, inps=None, inp_dir=None, out_dir=None,
+                     checkpoints_path=None):
 
-    if model is None and (not checkpoints_path is None):
+    if model is None and (checkpoints_path is not None):
         model = model_from_checkpoint_path(checkpoints_path)
 
-    if inps is None and (not inp_dir is None):
+    if inps is None and (inp_dir is not None):
         inps = glob.glob(os.path.join(inp_dir, "*.jpg")) + glob.glob(
-            os.path.join(inp_dir, "*.png")) + glob.glob(os.path.join(inp_dir, "*.jpeg"))
+            os.path.join(inp_dir, "*.png")) + \
+            glob.glob(os.path.join(inp_dir, "*.jpeg"))
 
     assert type(inps) is list
 
@@ -107,7 +110,8 @@ def predict_multiple(model=None, inps=None, inp_dir=None, out_dir=None, checkpoi
     return all_prs
 
 
-def evaluate(model=None, inp_inmges=None, annotations=None, checkpoints_path=None):
+def evaluate(model=None, inp_inmges=None, annotations=None,
+             checkpoints_path=None):
 
     assert False, "not implemented "
 

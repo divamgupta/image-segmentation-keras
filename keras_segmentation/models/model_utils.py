@@ -30,7 +30,8 @@ def transfer_weights(m1, m2, verbose=True):
 
     for l, ll in bar:
 
-        if not any([w.shape != ww.shape for w, ww in zip(list(l.weights), list(ll.weights))]):
+        if not any([w.shape != ww.shape for w, ww in zip(list(l.weights),
+                                                         list(ll.weights))]):
             if len(list(l.weights)) > 0:
                 ll.set_weights(l.get_weights())
                 nSet += 1
@@ -53,8 +54,8 @@ def resize_image(inp,  s, data_format):
                                                 interpolation='bilinear'))(inp)
 
     except Exception as e:
-
-        # if keras is old , then rely on the tf function ... sorry theono/cntk users .
+        # if keras is old, then rely on the tf function
+        # Sorry theano/cntk users!!!
         assert data_format == 'channels_last'
         assert IMAGE_ORDERING == 'channels_last'
 

@@ -30,7 +30,8 @@ def vanilla_encoder(input_height=224,  input_width=224):
     levels.append(x)
 
     x = (ZeroPadding2D((pad, pad), data_format=IMAGE_ORDERING))(x)
-    x = (Conv2D(128, (kernel, kernel), data_format=IMAGE_ORDERING, padding='valid'))(x)
+    x = (Conv2D(128, (kernel, kernel), data_format=IMAGE_ORDERING,
+         padding='valid'))(x)
     x = (BatchNormalization())(x)
     x = (Activation('relu'))(x)
     x = (MaxPooling2D((pool_size, pool_size), data_format=IMAGE_ORDERING))(x)
@@ -42,7 +43,8 @@ def vanilla_encoder(input_height=224,  input_width=224):
                     data_format=IMAGE_ORDERING, padding='valid'))(x)
         x = (BatchNormalization())(x)
         x = (Activation('relu'))(x)
-        x = (MaxPooling2D((pool_size, pool_size), data_format=IMAGE_ORDERING))(x)
+        x = (MaxPooling2D((pool_size, pool_size),
+             data_format=IMAGE_ORDERING))(x)
         levels.append(x)
 
     return img_input, levels

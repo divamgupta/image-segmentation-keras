@@ -36,11 +36,13 @@ def load_aug():
                 order=[0, 1],
                 # if mode is constant, use a cval between 0 and 255
                 cval=(0, 255),
-                # use any of scikit-image's warping modes (see 2nd image from the top for examples)
+                # use any of scikit-image's warping modes
+                # (see 2nd image from the top for examples)
                 mode=ia.ALL
             )),
-            # execute 0 to 5 of the following (less important) augmenters per image
-            # don't execute all of them, as that would often be way too strong
+            # execute 0 to 5 of the following (less important) augmenters per
+            # image don't execute all of them, as that would often be way too
+            # strong
             iaa.SomeOf((0, 5),
                        [
                 # convert images into their superpixel representation
@@ -49,9 +51,11 @@ def load_aug():
                 iaa.OneOf([
                     # blur images with a sigma between 0 and 3.0
                     iaa.GaussianBlur((0, 3.0)),
-                    # blur image using local means with kernel sizes between 2 and 7
+                    # blur image using local means with kernel sizes
+                    # between 2 and 7
                     iaa.AverageBlur(k=(2, 7)),
-                    # blur image using local medians with kernel sizes between 2 and 7
+                    # blur image using local medians with kernel sizes
+                    # between 2 and 7
                     iaa.MedianBlur(k=(3, 11)),
                 ]),
                 iaa.Sharpen(alpha=(0, 1.0), lightness=(

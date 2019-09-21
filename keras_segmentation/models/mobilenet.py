@@ -57,7 +57,8 @@ def _depthwise_conv_block(inputs, pointwise_conv_filters, alpha,
     return Activation(relu6, name='conv_pw_%d_relu' % block_id)(x)
 
 
-def get_mobilenet_encoder(input_height=224,  input_width=224, pretrained='imagenet'):
+def get_mobilenet_encoder(input_height=224, input_width=224,
+                          pretrained='imagenet'):
 
     # todo add more alpha and stuff
 
@@ -65,7 +66,8 @@ def get_mobilenet_encoder(input_height=224,  input_width=224, pretrained='imagen
             'channels_last'), "Currently only channels last mode is supported"
     assert (IMAGE_ORDERING ==
             'channels_last'), "Currently only channels last mode is supported"
-    assert (input_height == 224), "For mobilenet , 224 input_height is supported "
+    assert (input_height == 224), \
+        "For mobilenet , 224 input_height is supported "
     assert (input_width == 224), "For mobilenet , 224 width is supported "
 
     assert input_height % 32 == 0

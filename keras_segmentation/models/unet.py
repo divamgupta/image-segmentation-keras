@@ -66,10 +66,11 @@ def unet_mini(n_classes, input_height=360, input_width=480):
     return model
 
 
-def _unet(n_classes, encoder, l1_skip_conn=True,  input_height=416, input_width=608):
+def _unet(n_classes, encoder, l1_skip_conn=True, input_height=416,
+          input_width=608):
 
     img_input, levels = encoder(
-        input_height=input_height,  input_width=input_width)
+        input_height=input_height, input_width=input_width)
     [f1, f2, f3, f4, f5] = levels
 
     o = f4
@@ -107,7 +108,7 @@ def _unet(n_classes, encoder, l1_skip_conn=True,  input_height=416, input_width=
     return model
 
 
-def unet(n_classes,  input_height=416, input_width=608, encoder_level=3):
+def unet(n_classes, input_height=416, input_width=608, encoder_level=3):
 
     model = _unet(n_classes, vanilla_encoder,
                   input_height=input_height, input_width=input_width)
@@ -115,7 +116,7 @@ def unet(n_classes,  input_height=416, input_width=608, encoder_level=3):
     return model
 
 
-def vgg_unet(n_classes,  input_height=416, input_width=608, encoder_level=3):
+def vgg_unet(n_classes, input_height=416, input_width=608, encoder_level=3):
 
     model = _unet(n_classes, get_vgg_encoder,
                   input_height=input_height, input_width=input_width)
@@ -123,7 +124,8 @@ def vgg_unet(n_classes,  input_height=416, input_width=608, encoder_level=3):
     return model
 
 
-def resnet50_unet(n_classes,  input_height=416, input_width=608, encoder_level=3):
+def resnet50_unet(n_classes, input_height=416, input_width=608,
+                  encoder_level=3):
 
     model = _unet(n_classes, get_resnet50_encoder,
                   input_height=input_height, input_width=input_width)
@@ -131,7 +133,8 @@ def resnet50_unet(n_classes,  input_height=416, input_width=608, encoder_level=3
     return model
 
 
-def mobilenet_unet(n_classes,  input_height=224, input_width=224, encoder_level=3):
+def mobilenet_unet(n_classes, input_height=224, input_width=224,
+                   encoder_level=3):
 
     model = _unet(n_classes, get_mobilenet_encoder,
                   input_height=input_height, input_width=input_width)

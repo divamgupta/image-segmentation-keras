@@ -14,11 +14,11 @@ def cli_train():
 
     parser = argparse.ArgumentParser()
     parser.add_argument("command", type=str)
-    parser.add_argument("--model_name", type=str)
-    parser.add_argument("--train_images", type=str)
-    parser.add_argument("--train_annotations", type=str)
+    parser.add_argument("--model_name", type=str, required=True)
+    parser.add_argument("--train_images", type=str, required=True)
+    parser.add_argument("--train_annotations", type=str, required=True)
 
-    parser.add_argument("--n_classes", type=int)
+    parser.add_argument("--n_classes", type=int, required=True)
     parser.add_argument("--input_height", type=int, default=None)
     parser.add_argument("--input_width", type=int, default=None)
 
@@ -39,11 +39,6 @@ def cli_train():
     parser.add_argument("--optimizer_name", type=str, default="adadelta")
 
     args = parser.parse_args()
-
-    assert not args.model_name is None, "Please provide model_name"
-    assert not args.train_images is None, "Please provide train_images"
-    assert not args.train_annotations is None, "Please provide train_annotations"
-    assert not args.n_classes is None, "Please provide n_classes"
 
     train.train(model=args.model_name,
                 train_images=args.train_images,
@@ -70,22 +65,20 @@ def cli_predict():
 
     parser = argparse.ArgumentParser()
     parser.add_argument("command", type=str)
-    parser.add_argument("--checkpoints_path", type=str)
-    parser.add_argument("--input_path", type=str, default="")
-    parser.add_argument("--output_path", type=str, default="")
+    parser.add_argument("--checkpoints_path", type=str, required=True)
+    parser.add_argument("--input_path", type=str, default="", required=True)
+    parser.add_argument("--output_path", type=str, default="", required=True)
 
     args = parser.parse_args()
 
-    assert not args.checkpoints_path is None
-    assert not args.input_path is None
-    assert not args.output_path is None
-
-    if ".jpg" in args.input_path or ".png" in args.input_path or ".jpeg" in args.input_path:
+    if ".jpg" in args.input_path or ".png" in args.input_path or \
+            ".jpeg" in args.input_path:
         predict.predict(inp=args.input_path, out_fname=args.output_path,
                         checkpoints_path=args.checkpoints_path)
     else:
-        predict.predict_multiple(
-            inp_dir=args.input_path, out_dir=args.output_path, checkpoints_path=args.checkpoints_path)
+        predict.predict_multiple(inp_dir=args.input_path,
+                                 out_dir=args.output_path,
+                                 checkpoints_path=args.checkpoints_path)
 
 
 def cli_verify_dataset():
@@ -113,12 +106,13 @@ def cli_visualize_dataset():
 
     args = parser.parse_args()
 
-    visualize_segmentation_dataset(
-        args.images_path, args.segs_path,  args.n_classes, do_augment=args.do_augment)
+    visualize_segmentation_dataset(args.images_path, args.segs_path,
+                                   args.n_classes, do_augment=args.do_augment)
 
 
 def main():
-    assert len(sys.argv) >= 2, "python -m keras_segmentation <command> <arguments>"
+    assert len(sys.argv) >= 2, \
+        "python -m keras_segmentation <command> <arguments>"
 
     command = sys.argv[1]
 

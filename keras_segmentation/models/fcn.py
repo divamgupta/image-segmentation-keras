@@ -50,7 +50,8 @@ def crop(o1, o2, i):
     return o1, o2
 
 
-def fcn_8(n_classes, encoder=vanilla_encoder,  input_height=416, input_width=608):
+def fcn_8(n_classes, encoder=vanilla_encoder, input_height=416,
+          input_width=608):
 
     img_input, levels = encoder(
         input_height=input_height,  input_width=input_width)
@@ -94,7 +95,8 @@ def fcn_8(n_classes, encoder=vanilla_encoder,  input_height=416, input_width=608
     return model
 
 
-def fcn_32(n_classes, encoder=vanilla_encoder,  input_height=416, input_width=608):
+def fcn_32(n_classes, encoder=vanilla_encoder, input_height=416,
+           input_width=608):
 
     img_input, levels = encoder(
         input_height=input_height,  input_width=input_width)

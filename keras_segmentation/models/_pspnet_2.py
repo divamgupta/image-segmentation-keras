@@ -4,7 +4,8 @@
 from math import ceil
 from keras import layers
 from keras.layers import Conv2D, MaxPooling2D, AveragePooling2D
-from keras.layers import BatchNormalization, Activation, Input, Dropout, ZeroPadding2D, Lambda
+from keras.layers import BatchNormalization, Activation, Input, Dropout, \
+    ZeroPadding2D, Lambda
 from keras.layers.merge import Concatenate, Add
 from keras.models import Model
 from keras.optimizers import SGD
@@ -40,7 +41,10 @@ class Interp(layers.Layer):
         return resized
 
     def compute_output_shape(self, input_shape):
-        return tuple([None, self.new_size[0], self.new_size[1], input_shape[3]])
+        return tuple([None,
+                      self.new_size[0],
+                      self.new_size[1],
+                      input_shape[3]])
 
     def get_config(self):
         config = super(Interp, self).get_config()
@@ -86,7 +90,8 @@ def residual_conv(prev, level, pad=1, lvl=1, sub_lvl=1, modify_stride=False):
     return prev
 
 
-def short_convolution_branch(prev, level, lvl=1, sub_lvl=1, modify_stride=False):
+def short_convolution_branch(prev, level, lvl=1, sub_lvl=1,
+                             modify_stride=False):
     lvl = str(lvl)
     sub_lvl = str(sub_lvl)
     names = ["conv" + lvl + "_" + sub_lvl + "_1x1_proj",
@@ -107,7 +112,8 @@ def empty_branch(prev):
     return prev
 
 
-def residual_short(prev_layer, level, pad=1, lvl=1, sub_lvl=1, modify_stride=False):
+def residual_short(prev_layer, level, pad=1, lvl=1, sub_lvl=1,
+                   modify_stride=False):
     prev_layer = Activation('relu')(prev_layer)
     block_1 = residual_conv(prev_layer, level,
                             pad=pad, lvl=lvl, sub_lvl=sub_lvl,
@@ -251,7 +257,8 @@ def build_pyramid_pooling_module(res, input_shape):
     return res
 
 
-def _build_pspnet(nb_classes, resnet_layers, input_shape, activation='softmax'):
+def _build_pspnet(nb_classes, resnet_layers, input_shape,
+                  activation='softmax'):
 
     assert IMAGE_ORDERING == 'channels_last'
 

@@ -4,16 +4,21 @@ from keras.layers import *
 from keras import layers
 import keras.backend as K
 
-# code taken from https://github.com/fchollet/deep-learning-models/blob/master/resnet50.py
+# Source:
+# https://github.com/fchollet/deep-learning-models/blob/master/resnet50.py
 
 
 from .config import IMAGE_ORDERING
 
 
 if IMAGE_ORDERING == 'channels_first':
-    pretrained_url = "https://github.com/fchollet/deep-learning-models/releases/download/v0.2/resnet50_weights_th_dim_ordering_th_kernels_notop.h5"
+    pretrained_url = "https://github.com/fchollet/deep-learning-models/" \
+                     "releases/download/v0.2/" \
+                     "resnet50_weights_th_dim_ordering_th_kernels_notop.h5"
 elif IMAGE_ORDERING == 'channels_last':
-    pretrained_url = "https://github.com/fchollet/deep-learning-models/releases/download/v0.2/resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5"
+    pretrained_url = "https://github.com/fchollet/deep-learning-models/" \
+                     "releases/download/v0.2/" \
+                     "resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5"
 
 
 def one_side_pad(x):
@@ -29,7 +34,8 @@ def identity_block(input_tensor, kernel_size, filters, stage, block):
     """The identity block is the block that has no conv layer at shortcut.
     # Arguments
         input_tensor: input tensor
-        kernel_size: defualt 3, the kernel size of middle conv layer at main path
+        kernel_size: defualt 3, the kernel size of middle conv layer at
+                     main path
         filters: list of integers, the filterss of 3 conv layer at main path
         stage: integer, current stage label, used for generating layer names
         block: 'a','b'..., current block label, used for generating layer names
@@ -65,18 +71,20 @@ def identity_block(input_tensor, kernel_size, filters, stage, block):
     return x
 
 
-def conv_block(input_tensor, kernel_size, filters, stage, block, strides=(2, 2)):
+def conv_block(input_tensor, kernel_size, filters, stage, block,
+               strides=(2, 2)):
     """conv_block is the block that has a conv layer at shortcut
     # Arguments
         input_tensor: input tensor
-        kernel_size: defualt 3, the kernel size of middle conv layer at main path
+        kernel_size: defualt 3, the kernel size of middle conv layer at
+                     main path
         filters: list of integers, the filterss of 3 conv layer at main path
         stage: integer, current stage label, used for generating layer names
         block: 'a','b'..., current block label, used for generating layer names
     # Returns
         Output tensor for the block.
-    Note that from stage 3, the first conv layer at main path is with strides=(2,2)
-    And the shortcut should have strides=(2,2) as well
+    Note that from stage 3, the first conv layer at main path is with
+    strides=(2,2) and the shortcut should have strides=(2,2) as well
     """
     filters1, filters2, filters3 = filters
 
@@ -93,8 +101,8 @@ def conv_block(input_tensor, kernel_size, filters, stage, block, strides=(2, 2))
     x = BatchNormalization(axis=bn_axis, name=bn_name_base + '2a')(x)
     x = Activation('relu')(x)
 
-    x = Conv2D(filters2, kernel_size, data_format=IMAGE_ORDERING, padding='same',
-               name=conv_name_base + '2b')(x)
+    x = Conv2D(filters2, kernel_size, data_format=IMAGE_ORDERING,
+               padding='same', name=conv_name_base + '2b')(x)
     x = BatchNormalization(axis=bn_axis, name=bn_name_base + '2b')(x)
     x = Activation('relu')(x)
 
@@ -102,8 +110,8 @@ def conv_block(input_tensor, kernel_size, filters, stage, block, strides=(2, 2))
                name=conv_name_base + '2c')(x)
     x = BatchNormalization(axis=bn_axis, name=bn_name_base + '2c')(x)
 
-    shortcut = Conv2D(filters3, (1, 1), data_format=IMAGE_ORDERING, strides=strides,
-                      name=conv_name_base + '1')(input_tensor)
+    shortcut = Conv2D(filters3, (1, 1), data_format=IMAGE_ORDERING,
+                      strides=strides, name=conv_name_base + '1')(input_tensor)
     shortcut = BatchNormalization(
         axis=bn_axis, name=bn_name_base + '1')(shortcut)
 
@@ -112,8 +120,8 @@ def conv_block(input_tensor, kernel_size, filters, stage, block, strides=(2, 2))
     return x
 
 
-def get_resnet50_encoder(input_height=224,  input_width=224, pretrained='imagenet',
-
+def get_resnet50_encoder(input_height=224,  input_width=224,
+                         pretrained='imagenet',
                          include_top=True, weights='imagenet',
                          input_tensor=None, input_shape=None,
                          pooling=None,

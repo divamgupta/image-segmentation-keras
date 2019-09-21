@@ -28,7 +28,8 @@ def pool_block(feats, pool_factor):
         w = K.int_shape(feats)[2]
 
     pool_size = strides = [
-        int(np.round(float(h) / pool_factor)), int(np.round(float(w) / pool_factor))]
+        int(np.round(float(h) / pool_factor)),
+        int(np.round(float(w) / pool_factor))]
 
     x = AveragePooling2D(pool_size, data_format=IMAGE_ORDERING,
                          strides=strides, padding='same')(feats)
@@ -66,7 +67,8 @@ def _pspnet(n_classes, encoder,  input_height=384, input_width=576):
     o = BatchNormalization()(o)
     o = Activation('relu')(o)
 
-    o = Conv2D(n_classes, (3, 3), data_format=IMAGE_ORDERING, padding='same')(o)
+    o = Conv2D(n_classes, (3, 3), data_format=IMAGE_ORDERING,
+               padding='same')(o)
     o = resize_image(o, (8, 8), data_format=IMAGE_ORDERING)
 
     model = get_segmentation_model(img_input, o)
@@ -125,7 +127,8 @@ def pspnet_101(n_classes,  input_height=473, input_width=473):
 
 # def mobilenet_pspnet( n_classes ,  input_height=224, input_width=224 ):
 
-# 	model =  _pspnet( n_classes , get_mobilenet_encoder ,  input_height=input_height, input_width=input_width  )
+# 	model =  _pspnet(n_classes, get_mobilenet_encoder,
+#                    input_height=input_height, input_width=input_width)
 # 	model.model_name = "mobilenet_pspnet"
 # 	return model
 

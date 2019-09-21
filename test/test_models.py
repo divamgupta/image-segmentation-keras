@@ -1,11 +1,11 @@
 import pytest
-from keras_segmentation import models
-from keras_segmentation.models.config import IMAGE_ORDERING
 import random
 import numpy as np
 
-from keras_segmentation.data_utils.data_loader import verify_segmentation_dataset, image_segmentation_generator
-
+from keras_segmentation import models
+from keras_segmentation.models.config import IMAGE_ORDERING
+from keras_segmentation.data_utils.data_loader import \
+    verify_segmentation_dataset, image_segmentation_generator
 from keras_segmentation.predict import predict_multiple, predict
 
 tr_im = "test/example_dataset/images_prepped_train"
@@ -19,8 +19,11 @@ def test_verify():
 
 
 def test_datag():
-    g = image_segmentation_generator(images_path=tr_im, segs_path=tr_an,  batch_size=3,  n_classes=50,
-                                     input_height=224, input_width=324, output_height=114, output_width=134, do_augment=False)
+    g = image_segmentation_generator(images_path=tr_im, segs_path=tr_an,
+                                     batch_size=3,  n_classes=50,
+                                     input_height=224, input_width=324,
+                                     output_height=114, output_width=134,
+                                     do_augment=False)
 
     x, y = next(g)
     assert x.shape[0] == 3
@@ -59,7 +62,7 @@ def test_model():
 
 
 # 	unet_models = [  , models.unet.vgg_unet , models.unet.resnet50_unet ]
-# 	args = [ ( 101, 416 , 608)  , ( 101, 224 , 224)  , ( 101, 256  , 256 ) , ( 2, 32*4  , 32*5 )  ]
+# 	args = [(101, 416, 608), (101, 224 ,224), (101, 256, 256), (2, 32*4, 32*5)]
 # 	en_level = [ 1,2,3,4 ]
 
 # 	for mf in unet_models:
