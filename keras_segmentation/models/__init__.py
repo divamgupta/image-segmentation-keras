@@ -1,11 +1,9 @@
 
-model_from_name = {}
-
+from . import pspnet
+from . import unet
+from . import segnet
 from . import fcn
-from  . import segnet
-from  . import unet
-from  . import pspnet
-
+model_from_name = {}
 
 
 model_from_name["fcn_8"] = fcn.fcn_8
@@ -29,7 +27,6 @@ model_from_name["pspnet_50"] = pspnet.pspnet_50
 model_from_name["pspnet_101"] = pspnet.pspnet_101
 
 
-
 # model_from_name["mobilenet_pspnet"] = pspnet.mobilenet_pspnet
 
 
@@ -44,6 +41,3 @@ model_from_name["segnet"] = segnet.segnet
 model_from_name["vgg_segnet"] = segnet.vgg_segnet
 model_from_name["resnet50_segnet"] = segnet.resnet50_segnet
 model_from_name["mobilenet_segnet"] = segnet.mobilenet_segnet
-
-
-

@@ -13,7 +13,7 @@ import tensorflow as tf
 
 
 from .config import IMAGE_ORDERING
-from .model_utils import get_segmentation_model , resize_image
+from .model_utils import get_segmentation_model, resize_image
 
 
 learning_rate = 1e-3  # Layer specific learning rate
@@ -36,7 +36,7 @@ class Interp(layers.Layer):
     def call(self, inputs, **kwargs):
         new_height, new_width = self.new_size
         resized = tf.image.resize_images(inputs, [new_height, new_width],
-                                          align_corners=True)
+                                         align_corners=True)
         return resized
 
     def compute_output_shape(self, input_shape):
@@ -236,7 +236,6 @@ def build_pyramid_pooling_module(res, input_shape):
     feature_map_size = tuple(int(ceil(input_dim / 8.0))
                              for input_dim in input_shape)
 
-
     interp_block1 = interp_block(res, 1, feature_map_size, input_shape)
     interp_block2 = interp_block(res, 2, feature_map_size, input_shape)
     interp_block3 = interp_block(res, 3, feature_map_size, input_shape)
@@ -252,15 +251,14 @@ def build_pyramid_pooling_module(res, input_shape):
     return res
 
 
-def _build_pspnet(nb_classes, resnet_layers, input_shape, activation='softmax' ):
-    
+def _build_pspnet(nb_classes, resnet_layers, input_shape, activation='softmax'):
+
     assert IMAGE_ORDERING == 'channels_last'
 
     inp = Input((input_shape[0], input_shape[1], 3))
-    
-    
+
     res = ResNet(inp, layers=resnet_layers)
-    
+
     psp = build_pyramid_pooling_module(res, input_shape)
 
     x = Conv2D(512, (3, 3), strides=(1, 1), padding="same", name="conv5_4",
@@ -273,8 +271,7 @@ def _build_pspnet(nb_classes, resnet_layers, input_shape, activation='softmax' )
     # x = Lambda(Interp, arguments={'shape': (
     #    input_shape[0], input_shape[1])})(x)
     x = Interp([input_shape[0], input_shape[1]])(x)
-    
 
-    model = get_segmentation_model( inp  , x )
-    
+    model = get_segmentation_model(inp, x)
+
     return model

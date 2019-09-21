@@ -10,4 +10,4 @@ setup(name="keras_segmentation",
       license="MIT",
       url="https://github.com/divamgupta/image-segmentation-keras",
       packages=find_packages(),
-)
+      )
