@@ -32,8 +32,8 @@ def get_pairs_from_paths(images_path, segs_path, ignore_non_matching=False):
         the segmentation images from the segs_path directory
         while checking integrity of data """
 
-    ACCEPTABLE_IMAGE_FORMATS = ["jpg", "jpeg", "png"]
-    ACCEPTABLE_SEGMENTATION_FORMATS = ["png"]
+    ACCEPTABLE_IMAGE_FORMATS = [".jpg", ".jpeg", ".png"]
+    ACCEPTABLE_SEGMENTATION_FORMATS = [".png"]
 
     image_files = []
     segmentation_files = {}
@@ -42,26 +42,26 @@ def get_pairs_from_paths(images_path, segs_path, ignore_non_matching=False):
         if os.path.isfile(os.path.join(images_path, dir_entry)) and \
                 os.path.splitext(dir_entry)[1] in ACCEPTABLE_IMAGE_FORMATS:
             file_name, file_extension = os.path.splitext(dir_entry)
-            image_files.append(file_name, file_extension, os.path.join(images_path, dir_entry))
+            image_files.append((file_name, file_extension, os.path.join(images_path, dir_entry)))
 
     for dir_entry in os.listdir(segs_path):
         if os.path.isfile(os.path.join(segs_path, dir_entry)) and \
                 os.path.splitext(dir_entry)[1] in ACCEPTABLE_SEGMENTATION_FORMATS:
             file_name, file_extension = os.path.splitext(dir_entry)
             if file_name in segmentation_files:
-                raise DataLoaderError("Segmentation file with filename {} already exists and is ambiguous to resolve with path {}. Please remove or rename the latter.".format(image_name, os.path.join(segs_path, dir_entry)))
+                raise DataLoaderError("Segmentation file with filename {0} already exists and is ambiguous to resolve with path {1}. Please remove or rename the latter.".format(file_name, os.path.join(segs_path, dir_entry)))
             segmentation_files[file_name] = (file_extension, os.path.join(segs_path, dir_entry))
 
     return_value = []
     # Match the images and segmentations
     for image_file, _, image_full_path in image_files:
         if image_file in segmentation_files:
-            return_value = (image_full_path, segmentation_files[image_file][1])
+            return_value.append((image_full_path, segmentation_files[image_file][1]))
         elif ignore_non_matching:
             continue
         else:
             # Error out
-            raise DataLoaderError("No corresponding segmentation found for image {}".format(image_file, image_files[image_file]))
+            raise DataLoaderError("No corresponding segmentation found for image {0}.".format(image_full_path))
 
     return return_value
 

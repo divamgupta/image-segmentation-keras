@@ -1,6 +1,7 @@
 import pytest
 import random
 import numpy as np
+import tempfile
 
 from keras_segmentation.models import all_models
 from keras_segmentation.models.config import IMAGE_ORDERING
@@ -36,7 +37,7 @@ def test_model():
     h = 224
     w = 256
     n_c = 100
-    check_path = "/tmp/%d" % (random.randint(0, 199999))
+    check_path = tempfile.mktemp()
 
     m = all_models.model_from_name[model_name](n_c,  input_height=h, input_width=w)
 
