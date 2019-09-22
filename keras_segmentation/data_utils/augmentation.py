@@ -1,20 +1,24 @@
-
 import random
 import numpy as np
 import cv2
-
-
-seq = [None]
-
-
-def load_aug():
-
+try:
     import imgaug as ia
     from imgaug import augmenters as iaa
+except ImportError:
+    print("Error in loading augmentation, can't import imgaug. Please make sure it is installed.")
 
-    def sometimes(aug): return iaa.Sometimes(0.5, aug)
 
-    seq[0] = iaa.Sequential(
+IMAGE_AUGMENTATION_SEQUENCE = None
+IMAGE_AUGMENTATION_NUM_TRIES = 10
+
+def _load_augmentation():
+    """ Load image augmentation model """
+
+    def sometimes(aug):
+        return iaa.Sometimes(0.5, aug)
+
+    global IMAGE_AUGMENTATION_SEQUENCE
+    IMAGE_AUGMENTATION_SEQUENCE = iaa.Sequential(
         [
             # apply the following augmenters to most images
             iaa.Fliplr(0.5),  # horizontally flip 50% of all images
@@ -116,34 +120,33 @@ def load_aug():
 
 def _augment_seg(img, seg):
 
-    import imgaug as ia
+    if not IMAGE_AUGMENTATION_SEQUENCE:
+        _load_augmentation()
 
-    if seq[0] is None:
-        load_aug()
-
-    aug_det = seq[0].to_deterministic()
+    # Create a deterministic augmentation from the random one
+    aug_det = IMAGE_AUGMENTATION_SEQUENCE.to_deterministic()
+    # Augment the input image
     image_aug = aug_det.augment_image(img)
 
     segmap = ia.SegmentationMapOnImage(
-        seg, nb_classes=np.max(seg)+1, shape=img.shape)
+        seg, nb_classes=np.max(seg) + 1, shape=img.shape)
     segmap_aug = aug_det.augment_segmentation_maps(segmap)
     segmap_aug = segmap_aug.get_arr_int()
 
     return image_aug, segmap_aug
 
 
-def try_n_times(fn, n, *args, **kargs):
-
+def _try_n_times(fn, n, *args, **kargs):
+    """ Try a function N times """
     attempts = 0
-
     while attempts < n:
         try:
             return fn(*args, **kargs)
-        except Exception as e:
+        except Exception:
             attempts += 1
 
     return fn(*args, **kargs)
 
 
 def augment_seg(img, seg):
-    return try_n_times(_augment_seg, 10,  img, seg)
+    return _try_n_times(_augment_seg, IMAGE_AUGMENTATION_NUM_TRIES, img, seg)
