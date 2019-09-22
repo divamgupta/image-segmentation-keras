@@ -4,13 +4,12 @@ from keras.models import *
 from keras.layers import *
 import keras.backend as K
 
-
-from keras_segmentation.models.config import IMAGE_ORDERING
-from keras_segmentation.models.model_utils import get_segmentation_model, resize_image
-from keras_segmentation.models.vgg16 import get_vgg_encoder
-from keras_segmentation.models.mobilenet import get_mobilenet_encoder
-from keras_segmentation.models.basic_models import vanilla_encoder
-from keras_segmentation.models.resnet50 import get_resnet50_encoder
+from .config import IMAGE_ORDERING
+from .model_utils import get_segmentation_model, resize_image
+from .vgg16 import get_vgg_encoder
+from .mobilenet import get_mobilenet_encoder
+from .basic_models import vanilla_encoder
+from .resnet50 import get_resnet50_encoder
 
 
 if IMAGE_ORDERING == 'channels_first':
@@ -101,7 +100,7 @@ def resnet50_pspnet(n_classes,  input_height=384, input_width=576):
 
 
 def pspnet_50(n_classes,  input_height=473, input_width=473):
-    from keras_segmentation.models._pspnet_2 import _build_pspnet
+    from ._pspnet_2 import _build_pspnet
 
     nb_classes = n_classes
     resnet_layers = 50
@@ -114,7 +113,7 @@ def pspnet_50(n_classes,  input_height=473, input_width=473):
 
 
 def pspnet_101(n_classes,  input_height=473, input_width=473):
-    from keras_segmentation.models._pspnet_2 import _build_pspnet
+    from ._pspnet_2 import _build_pspnet
 
     nb_classes = n_classes
     resnet_layers = 101

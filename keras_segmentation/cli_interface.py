@@ -2,10 +2,11 @@
 
 import sys
 import argparse
-from keras_segmentation.train import train
-from keras_segmentation.predict import predict, predict_multiple
-from keras_segmentation.data_utils.data_loader import verify_segmentation_dataset
-from keras_segmentation.data_utils.visualize_dataset import visualize_segmentation_dataset
+
+from .train import train
+from .predict import predict, predict_multiple
+from .data_utils.data_loader import verify_segmentation_dataset
+from .data_utils.visualize_dataset import visualize_segmentation_dataset
 
 
 def train_action(command_parser):

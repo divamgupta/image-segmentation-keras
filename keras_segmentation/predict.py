@@ -1,17 +1,17 @@
 import glob
-import cv2
-import numpy as np
 import random
 import json
 import os
-from tqdm import tqdm
 
+import cv2
+import numpy as np
+from tqdm import tqdm
 from keras.models import load_model
 
-from keras_segmentation.train import find_latest_checkpoint
-from keras_segmentation.data_utils.data_loader import get_image_array, get_segmentation_array, DATA_LOADER_SEED, class_colors
-from keras_segmentation.models.config import IMAGE_ORDERING
-from keras_segmentation import metrics
+from .train import find_latest_checkpoint
+from .data_utils.data_loader import get_image_array, get_segmentation_array, DATA_LOADER_SEED, class_colors
+from .models.config import IMAGE_ORDERING
+from . import metrics
 
 import six
 
@@ -19,7 +19,7 @@ random.seed(DATA_LOADER_SEED)
 
 def model_from_checkpoint_path(checkpoints_path):
 
-    from keras_segmentation.models.all_models import model_from_name
+    from .models.all_models import model_from_name
     assert (os.path.isfile(checkpoints_path+"_config.json")
             ), "Checkpoint not found."
     model_config = json.loads(

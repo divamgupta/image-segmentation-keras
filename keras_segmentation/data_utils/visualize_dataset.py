@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 
 import glob
-import numpy as np
-import cv2
 import random
 
-from keras_segmentation.data_utils.augmentation import augment_seg
-from keras_segmentation.data_utils.data_loader import \
+import numpy as np
+import cv2
+
+from .augmentation import augment_seg
+from .data_loader import \
     get_pairs_from_paths, DATA_LOADER_SEED, class_colors, DataLoaderError
 
 random.seed(DATA_LOADER_SEED)

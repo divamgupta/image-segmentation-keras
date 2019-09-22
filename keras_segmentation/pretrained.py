@@ -1,7 +1,7 @@
 from keras.models import load_model
 import keras
 
-from keras_segmentation.models.all_models import model_from_name
+from .models.all_models import model_from_name
 
 
 def model_from_checkpoint_path(model_config, latest_weights):

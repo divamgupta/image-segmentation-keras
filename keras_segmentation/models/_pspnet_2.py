@@ -1,7 +1,7 @@
 # This code is proveded by Vladkryvoruchko and small modifications done by me .
 
-
 from math import ceil
+
 from keras import layers
 from keras.layers import Conv2D, MaxPooling2D, AveragePooling2D
 from keras.layers import BatchNormalization, Activation, Input, Dropout, \
@@ -9,12 +9,10 @@ from keras.layers import BatchNormalization, Activation, Input, Dropout, \
 from keras.layers.merge import Concatenate, Add
 from keras.models import Model
 from keras.optimizers import SGD
-
 import tensorflow as tf
 
-
-from keras_segmentation.models.config import IMAGE_ORDERING
-from keras_segmentation.models.model_utils import get_segmentation_model, resize_image
+from .config import IMAGE_ORDERING
+from .model_utils import get_segmentation_model, resize_image
 
 
 learning_rate = 1e-3  # Layer specific learning rate

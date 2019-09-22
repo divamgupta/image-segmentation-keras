@@ -1,8 +1,7 @@
-
-from keras_segmentation.models import pspnet
-from keras_segmentation.models import unet
-from keras_segmentation.models import segnet
-from keras_segmentation.models import fcn
+from . import pspnet
+from . import unet
+from . import segnet
+from . import fcn
 model_from_name = {}
 
 

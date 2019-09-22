@@ -8,7 +8,7 @@ import keras.backend as K
 # https://github.com/fchollet/deep-learning-models/blob/master/resnet50.py
 
 
-from keras_segmentation.models.config import IMAGE_ORDERING
+from .config import IMAGE_ORDERING
 
 
 if IMAGE_ORDERING == 'channels_first':

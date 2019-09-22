@@ -1,11 +1,10 @@
-
-import numpy as np
-import cv2
 import glob
 import itertools
 import os
 import random
 
+import numpy as np
+import cv2
 try:
     from tqdm import tqdm
 except ImportError:
@@ -14,8 +13,8 @@ except ImportError:
         return iter
 
 
-from keras_segmentation.models.config import IMAGE_ORDERING
-from keras_segmentation.data_utils.augmentation import augment_seg
+from ..models.config import IMAGE_ORDERING
+from .augmentation import augment_seg
 
 DATA_LOADER_SEED = 0
 

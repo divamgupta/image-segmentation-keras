@@ -1,10 +1,8 @@
-
 from keras.models import *
 from keras.layers import *
-
 import keras.backend as K
-from keras_segmentation.models.config import IMAGE_ORDERING
 
+from .config import IMAGE_ORDERING
 
 def vanilla_encoder(input_height=224,  input_width=224):
 

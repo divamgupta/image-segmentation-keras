@@ -2,9 +2,7 @@ import keras
 from keras.models import *
 from keras.layers import *
 
-
-from keras_segmentation.models.config import IMAGE_ORDERING
-
+from .config import IMAGE_ORDERING
 
 if IMAGE_ORDERING == 'channels_first':
     pretrained_url = "https://github.com/fchollet/deep-learning-models/" \

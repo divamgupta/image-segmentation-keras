@@ -1,16 +1,13 @@
-from keras.models import *
-from keras.layers import *
-
-import keras.backend as K
 from types import MethodType
 
-
-from keras_segmentation.models.config import IMAGE_ORDERING
-from keras_segmentation.train import train
-from keras_segmentation.predict import predict, predict_multiple, evaluate
-
-
+from keras.models import *
+from keras.layers import *
+import keras.backend as K
 from tqdm import tqdm
+
+from .config import IMAGE_ORDERING
+from ..train import train
+from ..predict import predict, predict_multiple, evaluate
 
 
 # source m1 , dest m2

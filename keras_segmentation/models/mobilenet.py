@@ -1,10 +1,9 @@
-
-from keras_segmentation.models.config import IMAGE_ORDERING
 from keras.models import *
 from keras.layers import *
 import keras.backend as K
 import keras
 
+from .config import IMAGE_ORDERING
 
 BASE_WEIGHT_PATH = ('https://github.com/fchollet/deep-learning-models/'
                     'releases/download/v0.6/')
