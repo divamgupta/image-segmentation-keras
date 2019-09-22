@@ -2,12 +2,10 @@
 
 import sys
 import argparse
-from . import train
-from . import predict
-
-from . import data_utils
-
-from .data_utils.visualize_dataset import visualize_segmentation_dataset
+from keras_segmentation.train import train
+from keras_segmentation.predict import predict, predict_multiple
+from keras_segmentation.data_utils.data_loader import verify_segmentation_dataset
+from keras_segmentation.data_utils.visualize_dataset import visualize_segmentation_dataset
 
 
 def train_action(command_parser):
@@ -38,7 +36,7 @@ def train_action(command_parser):
     parser.add_argument("--optimizer_name", type=str, default="adadelta")
 
     def action(args):
-        return train.train(model=args.model_name,
+        return train(model=args.model_name,
                     train_images=args.train_images,
                     train_annotations=args.train_annotations,
                     input_height=args.input_height,
@@ -57,7 +55,7 @@ def train_action(command_parser):
                     steps_per_epoch=args.steps_per_epoch,
                     optimizer_name=args.optimizer_name
                     )
-    
+
     parser.set_defaults(func=action)
 
 def predict_action(command_parser):
@@ -71,13 +69,13 @@ def predict_action(command_parser):
     def action(args):
         input_path_extension = args.input_path.split('.')[-1]
         if input_path_extension in ['jpg', 'jpeg', 'png']:
-            return predict.predict(inp=args.input_path, out_fname=args.output_path,
+            return predict(inp=args.input_path, out_fname=args.output_path,
                             checkpoints_path=args.checkpoints_path)
         else:
-            return predict.predict_multiple(inp_dir=args.input_path,
+            return predict_multiple(inp_dir=args.input_path,
                                     out_dir=args.output_path,
                                     checkpoints_path=args.checkpoints_path)
-    
+
     parser.set_defaults(func=action)
 
 
@@ -90,9 +88,9 @@ def verify_dataset_action(command_parser):
     parser.add_argument("--n_classes", type=int)
 
     def action(args):
-        data_utils.data_loader.verify_segmentation_dataset(
+        verify_segmentation_dataset(
             args.images_path, args.segs_path, args.n_classes)
-    
+
     parser.set_defaults(func=action)
 
 
@@ -117,7 +115,7 @@ def main():
 
     main_parser = argparse.ArgumentParser()
     command_parser = main_parser.add_subparsers()
-    
+
     # Add individual commands
     train_action(command_parser)
     predict_action(command_parser)

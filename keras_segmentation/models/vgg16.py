@@ -3,7 +3,7 @@ from keras.models import *
 from keras.layers import *
 
 
-from .config import IMAGE_ORDERING
+from keras_segmentation.models.config import IMAGE_ORDERING
 
 
 if IMAGE_ORDERING == 'channels_first':

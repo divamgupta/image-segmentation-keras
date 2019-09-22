@@ -1,29 +1,25 @@
-import argparse
-
-from keras.models import load_model
 import glob
 import cv2
 import numpy as np
 import random
+import json
 import os
 from tqdm import tqdm
-from .train import find_latest_checkpoint
-import os
-from .data_utils.data_loader import get_image_arr, get_segmentation_arr
-import json
-from .models.config import IMAGE_ORDERING
-from . import metrics
-from .models import model_from_name
+
+from keras.models import load_model
+
+from keras_segmentation.train import find_latest_checkpoint
+from keras_segmentation.data_utils.data_loader import get_image_array, get_segmentation_array, DATA_LOADER_SEED, class_colors
+from keras_segmentation.models.config import IMAGE_ORDERING
+from keras_segmentation import metrics
 
 import six
 
-random.seed(0)
-class_colors = [(random.randint(0, 255), random.randint(
-    0, 255), random.randint(0, 255)) for _ in range(5000)]
-
+random.seed(DATA_LOADER_SEED)
 
 def model_from_checkpoint_path(checkpoints_path):
 
+    from keras_segmentation.models.all_models import model_from_name
     assert (os.path.isfile(checkpoints_path+"_config.json")
             ), "Checkpoint not found."
     model_config = json.loads(
@@ -60,7 +56,7 @@ def predict(model=None, inp=None, out_fname=None, checkpoints_path=None):
     input_height = model.input_height
     n_classes = model.n_classes
 
-    x = get_image_arr(inp, input_width, input_height, odering=IMAGE_ORDERING)
+    x = get_image_array(inp, input_width, input_height, ordering=IMAGE_ORDERING)
     pr = model.predict(np.array([x]))[0]
     pr = pr.reshape((output_height,  output_width, n_classes)).argmax(axis=2)
 
@@ -110,7 +106,7 @@ def predict_multiple(model=None, inps=None, inp_dir=None, out_dir=None,
     return all_prs
 
 
-def evaluate(model=None, inp_inmges=None, annotations=None,
+def evaluate(model=None, inp_images=None, annotations=None,
              checkpoints_path=None):
 
     assert False, "not implemented "
@@ -118,7 +114,7 @@ def evaluate(model=None, inp_inmges=None, annotations=None,
     ious = []
     for inp, ann in tqdm(zip(inp_images, annotations)):
         pr = predict(model, inp)
-        gt = get_segmentation_arr(
+        gt = get_segmentation_array(
             ann, model.n_classes,  model.output_width, model.output_height)
         gt = gt.argmax(-1)
         iou = metrics.get_iou(gt, pr, model.n_classes)

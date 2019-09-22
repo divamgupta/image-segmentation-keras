@@ -5,9 +5,9 @@ import keras.backend as K
 from types import MethodType
 
 
-from .config import IMAGE_ORDERING
-from ..train import train
-from ..predict import predict, predict_multiple, evaluate
+from keras_segmentation.models.config import IMAGE_ORDERING
+from keras_segmentation.train import train
+from keras_segmentation.predict import predict, predict_multiple, evaluate
 
 
 from tqdm import tqdm

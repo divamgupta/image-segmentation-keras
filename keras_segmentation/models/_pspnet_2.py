@@ -13,8 +13,8 @@ from keras.optimizers import SGD
 import tensorflow as tf
 
 
-from .config import IMAGE_ORDERING
-from .model_utils import get_segmentation_model, resize_image
+from keras_segmentation.models.config import IMAGE_ORDERING
+from keras_segmentation.models.model_utils import get_segmentation_model, resize_image
 
 
 learning_rate = 1e-3  # Layer specific learning rate

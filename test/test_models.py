@@ -2,7 +2,7 @@ import pytest
 import random
 import numpy as np
 
-from keras_segmentation import models
+from keras_segmentation.models import all_models
 from keras_segmentation.models.config import IMAGE_ORDERING
 from keras_segmentation.data_utils.data_loader import \
     verify_segmentation_dataset, image_segmentation_generator
@@ -38,7 +38,7 @@ def test_model():
     n_c = 100
     check_path = "/tmp/%d" % (random.randint(0, 199999))
 
-    m = models.model_from_name[model_name](n_c,  input_height=h, input_width=w)
+    m = all_models.model_from_name[model_name](n_c,  input_height=h, input_width=w)
 
     m.train(train_images=tr_im,
             train_annotations=tr_an,

@@ -1,5 +1,5 @@
 
-from .config import IMAGE_ORDERING
+from keras_segmentation.models.config import IMAGE_ORDERING
 from keras.models import *
 from keras.layers import *
 import keras.backend as K

@@ -9,7 +9,7 @@ setup(name="keras_segmentation",
       platforms=["any"],  # or more specific, e.g. "win32", "cygwin", "osx"
       license="GPLv3",
       url="https://github.com/divamgupta/image-segmentation-keras",
-      packages=find_packages(),
+      packages=find_packages(exclude=["test"]),
       entry_points={
             'console_scripts': [
                   'keras_segmentation = keras_segmentation.__main__:main'

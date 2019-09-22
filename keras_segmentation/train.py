@@ -1,8 +1,7 @@
 import argparse
 import json
-from .data_utils.data_loader import image_segmentation_generator, \
+from keras_segmentation.data_utils.data_loader import image_segmentation_generator, \
     verify_segmentation_dataset
-from .models import model_from_name
 import os
 import six
 
@@ -39,6 +38,7 @@ def train(model,
           optimizer_name='adadelta'
           ):
 
+    from keras_segmentation.models.all_models import model_from_name
     # check if user gives model name insteead of the model object
     if isinstance(model, six.string_types):
         # create the model from the name
