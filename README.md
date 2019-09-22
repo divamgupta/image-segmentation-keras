@@ -1,11 +1,12 @@
 # Image Segmentation Keras : Implementation of Segnet, FCN, UNet, PSPNet and other models in Keras.
 
 [![PyPI version](https://badge.fury.io/py/keras-segmentation.svg)](https://badge.fury.io/py/keras-segmentation)
+[![Build Status](https://travis-ci.org/rjalfa/image-segmentation-keras.svg?branch=master)](https://travis-ci.org/rjalfa/image-segmentation-keras)
 [![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://saythanks.io/to/divamgupta)
 [![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](http://perso.crans.org/besson/LICENSE.html)
 
 
-Implementation of various Deep Image Segmentation models in keras. 
+Implementation of various Deep Image Segmentation models in keras.
 
 Link to the full blog post with tutorial : https://divamgupta.com/image-segmentation/2019/06/06/deep-learning-semantic-segmentation-keras.html
 
@@ -13,16 +14,16 @@ Link to the full blog post with tutorial : https://divamgupta.com/image-segmenta
   <img src="https://raw.githubusercontent.com/sunshineatnoon/Paper-Collection/master/images/FCN1.png" width="50%" >
 </p>
 
-## Our Other Repositories 
+## Our Other Repositories
 - [Attention based Language Translation in Keras](https://github.com/divamgupta/attention-translation-keras)
 - [Ladder Network in Keras](https://github.com/divamgupta/ladder_network_keras)  model achives 98% test accuracy on MNIST with just 100 labeled examples
 
-### Contributors 
+### Contributors
 
 Divam Gupta : https://divamgupta.com
 
 
-## Models 
+## Models
 
 Following models are supported:
 
@@ -52,7 +53,7 @@ Following models are supported:
 
 Example results for the pre-trained models provided :
 
-Input Image            |  Output Segmentation Image 
+Input Image            |  Output Segmentation Image
 :-------------------------:|:-------------------------:
 ![](sample_images/1_input.jpg)  |  ![](sample_images/1_output.png)
 ![](sample_images/3_input.jpg)  |  ![](sample_images/3_output.png)
@@ -64,7 +65,7 @@ Input Image            |  Output Segmentation Image
 
 * Keras 2.0
 * opencv for python
-* Theano / Tensorflow / CNTK 
+* Theano / Tensorflow / CNTK
 
 ```shell
 sudo apt-get install python-opencv
@@ -113,12 +114,12 @@ out = model.predict_segmentation(
 
 You need to make two folders
 
-*  Images Folder - For all the training images 
+*  Images Folder - For all the training images
 * Annotations Folder - For the corresponding ground truth segmentation images
 
 The filenames of the annotation images should be same as the filenames of the RGB images.
 
-The size of the annotation image for the corresponding RGB image should be same. 
+The size of the annotation image for the corresponding RGB image should be same.
 
 For each pixel in the RGB image, the class label of that pixel in the annotation image would be the value of the blue pixel.
 
@@ -142,7 +143,7 @@ Download and extract the following:
 
 https://drive.google.com/file/d/0B0d9ZiqAgFkiOHR1NTJhWVJMNEU/view?usp=sharing
 
-You will get a folder named dataset1/ 
+You will get a folder named dataset1/
 
 
 ## Using the python module
@@ -154,7 +155,7 @@ import keras_segmentation
 
 model = keras_segmentation.models.unet.vgg_unet(n_classes=51 ,  input_height=416, input_width=608  )
 
-model.train( 
+model.train(
     train_images =  "dataset1/images_prepped_train/",
     train_annotations = "dataset1/annotations_prepped_train/",
     checkpoints_path = "/tmp/vgg_unet_1" , epochs=5
@@ -172,7 +173,7 @@ plt.imshow(out)
 ```
 
 
-## Usage via command line 
+## Usage via command line
 You can also use the tool just using command line
 
 ### Visualizing the prepared data
@@ -240,13 +241,13 @@ import keras_segmentation
 from keras_segmentation.models.model_utils import transfer_weights
 
 
-pretrained_model = keras_segmentation.pretrained.pspnet_50_ADE_20K() 
+pretrained_model = keras_segmentation.pretrained.pspnet_50_ADE_20K()
 
 new_model = keras_segmentation.models.pspnet.pspnet_50( n_classes=51 )
 
 transfer_weights( pretrained_model , new_model  ) # transfer weights from pre-trained model to your model
 
-new_model.train( 
+new_model.train(
     train_images =  "dataset1/images_prepped_train/",
     train_annotations = "dataset1/annotations_prepped_train/",
     checkpoints_path = "/tmp/vgg_unet_1" , epochs=5
@@ -255,7 +256,7 @@ new_model.train(
 
 ```
 
-## Projects using keras-segmentation 
+## Projects using keras-segmentation
 Here are a few projects which are using our library :
 * https://github.com/SteliosTsop/QF-image-segmentation-keras [paper](https://arxiv.org/pdf/1908.02242.pdf)
 * https://github.com/willembressers/bouquet_quality
