@@ -3,19 +3,29 @@ import json
 from .data_utils.data_loader import image_segmentation_generator, \
     verify_segmentation_dataset
 import os
+import glob
 import six
 
 
-def find_latest_checkpoint(checkpoints_path):
-    ep = 0
-    r = None
-    while True:
-        if os.path.isfile(checkpoints_path + "." + str(ep)):
-            r = checkpoints_path + "." + str(ep)
-        else:
-            return r
+def find_latest_checkpoint(checkpoints_path, fail_safe=True):
 
-        ep += 1
+    def get_epoch_number_from_path(path):
+        return path.replace(checkpoints_path, "").strip(".")
+
+    # Get all matching files
+    all_checkpoint_files = glob.glob(checkpoints_path + ".*")
+    # Filter out entries where the epoc_number part is pure number
+    all_checkpoint_files = list(filter(lambda f: get_epoch_number_from_path(f).isdigit(), all_checkpoint_files))
+    if not len(all_checkpoint_files):
+        # The glob list is empty, don't have a checkpoints_path
+        if not fail_safe:
+            raise ValueError("Checkpoint path {0} invalid".format(checkpoints_path))
+        else:
+            return None
+
+    # Find the checkpoint file with the maximum epoch
+    latest_epoch_checkpoint = max(all_checkpoint_files, key=lambda f: int(get_epoch_number_from_path(f)))
+    return latest_epoch_checkpoint
 
 
 def train(model,
@@ -65,14 +75,15 @@ def train(model,
                       metrics=['accuracy'])
 
     if checkpoints_path is not None:
-        open(checkpoints_path+"_config.json", "w").write(json.dumps({
-            "model_class": model.model_name,
-            "n_classes": n_classes,
-            "input_height": input_height,
-            "input_width": input_width,
-            "output_height": output_height,
-            "output_width": output_width
-        }))
+        with open(checkpoints_path+"_config.json", "w") as f:
+            json.dump({
+                "model_class": model.model_name,
+                "n_classes": n_classes,
+                "input_height": input_height,
+                "input_width": input_width,
+                "output_height": output_height,
+                "output_width": output_width
+            }, f)
 
     if load_weights is not None and len(load_weights) > 0:
         print("Loading weights from ", load_weights)
@@ -86,10 +97,10 @@ def train(model,
             model.load_weights(latest_checkpoint)
 
     if verify_dataset:
-        print("Verifying train dataset")
+        print("Verifying training dataset")
         verify_segmentation_dataset(train_images, train_annotations, n_classes)
         if validate:
-            print("Verifying val dataset")
+            print("Verifying validation dataset")
             verify_segmentation_dataset(val_images, val_annotations, n_classes)
 
     train_gen = image_segmentation_generator(
