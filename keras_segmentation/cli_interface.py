@@ -11,7 +11,6 @@ from .data_utils.visualize_dataset import visualize_segmentation_dataset
 
 def train_action(command_parser):
     parser = command_parser.add_parser('train')
-    parser.add_argument("command", type=str)
     parser.add_argument("--model_name", type=str, required=True)
     parser.add_argument("--train_images", type=str, required=True)
     parser.add_argument("--train_annotations", type=str, required=True)
@@ -62,7 +61,6 @@ def train_action(command_parser):
 def predict_action(command_parser):
 
     parser = command_parser.add_parser('predict')
-    parser.add_argument("command", type=str)
     parser.add_argument("--checkpoints_path", type=str, required=True)
     parser.add_argument("--input_path", type=str, default="", required=True)
     parser.add_argument("--output_path", type=str, default="", required=True)
@@ -83,7 +81,6 @@ def predict_action(command_parser):
 def verify_dataset_action(command_parser):
 
     parser = command_parser.add_parser('verify_dataset')
-    parser.add_argument("command", type=str)
     parser.add_argument("--images_path", type=str)
     parser.add_argument("--segs_path", type=str)
     parser.add_argument("--n_classes", type=int)
@@ -98,7 +95,6 @@ def verify_dataset_action(command_parser):
 def visualize_dataset_action(command_parser):
 
     parser = command_parser.add_parser('visualize_dataset')
-    parser.add_argument("command", type=str)
     parser.add_argument("--images_path", type=str)
     parser.add_argument("--segs_path", type=str)
     parser.add_argument("--n_classes", type=int)
