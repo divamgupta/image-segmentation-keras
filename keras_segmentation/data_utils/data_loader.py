@@ -18,6 +18,7 @@ class_colors = [  ( random.randint(0,255),random.randint(0,255),random.randint(0
 
 def get_pairs_from_paths( images_path , segs_path ):
 	images = glob.glob( os.path.join(images_path,"*.jpg")  ) + glob.glob( os.path.join(images_path,"*.png")  ) +  glob.glob( os.path.join(images_path,"*.jpeg")  )
+	segs_path = segs_path[:-1] if segs_path[-1]=='/' else segs_path
 	segmentations  =  glob.glob( os.path.join(segs_path,"*.png")  ) 
 
 	segmentations_d = dict( zip(segmentations,segmentations ))
