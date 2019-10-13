@@ -49,7 +49,7 @@ def train(model,
           ):
 
     from .models.all_models import model_from_name
-    # check if user gives model name insteead of the model object
+    # check if user gives model name instead of the model object
     if isinstance(model, six.string_types):
         # create the model from the name
         assert (n_classes is not None), "Please provide the n_classes"

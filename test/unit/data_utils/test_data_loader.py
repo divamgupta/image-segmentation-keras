@@ -120,3 +120,31 @@ class TestGetPairsFromPaths(unittest.TestCase):
         for (x, y) in expected:
             expected_values.append((os.path.join(self.img_path, x), os.path.join(self.seg_path, y)))
         self.assertEqual(expected_values, sorted(data_loader.get_pairs_from_paths(self.img_path, self.seg_path, ignore_non_matching=True)))
+
+class TestGetImageArray(unittest.TestCase):
+    def test_get_image_array_normal(self):
+        """ Stub test
+        TODO(divamgupta): Fill with actual test
+        """
+        pass
+
+class TestGetSegmentationArray(unittest.TestCase):
+    def test_get_segmentation_array_normal(self):
+        """ Stub test
+        TODO(divamgupta): Fill with actual test
+        """
+        pass
+
+class TestVerifySegmentationDataset(unittest.TestCase):
+    def test_verify_segmentation_dataset(self):
+        """ Stub test
+        TODO(divamgupta): Fill with actual test
+        """
+        pass
+
+class TestImageSegmentationGenerator(unittest.TestCase):
+    def test_image_segmentation_generator(self):
+        """ Stub test
+        TODO(divamgupta): Fill with actual test
+        """
+        pass
