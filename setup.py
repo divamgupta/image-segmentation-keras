@@ -15,5 +15,17 @@ setup(name="keras_segmentation",
                   'keras_segmentation = keras_segmentation.__main__:main'
             ]
       },
-      install_requires=["Keras>=2.3.0", "imgaug>=0.2.9", "opencv-python>=4.1.1.26", "tensorflow", "tqdm"]
-      )
+      install_requires=[
+            "Keras>=2.0.0",
+            "imgaug>=0.2.9",
+            "opencv-python>=4.1.1.26",
+            "tqdm"],
+      extras_require={
+            # These requires provide different backends available with Keras
+            "tensorflow": ["tensorflow"],
+            "cntk": ["cntk"],
+            "theano": ["theano"],
+            # Default testing with tensorflow
+            "tests-default": ["tensorflow", "pytest"]
+      }
+)

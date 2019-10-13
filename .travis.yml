@@ -7,7 +7,7 @@ python:
   - "3.7"
 # command to install dependencies
 install:
-  - pip install .
-  - pip install pytest
+  # Install with tests default extras-require
+  - pip install .[tests-default]
 # command to run tests
 script: pytest
