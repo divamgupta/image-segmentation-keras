@@ -5,6 +5,7 @@ import random
 import six
 import numpy as np
 import cv2
+
 try:
     from tqdm import tqdm
 except ImportError:
