@@ -22,6 +22,7 @@ Link to the full blog post with tutorial : https://divamgupta.com/image-segmenta
 ### Contributors
 
 Divam Gupta : https://divamgupta.com
+
 [Rounaq Jhunjhunu wala](https://github.com/rjalfa)
 
 
