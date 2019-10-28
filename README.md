@@ -1,9 +1,10 @@
 # Image Segmentation Keras : Implementation of Segnet, FCN, UNet, PSPNet and other models in Keras.
 
 [![PyPI version](https://badge.fury.io/py/keras-segmentation.svg)](https://badge.fury.io/py/keras-segmentation)
-[![Build Status](https://travis-ci.org/rjalfa/image-segmentation-keras.svg?branch=master)](https://travis-ci.org/rjalfa/image-segmentation-keras)
+[![Build Status](https://travis-ci.org/divamgupta/image-segmentation-keras.png)](https://travis-ci.org/divamgupta/image-segmentation-keras)
 [![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://saythanks.io/to/divamgupta)
 [![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](http://perso.crans.org/besson/LICENSE.html)
+
 
 
 Implementation of various Deep Image Segmentation models in keras.
