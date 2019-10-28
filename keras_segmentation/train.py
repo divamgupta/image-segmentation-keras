@@ -98,10 +98,12 @@ def train(model,
 
     if verify_dataset:
         print("Verifying training dataset")
-        verify_segmentation_dataset(train_images, train_annotations, n_classes)
+        verified = verify_segmentation_dataset(train_images, train_annotations, n_classes)
+        assert verified
         if validate:
             print("Verifying validation dataset")
-            verify_segmentation_dataset(val_images, val_annotations, n_classes)
+            verified = verify_segmentation_dataset(val_images, val_annotations, n_classes)
+            assert verified
 
     train_gen = image_segmentation_generator(
         train_images, train_annotations,  batch_size,  n_classes,

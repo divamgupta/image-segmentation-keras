@@ -2,7 +2,7 @@ import glob
 import itertools
 import os
 import random
-
+import six
 import numpy as np
 import cv2
 try:
@@ -72,7 +72,7 @@ def get_image_array(image_input, width, height, imgNorm="sub_mean",
     if type(image_input) is np.ndarray:
         # It is already an array, use it as it is
         img = image_input
-    elif type(image_input) is str:
+    elif  isinstance(image_input, six.string_types)  :
         if not os.path.isfile(image_input):
             raise DataLoaderError("get_image_array: path {0} doesn't exist".format(image_input))
         img = cv2.imread(image_input, 1)
@@ -106,7 +106,7 @@ def get_segmentation_array(image_input, nClasses, width, height, no_reshape=Fals
     if type(image_input) is np.ndarray:
         # It is already an array, use it as it is
         img = image_input
-    elif type(image_input) is str:
+    elif isinstance(image_input, six.string_types) :
         if not os.path.isfile(image_input):
             raise DataLoaderError("get_segmentation_array: path {0} doesn't exist".format(image_input))
         img = cv2.imread(image_input, 1)

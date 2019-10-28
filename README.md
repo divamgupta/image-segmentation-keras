@@ -21,6 +21,8 @@ Link to the full blog post with tutorial : https://divamgupta.com/image-segmenta
 ### Contributors
 
 Divam Gupta : https://divamgupta.com
+[Rounaq Jhunjhunu wala](https://github.com/rjalfa)
+
 
 
 ## Models
@@ -92,13 +94,13 @@ pip install will be available soon!
 
 ## Pre-trained models:
 ```python
-import keras_segmentation
+from keras_segmentation.pretrained import pspnet_50_ADE_20K , pspnet_101_cityscapes, pspnet_101_voc12
 
-model = keras_segmentation.pretrained.pspnet_50_ADE_20K() # load the pretrained model trained on ADE20k dataset
+model = pspnet_50_ADE_20K() # load the pretrained model trained on ADE20k dataset
 
-model = keras_segmentation.pretrained.pspnet_101_cityscapes() # load the pretrained model trained on Cityscapes dataset
+model = pspnet_101_cityscapes() # load the pretrained model trained on Cityscapes dataset
 
-model = keras_segmentation.pretrained.pspnet_101_voc12() # load the pretrained model trained on Pascal VOC 2012 dataset
+model = pspnet_101_voc12() # load the pretrained model trained on Pascal VOC 2012 dataset
 
 # load any of the 3 pretrained models
 
@@ -151,9 +153,9 @@ You will get a folder named dataset1/
 You can import keras_segmentation in  your python script and use the API
 
 ```python
-import keras_segmentation
+from keras_segmentation.models.unet import vgg_unet
 
-model = keras_segmentation.models.unet.vgg_unet(n_classes=51 ,  input_height=416, input_width=608  )
+model = vgg_unet(n_classes=51 ,  input_height=416, input_width=608  )
 
 model.train(
     train_images =  "dataset1/images_prepped_train/",
@@ -237,13 +239,13 @@ python -m keras_segmentation predict \
 The following example shows how to fine-tune a model with 10 classes .
 
 ```python
-import keras_segmentation
 from keras_segmentation.models.model_utils import transfer_weights
+from keras_segmentation.pretrained import pspnet_50_ADE_20K
+from keras_segmentation.models.pspnet import pspnet_50
 
+pretrained_model = pspnet_50_ADE_20K()
 
-pretrained_model = keras_segmentation.pretrained.pspnet_50_ADE_20K()
-
-new_model = keras_segmentation.models.pspnet.pspnet_50( n_classes=51 )
+new_model = pspnet_50( n_classes=51 )
 
 transfer_weights( pretrained_model , new_model  ) # transfer weights from pre-trained model to your model
 
