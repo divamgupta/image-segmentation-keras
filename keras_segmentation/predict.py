@@ -122,7 +122,7 @@ def evaluate( model=None , inp_images=None , annotations=None,inp_images_dir=Non
         assert (annotations_dir is not None) , "Please privide inp_images or inp_images_dir"
         
         paths = get_pairs_from_paths(inp_images_dir , annotations_dir )
-        paths = zip(*paths)
+        paths = list(zip(*paths))
         inp_images = list(paths[0])
         annotations = list(paths[1])
         
