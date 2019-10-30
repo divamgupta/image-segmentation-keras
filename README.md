@@ -170,9 +170,11 @@ out = model.predict_segmentation(
     out_fname="/tmp/out.png"
 )
 
-
 import matplotlib.pyplot as plt
 plt.imshow(out)
+
+# evaluating the model 
+print(model.evaluate_segmentation( inp_images_dir="dataset1/images_prepped_test/"  , annotations_dir="dataset1/annotations_prepped_test/" ) )
 
 ```
 
@@ -232,6 +234,17 @@ python -m keras_segmentation predict \
  --input_path="dataset1/images_prepped_test/" \
  --output_path="path_to_predictions"
 
+```
+
+### Model Evaluation 
+
+To get the IoU scores 
+
+```shell
+python -m keras_segmentation evaluate_model \
+ --checkpoints_path="path_to_checkpoints" \
+ --images_path="dataset1/images_prepped_test/" \
+ --segs_path="dataset1/annotations_prepped_test/"
 ```
 
 
