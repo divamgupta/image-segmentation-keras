@@ -7,7 +7,7 @@ from keras_segmentation.models import all_models
 from keras_segmentation.models.config import IMAGE_ORDERING
 from keras_segmentation.data_utils.data_loader import \
     verify_segmentation_dataset, image_segmentation_generator
-from keras_segmentation.predict import predict_multiple, predict
+from keras_segmentation.predict import predict_multiple, predict , evaluate 
 
 tr_im = "test/example_dataset/images_prepped_train"
 tr_an = "test/example_dataset/annotations_prepped_train"
@@ -55,9 +55,14 @@ def test_model():
     predict_multiple(inps=[np.zeros((h, w, 3))]*3,
                      checkpoints_path=check_path, out_dir="/tmp")
 
+    ev = m.evaluate_segmentation( inp_images_dir=te_im  , annotations_dir=te_an )
+    assert ev['frequency_weighted_IU'] > 0.01
+    print(ev)
     o = predict(inp=np.zeros((h, w, 3)), checkpoints_path=check_path)
     o.shape
 
+    ev = evaluate( inp_images_dir=te_im  , annotations_dir=te_an , checkpoints_path=check_path)
+    assert ev['frequency_weighted_IU'] > 0.01
 
 # def test_models():
 

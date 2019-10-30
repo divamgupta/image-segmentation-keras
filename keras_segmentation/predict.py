@@ -9,11 +9,15 @@ from tqdm import tqdm
 from keras.models import load_model
 
 from .train import find_latest_checkpoint
-from .data_utils.data_loader import get_image_array, get_segmentation_array, DATA_LOADER_SEED, class_colors
+from .data_utils.data_loader import get_image_array, get_segmentation_array, DATA_LOADER_SEED, class_colors , get_pairs_from_paths
 from .models.config import IMAGE_ORDERING
 from . import metrics
 
 import six
+
+
+
+
 
 random.seed(DATA_LOADER_SEED)
 
@@ -106,19 +110,48 @@ def predict_multiple(model=None, inps=None, inp_dir=None, out_dir=None,
     return all_prs
 
 
-def evaluate(model=None, inp_images=None, annotations=None,
-             checkpoints_path=None):
 
-    assert False, "not implemented "
-
-    ious = []
-    for inp, ann in tqdm(zip(inp_images, annotations)):
-        pr = predict(model, inp)
-        gt = get_segmentation_array(
-            ann, model.n_classes,  model.output_width, model.output_height)
+def evaluate( model=None , inp_images=None , annotations=None,inp_images_dir=None ,annotations_dir=None , checkpoints_path=None ):
+    
+    if model is None:
+        assert (checkpoints_path is not None) , "Please provide the model or the checkpoints_path"
+        model = model_from_checkpoint_path(checkpoints_path)
+        
+    if inp_images is None:
+        assert (inp_images_dir is not None) , "Please privide inp_images or inp_images_dir"
+        assert (annotations_dir is not None) , "Please privide inp_images or inp_images_dir"
+        
+        paths = get_pairs_from_paths(inp_images_dir , annotations_dir )
+        paths = zip(*paths)
+        inp_images = list(paths[0])
+        annotations = list(paths[1])
+        
+    assert type(inp_images) is list
+    assert type(annotations) is list
+        
+    tp = np.zeros( model.n_classes  )
+    fp = np.zeros( model.n_classes  )
+    fn = np.zeros( model.n_classes  )
+    n_pixels = np.zeros( model.n_classes  )
+    
+    for inp , ann   in tqdm( zip( inp_images , annotations )):
+        pr = predict(model , inp )
+        gt = get_segmentation_array( ann , model.n_classes ,  model.output_width , model.output_height , no_reshape=True  )
         gt = gt.argmax(-1)
-        iou = metrics.get_iou(gt, pr, model.n_classes)
-        ious.append(iou)
-    ious = np.array(ious)
-    print("Class wise IoU ",  np.mean(ious, axis=0))
-    print("Total  IoU ",  np.mean(ious))
+        pr = pr.flatten()
+        gt = gt.flatten()
+                
+        for cl_i in range(model.n_classes ):
+            
+            tp[ cl_i ] += np.sum( (pr == cl_i) * (gt == cl_i) )
+            fp[ cl_i ] += np.sum( (pr == cl_i) * ((gt != cl_i)) )
+            fn[ cl_i ] += np.sum( (pr != cl_i) * ((gt == cl_i)) )
+            n_pixels[ cl_i ] += np.sum( gt == cl_i  )
+            
+    cl_wise_score = tp / ( tp + fp + fn + 0.000000000001 )
+    n_pixels_norm = n_pixels /  np.sum(n_pixels)
+    frequency_weighted_IU = np.sum(cl_wise_score*n_pixels_norm)
+    mean_IU = np.mean(cl_wise_score)
+    return {"frequency_weighted_IU":frequency_weighted_IU , "mean_IU":mean_IU , "class_wise_IU":cl_wise_score }
+
+

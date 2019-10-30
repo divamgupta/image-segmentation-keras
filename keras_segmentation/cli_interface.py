@@ -4,7 +4,7 @@ import sys
 import argparse
 
 from .train import train
-from .predict import predict, predict_multiple
+from .predict import predict, predict_multiple , evaluate
 from .data_utils.data_loader import verify_segmentation_dataset
 from .data_utils.visualize_dataset import visualize_segmentation_dataset
 
@@ -78,6 +78,23 @@ def predict_action(command_parser):
     parser.set_defaults(func=action)
 
 
+
+def evaluate_model_action(command_parser):
+
+    parser = command_parser.add_parser('evaluate_model')
+    parser.add_argument("--images_path", type=str, required=True)
+    parser.add_argument("--segs_path", type=str, required=True)
+    parser.add_argument("--checkpoints_path", type=str, required=True)
+
+    def action(args):
+        evaluate(
+            inp_images_dir=args.images_path, annotations_dir=args.segs_path, checkpoints_path=args.checkpoints_path)
+
+    parser.set_defaults(func=action)
+
+
+
+
 def verify_dataset_action(command_parser):
 
     parser = command_parser.add_parser('verify_dataset')
@@ -118,6 +135,7 @@ def main():
     predict_action(command_parser)
     verify_dataset_action(command_parser)
     visualize_dataset_action(command_parser)
+    evaluate_model_action(command_parser)
 
     args = main_parser.parse_args()
 
