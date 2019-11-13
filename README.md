@@ -85,6 +85,12 @@ Install the module
 pip install keras-segmentation
 ```
 
+or 
+
+```shell
+pip install git+https://github.com/divamgupta/image-segmentation-keras
+```
+
 ### or
 
 ```shell
