@@ -73,8 +73,8 @@ Input Image            |  Output Segmentation Image
 * Theano / Tensorflow / CNTK
 
 ```shell
-sudo apt-get install python-opencv
-sudo pip install --upgrade keras
+apt-get install -y libsm6 libxext6 libxrender-dev
+pip install opencv-python
 ```
 
 ### Installing
