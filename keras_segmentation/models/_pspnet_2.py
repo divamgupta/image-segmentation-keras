@@ -1,7 +1,7 @@
 # This code is proveded by Vladkryvoruchko and small modifications done by me .
 
 from math import ceil
-
+from sys import exit
 from keras import layers
 from keras.layers import Conv2D, MaxPooling2D, AveragePooling2D
 from keras.layers import BatchNormalization, Activation, Input, Dropout, \
