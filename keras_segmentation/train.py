@@ -45,7 +45,7 @@ def train(model,
           auto_resume_checkpoint=False,
           load_weights=None,
           steps_per_epoch=512,
-          optimizer_name='adadelta'
+          optimizer_name='adadelta' , do_augment=False 
           ):
 
     from .models.all_models import model_from_name
@@ -107,7 +107,7 @@ def train(model,
 
     train_gen = image_segmentation_generator(
         train_images, train_annotations,  batch_size,  n_classes,
-        input_height, input_width, output_height, output_width)
+        input_height, input_width, output_height, output_width , do_augment=do_augment )
 
     if validate:
         val_gen = image_segmentation_generator(
