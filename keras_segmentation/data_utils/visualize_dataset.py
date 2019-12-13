@@ -69,7 +69,7 @@ def visualize_segmentation_dataset_one(images_path, segs_path, n_classes,
     seg = cv2.imread(seg_fn)
     print("Found the following classes in the segmentation image:", np.unique(seg))
 
-    seg_img = visualize_segmentation_dataset(img, seg, colors, do_augment=do_augment)
+    seg_img = _get_colored_segmentation_image(img, seg, colors, do_augment=do_augment)
 
     if not no_show:
         cv2.imshow("img", img)
