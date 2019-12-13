@@ -27,7 +27,7 @@ def _get_colored_segmentation_image(img, seg, colors, n_classes, do_augment=Fals
         seg_img[:, :, 2] += ((seg[:, :, 0] == c) *
                             (colors[c][2])).astype('uint8')
 
-    return seg_img
+    return img , seg_img
 
 
 def visualize_segmentation_dataset(images_path, segs_path, n_classes,
@@ -46,7 +46,7 @@ def visualize_segmentation_dataset(images_path, segs_path, n_classes,
             img = cv2.imread(im_fn)
             seg = cv2.imread(seg_fn)
             print("Found the following classes in the segmentation image:", np.unique(seg))
-            seg_img = _get_colored_segmentation_image(img, seg, colors, n_classes, do_augment=do_augment)
+            img , seg_img = _get_colored_segmentation_image(img, seg, colors, n_classes, do_augment=do_augment)
             print("Please press any key to display the next image")
             cv2.imshow("img", img)
             cv2.imshow("seg_img", seg_img)
@@ -69,7 +69,7 @@ def visualize_segmentation_dataset_one(images_path, segs_path, n_classes,
     seg = cv2.imread(seg_fn)
     print("Found the following classes in the segmentation image:", np.unique(seg))
 
-    seg_img = _get_colored_segmentation_image(img, seg, colors,n_classes, do_augment=do_augment)
+    img,seg_img = _get_colored_segmentation_image(img, seg, colors,n_classes, do_augment=do_augment)
 
     if not no_show:
         cv2.imshow("img", img)
