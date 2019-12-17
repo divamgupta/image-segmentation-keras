@@ -309,6 +309,7 @@ Here are a few projects which are using our library :
 * https://github.com/RadiumScriptTang/cartoon_segmentation
 * https://github.com/dquail/NerveSegmentation
 * https://github.com/Bhomik/SemanticHumanMatting
+* https://github.com/Symefa/FP-Biomedik-Breast-Cancer
 
 
 If you use our code in a publicly available project, please add the link here ( by posting an issue or creating a PR )
