@@ -5,6 +5,7 @@
 [![Build Status](https://travis-ci.org/divamgupta/image-segmentation-keras.png)](https://travis-ci.org/divamgupta/image-segmentation-keras)
 [![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://saythanks.io/to/divamgupta)
 [![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](http://perso.crans.org/besson/LICENSE.html)
+[![Twitter](https://img.shields.io/twitter/url.svg?label=Follow%20%40divamgupta&style=social&url=https%3A%2F%2Ftwitter.com%2Fdivamgupta)](https://twitter.com/divamgupta)
 
 
 
@@ -22,7 +23,8 @@ Link to the full blog post with tutorial : https://divamgupta.com/image-segmenta
 
 ### Contributors
 
-Divam Gupta : https://divamgupta.com
+Divam Gupta : https://divamgupta.com [![Twitter](https://img.shields.io/twitter/url.svg?label=Follow%20%40divamgupta&style=social&url=https%3A%2F%2Ftwitter.com%2Fdivamgupta)](https://twitter.com/divamgupta)
+
 
 [Rounaq Jhunjhunu wala](https://github.com/rjalfa)
 
