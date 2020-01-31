@@ -3,3 +3,4 @@ h5py
 tqdm
 keras
 opencv-python
+tqdm
