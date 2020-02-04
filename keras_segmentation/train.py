@@ -45,6 +45,8 @@ def train(model,
           auto_resume_checkpoint=False,
           load_weights=None,
           steps_per_epoch=512,
+          val_steps_per_epoch=512,
+          gen_use_multiprocessing=False,
           optimizer_name='adadelta' , do_augment=False 
           ):
 
@@ -127,7 +129,7 @@ def train(model,
             print("Starting Epoch ", ep)
             model.fit_generator(train_gen, steps_per_epoch,
                                 validation_data=val_gen,
-                                validation_steps=200,  epochs=1)
+                                validation_steps=val_steps_per_epoch,  epochs=1 , use_multiprocessing=gen_use_multiprocessing)
             if checkpoints_path is not None:
                 model.save_weights(checkpoints_path + "." + str(ep))
                 print("saved ", checkpoints_path + ".model." + str(ep))
