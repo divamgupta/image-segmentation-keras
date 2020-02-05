@@ -38,7 +38,93 @@ def model_from_checkpoint_path(checkpoints_path):
     return model
 
 
-def predict(model=None, inp=None, out_fname=None, checkpoints_path=None):
+
+def get_colored_segmentation_image( seg_arr  , n_classes , colors=class_colors ):
+    output_height = seg_arr.shape[0]
+    output_width = seg_arr.shape[1]
+
+    seg_img = np.zeros((output_height, output_width, 3))
+
+    for c in range(n_classes):
+        seg_img[:, :, 0] += ((seg_arr[:, :] == c)*(colors[c][0])).astype('uint8')
+        seg_img[:, :, 1] += ((seg_arr[:, :] == c)*(colors[c][1])).astype('uint8')
+        seg_img[:, :, 2] += ((seg_arr[:, :] == c)*(colors[c][2])).astype('uint8')
+
+    return seg_img 
+
+
+
+def get_legends( class_names ,  colors=class_colors ): 
+    
+    n_classes = len(class_names)
+    legend = np.zeros(((len(class_names) * 25) + 25, 125, 3), dtype="uint8") + 255
+
+    for (i, (class_name, color)) in enumerate(zip( class_names[:n_classes] , colors[:n_classes] )):
+
+        color = [int(c) for c in color]
+        cv2.putText(legend, class_name, (5, (i * 25) + 17),
+            cv2.FONT_HERSHEY_COMPLEX, 0.5, (0, 0, 0), 1)
+        cv2.rectangle(legend, (100, (i * 25)), (125, (i * 25) + 25),
+            tuple(color), -1)
+        
+    return legend    
+
+def overlay_seg_image( inp_img , seg_img  ):
+    orininal_h = inp_img.shape[0]
+    orininal_w = inp_img.shape[1]
+    seg_img = cv2.resize(seg_img, (orininal_w, orininal_h))
+
+    fused_img = (inp_img/2 + seg_img/2 ).astype('uint8')
+    return fused_img 
+
+
+
+def concat_lenends(  seg_img , legend_img  ):
+    
+    new_h = np.maximum( seg_img.shape[0] , legend_img.shape[0] )
+    new_w = seg_img.shape[1] + legend_img.shape[1]
+
+    out_img = np.zeros((new_h ,new_w , 3  )).astype('uint8') + legend_img[0 , 0 , 0 ]
+
+    out_img[ :legend_img.shape[0] , :  legend_img.shape[1] ] = np.copy(legend_img)
+    out_img[ :seg_img.shape[0] , legend_img.shape[1]: ] = np.copy(seg_img)
+
+    return out_img
+
+
+def visualize_segmentation( seg_arr , inp_img=None  , n_classes=None , 
+    colors=class_colors , class_names=None , overlay_img=False , show_legends=False  ):
+    
+
+    if n_classes is None:
+        n_classes = np.max(seg_arr)
+
+    seg_img = get_colored_segmentation_image( seg_arr  , n_classes , colors=colors )
+
+    if not inp_img is None:
+        orininal_h = inp_img.shape[0]
+        orininal_w = inp_img.shape[1]
+        seg_img = cv2.resize(seg_img, (orininal_w, orininal_h))
+
+    if overlay_img:
+        assert not inp_img is None
+        seg_img = overlay_seg_image( inp_img , seg_img  )
+
+
+    if show_legends:
+        assert not class_names is None
+        legend_img = get_legends(class_names , colors=colors )
+
+        seg_img = concat_lenends( seg_img , legend_img )
+
+
+    return seg_img
+
+
+
+
+def predict(model=None, inp=None, out_fname=None, checkpoints_path=None,overlay_img=False ,
+    class_names=None , show_legends=False):
 
     if model is None and (checkpoints_path is not None):
         model = model_from_checkpoint_path(checkpoints_path)
@@ -64,15 +150,8 @@ def predict(model=None, inp=None, out_fname=None, checkpoints_path=None):
     pr = model.predict(np.array([x]))[0]
     pr = pr.reshape((output_height,  output_width, n_classes)).argmax(axis=2)
 
-    seg_img = np.zeros((output_height, output_width, 3))
-    colors = class_colors
-
-    for c in range(n_classes):
-        seg_img[:, :, 0] += ((pr[:, :] == c)*(colors[c][0])).astype('uint8')
-        seg_img[:, :, 1] += ((pr[:, :] == c)*(colors[c][1])).astype('uint8')
-        seg_img[:, :, 2] += ((pr[:, :] == c)*(colors[c][2])).astype('uint8')
-
-    seg_img = cv2.resize(seg_img, (orininal_w, orininal_h))
+    seg_img = visualize_segmentation( pr , inp ,n_classes=n_classes 
+        , overlay_img=overlay_img ,show_legends=show_legends ,class_names=class_names  )
 
     if out_fname is not None:
         cv2.imwrite(out_fname, seg_img)
