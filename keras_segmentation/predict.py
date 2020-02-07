@@ -93,7 +93,8 @@ def concat_lenends(  seg_img , legend_img  ):
 
 
 def visualize_segmentation( seg_arr , inp_img=None  , n_classes=None , 
-    colors=class_colors , class_names=None , overlay_img=False , show_legends=False  ):
+    colors=class_colors , class_names=None , overlay_img=False , show_legends=False , 
+    prediction_width=None , prediction_height=None  ):
     
 
     if n_classes is None:
@@ -105,6 +106,13 @@ def visualize_segmentation( seg_arr , inp_img=None  , n_classes=None ,
         orininal_h = inp_img.shape[0]
         orininal_w = inp_img.shape[1]
         seg_img = cv2.resize(seg_img, (orininal_w, orininal_h))
+
+
+    if (not prediction_height is None) and  (not prediction_width is None):
+        seg_img = cv2.resize(seg_img, (prediction_width, prediction_height ))
+        if not inp_img is None:
+            inp_img = cv2.resize(inp_img, (prediction_width, prediction_height ))
+
 
     if overlay_img:
         assert not inp_img is None
@@ -124,7 +132,7 @@ def visualize_segmentation( seg_arr , inp_img=None  , n_classes=None ,
 
 
 def predict(model=None, inp=None, out_fname=None, checkpoints_path=None,overlay_img=False ,
-    class_names=None , show_legends=False , colors=class_colors ):
+    class_names=None , show_legends=False , colors=class_colors , prediction_width=None , prediction_height=None  ):
 
     if model is None and (checkpoints_path is not None):
         model = model_from_checkpoint_path(checkpoints_path)
@@ -151,7 +159,7 @@ def predict(model=None, inp=None, out_fname=None, checkpoints_path=None,overlay_
     pr = pr.reshape((output_height,  output_width, n_classes)).argmax(axis=2)
 
     seg_img = visualize_segmentation( pr , inp ,n_classes=n_classes , colors=colors
-        , overlay_img=overlay_img ,show_legends=show_legends ,class_names=class_names  )
+        , overlay_img=overlay_img ,show_legends=show_legends ,class_names=class_names ,prediction_width=prediction_width , prediction_height=prediction_height   )
 
     if out_fname is not None:
         cv2.imwrite(out_fname, seg_img)
@@ -160,7 +168,8 @@ def predict(model=None, inp=None, out_fname=None, checkpoints_path=None,overlay_
 
 
 def predict_multiple(model=None, inps=None, inp_dir=None, out_dir=None,
-                     checkpoints_path=None):
+                     checkpoints_path=None ,overlay_img=False ,
+    class_names=None , show_legends=False , colors=class_colors , prediction_width=None , prediction_height=None  ):
 
     if model is None and (checkpoints_path is not None):
         model = model_from_checkpoint_path(checkpoints_path)
@@ -183,7 +192,10 @@ def predict_multiple(model=None, inps=None, inp_dir=None, out_dir=None,
             else:
                 out_fname = os.path.join(out_dir, str(i) + ".jpg")
 
-        pr = predict(model, inp, out_fname)
+        pr = predict( model, inp, out_fname ,
+            overlay_img=overlay_img,class_names=class_names ,show_legends=show_legends , 
+            colors=colors , prediction_width=prediction_width , prediction_height=prediction_height  )
+
         all_prs.append(pr)
 
     return all_prs
