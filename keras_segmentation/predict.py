@@ -6,7 +6,7 @@ import os
 import cv2
 import numpy as np
 from tqdm import tqdm
-from keras.models import load_model
+from tensorflow.keras.models import load_model
 
 from .train import find_latest_checkpoint
 from .data_utils.data_loader import get_image_array, get_segmentation_array, DATA_LOADER_SEED, class_colors , get_pairs_from_paths

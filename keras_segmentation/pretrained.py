@@ -1,4 +1,4 @@
-from keras.models import load_model
+from tensorflow.keras.models import load_model
 import keras
 
 from .models.all_models import model_from_name

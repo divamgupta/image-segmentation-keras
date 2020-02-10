@@ -1,6 +1,6 @@
 import keras
-from keras.models import *
-from keras.layers import *
+from tensorflow.keras.models import *
+from tensorflow.keras.layers import *
 from keras import layers
 import keras.backend as K
 

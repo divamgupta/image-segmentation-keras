@@ -3,12 +3,12 @@
 from math import ceil
 from sys import exit
 from keras import layers
-from keras.layers import Conv2D, MaxPooling2D, AveragePooling2D
-from keras.layers import BatchNormalization, Activation, Input, Dropout, \
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, AveragePooling2D
+from tensorflow.keras.layers import BatchNormalization, Activation, Input, Dropout, \
     ZeroPadding2D, Lambda
-from keras.layers.merge import Concatenate, Add
-from keras.models import Model
-from keras.optimizers import SGD
+from tensorflow.keras.layers.merge import Concatenate, Add
+from tensorflow.keras.models import Model
+from tensorflow.keras.optimizers import SGD
 import tensorflow as tf
 
 from .config import IMAGE_ORDERING
