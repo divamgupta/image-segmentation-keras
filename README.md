@@ -311,7 +311,7 @@ Here are a few projects which are using our library :
 * https://github.com/dquail/NerveSegmentation
 * https://github.com/Bhomik/SemanticHumanMatting
 * https://github.com/Symefa/FP-Biomedik-Breast-Cancer
-
+* https://github.com/Alpha-Monocerotis/PDF_FigureTable_Extraction
 
 If you use our code in a publicly available project, please add the link here ( by posting an issue or creating a PR )
 
