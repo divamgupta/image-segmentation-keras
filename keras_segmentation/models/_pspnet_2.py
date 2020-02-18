@@ -34,7 +34,9 @@ class Interp(layers.Layer):
 
     def call(self, inputs, **kwargs):
         new_height, new_width = self.new_size
-        resized = tf.image.resize(inputs, [new_height, new_width])
+
+        resized = tf.compat.v1.image.resize(inputs, [new_height, new_width],
+            align_corners=True)
         
         return resized
 
