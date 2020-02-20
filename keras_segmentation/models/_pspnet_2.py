@@ -34,8 +34,11 @@ class Interp(layers.Layer):
 
     def call(self, inputs, **kwargs):
         new_height, new_width = self.new_size
-        resized = tf.image.resize_images(inputs, [new_height, new_width],
-                                         align_corners=True)
+        try:
+            resized = tf.image.resize(inputs, [new_height, new_width])
+        except AttributeError:
+            resized = tf.image.resize_images(inputs, [new_height, new_width],
+                                             align_corners=True)
         return resized
 
     def compute_output_shape(self, input_shape):
