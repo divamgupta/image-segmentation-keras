@@ -28,10 +28,13 @@ def find_latest_checkpoint(checkpoints_path, fail_safe=True):
     return latest_epoch_checkpoint
 
 
+
 def masked_categorical_crossentropy(gt , pr ):
     from keras.losses import categorical_crossentropy
-    mask = 1-  gt[: , : , 0:1 ] 
-    return categorical_crossentropy( gt*mask , pr*mask )
+    mask = 1-  gt[: , : , 0 ] 
+    return categorical_crossentropy( gt , pr )*mask
+
+
 
 
 def train(model,
