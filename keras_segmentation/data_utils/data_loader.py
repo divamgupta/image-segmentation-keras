@@ -162,7 +162,7 @@ def verify_segmentation_dataset(images_path, segs_path, n_classes, show_all_erro
 def image_segmentation_generator(images_path, segs_path, batch_size,
                                  n_classes, input_height, input_width,
                                  output_height, output_width,
-                                 do_augment=False):
+                                 do_augment=False ,augmentation_name="aug_all" ):
 
     img_seg_pairs = get_pairs_from_paths(images_path, segs_path)
     random.shuffle(img_seg_pairs)
@@ -178,7 +178,7 @@ def image_segmentation_generator(images_path, segs_path, batch_size,
             seg = cv2.imread(seg, 1)
 
             if do_augment:
-                im, seg[:, :, 0] = augment_seg(im, seg[:, :, 0])
+                im, seg[:, :, 0] = augment_seg(im, seg[:, :, 0] , augmentation_name=augmentation_name )
 
             X.append(get_image_array(im, input_width,
                                    input_height, ordering=IMAGE_ORDERING))

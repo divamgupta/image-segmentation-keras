@@ -32,6 +32,23 @@ def test_datag():
     assert y.shape[-1] == 50
 
 
+
+# with augmentation
+def test_datag2():
+    g = image_segmentation_generator(images_path=tr_im, segs_path=tr_an,
+                                     batch_size=3,  n_classes=50,
+                                     input_height=224, input_width=324,
+                                     output_height=114, output_width=134,
+                                     do_augment=True)
+
+    x, y = next(g)
+    assert x.shape[0] == 3
+    assert y.shape[0] == 3
+    assert y.shape[-1] == 50
+
+
+
+
 def test_model():
     model_name = "fcn_8"
     h = 224
@@ -47,6 +64,15 @@ def test_model():
             epochs=2,
             checkpoints_path=check_path
             )
+
+
+    m.train(train_images=tr_im,
+            train_annotations=tr_an,
+            steps_per_epoch=2,
+            epochs=2,
+            checkpoints_path=check_path , augmentation_name='aug_geometric' , do_augment=True
+            )
+
 
     m.predict_segmentation(np.zeros((h, w, 3))).shape
 
