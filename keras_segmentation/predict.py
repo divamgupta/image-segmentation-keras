@@ -139,7 +139,7 @@ def predict(model=None, inp=None, out_fname=None, checkpoints_path=None,overlay_
 
     assert (inp is not None)
     assert((type(inp) is np.ndarray) or isinstance(inp, six.string_types)
-           ), "Inupt should be the CV image or the input file name"
+           ), "Input should be the CV image or the input file name"
 
     if isinstance(inp, six.string_types):
         inp = cv2.imread(inp)
@@ -209,8 +209,8 @@ def evaluate( model=None , inp_images=None , annotations=None,inp_images_dir=Non
         model = model_from_checkpoint_path(checkpoints_path)
         
     if inp_images is None:
-        assert (inp_images_dir is not None) , "Please privide inp_images or inp_images_dir"
-        assert (annotations_dir is not None) , "Please privide inp_images or inp_images_dir"
+        assert (inp_images_dir is not None) , "Please provide inp_images or inp_images_dir"
+        assert (annotations_dir is not None) , "Please provide inp_images or inp_images_dir"
         
         paths = get_pairs_from_paths(inp_images_dir , annotations_dir )
         paths = list(zip(*paths))
