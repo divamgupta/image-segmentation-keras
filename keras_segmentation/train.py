@@ -28,6 +28,15 @@ def find_latest_checkpoint(checkpoints_path, fail_safe=True):
     return latest_epoch_checkpoint
 
 
+
+def masked_categorical_crossentropy(gt , pr ):
+    from keras.losses import categorical_crossentropy
+    mask = 1-  gt[: , : , 0 ] 
+    return categorical_crossentropy( gt , pr )*mask
+
+
+
+
 def train(model,
           train_images,
           train_annotations,
@@ -47,7 +56,8 @@ def train(model,
           steps_per_epoch=512,
           val_steps_per_epoch=512,
           gen_use_multiprocessing=False,
-          optimizer_name='adadelta' , do_augment=False 
+          ignore_zero_class=False , 
+          optimizer_name='adadelta' , do_augment=False , augmentation_name="aug_all"
           ):
 
     from .models.all_models import model_from_name
@@ -72,7 +82,13 @@ def train(model,
         assert val_annotations is not None
 
     if optimizer_name is not None:
-        model.compile(loss='categorical_crossentropy',
+
+        if ignore_zero_class:
+            loss_k = masked_categorical_crossentropy
+        else:
+            loss_k = 'categorical_crossentropy'
+
+        model.compile(loss= loss_k ,
                       optimizer=optimizer_name,
                       metrics=['accuracy'])
 
@@ -109,7 +125,7 @@ def train(model,
 
     train_gen = image_segmentation_generator(
         train_images, train_annotations,  batch_size,  n_classes,
-        input_height, input_width, output_height, output_width , do_augment=do_augment )
+        input_height, input_width, output_height, output_width , do_augment=do_augment ,augmentation_name=augmentation_name )
 
     if validate:
         val_gen = image_segmentation_generator(
