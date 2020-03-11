@@ -138,7 +138,7 @@ def train(model,
             model.fit_generator(train_gen, steps_per_epoch, epochs=1)
             if checkpoints_path is not None:
                 model.save_weights(checkpoints_path + "." + str(ep))
-                print("saved ", checkpoints_path + ".model." + str(ep))
+                print("saved ", checkpoints_path + "." + str(ep). )
             print("Finished Epoch", ep)
     else:
         for ep in range(epochs):
@@ -148,5 +148,5 @@ def train(model,
                                 validation_steps=val_steps_per_epoch,  epochs=1 , use_multiprocessing=gen_use_multiprocessing)
             if checkpoints_path is not None:
                 model.save_weights(checkpoints_path + "." + str(ep))
-                print("saved ", checkpoints_path + ".model." + str(ep))
+                print("saved ", checkpoints_path + "." + str(ep) )
             print("Finished Epoch", ep)
