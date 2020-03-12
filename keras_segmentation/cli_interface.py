@@ -4,7 +4,7 @@ import sys
 import argparse
 
 from .train import train
-from .predict import predict, predict_multiple , evaluate
+from .predict import predict, predict_multiple, evaluate
 from .data_utils.data_loader import verify_segmentation_dataset
 from .data_utils.visualize_dataset import visualize_segmentation_dataset
 
@@ -37,26 +37,26 @@ def train_action(command_parser):
 
     def action(args):
         return train(model=args.model_name,
-                    train_images=args.train_images,
-                    train_annotations=args.train_annotations,
-                    input_height=args.input_height,
-                    input_width=args.input_width,
-                    n_classes=args.n_classes,
-                    verify_dataset=args.not_verify_dataset,
-                    checkpoints_path=args.checkpoints_path,
-                    epochs=args.epochs,
-                    batch_size=args.batch_size,
-                    validate=args.validate,
-                    val_images=args.val_images,
-                    val_annotations=args.val_annotations,
-                    val_batch_size=args.val_batch_size,
-                    auto_resume_checkpoint=args.auto_resume_checkpoint,
-                    load_weights=args.load_weights,
-                    steps_per_epoch=args.steps_per_epoch,
-                    optimizer_name=args.optimizer_name
-                    )
+                     train_images=args.train_images,
+                     train_annotations=args.train_annotations,
+                     input_height=args.input_height,
+                     input_width=args.input_width,
+                     n_classes=args.n_classes,
+                     verify_dataset=args.not_verify_dataset,
+                     checkpoints_path=args.checkpoints_path,
+                     epochs=args.epochs,
+                     batch_size=args.batch_size,
+                     validate=args.validate,
+                     val_images=args.val_images,
+                     val_annotations=args.val_annotations,
+                     val_batch_size=args.val_batch_size,
+                     auto_resume_checkpoint=args.auto_resume_checkpoint,
+                     load_weights=args.load_weights,
+                     steps_per_epoch=args.steps_per_epoch,
+                     optimizer_name=args.optimizer_name)
 
     parser.set_defaults(func=action)
+
 
 def predict_action(command_parser):
 
@@ -69,14 +69,13 @@ def predict_action(command_parser):
         input_path_extension = args.input_path.split('.')[-1]
         if input_path_extension in ['jpg', 'jpeg', 'png']:
             return predict(inp=args.input_path, out_fname=args.output_path,
-                            checkpoints_path=args.checkpoints_path)
+                           checkpoints_path=args.checkpoints_path)
         else:
             return predict_multiple(inp_dir=args.input_path,
                                     out_dir=args.output_path,
                                     checkpoints_path=args.checkpoints_path)
 
     parser.set_defaults(func=action)
-
 
 
 def evaluate_model_action(command_parser):
@@ -88,11 +87,10 @@ def evaluate_model_action(command_parser):
 
     def action(args):
         evaluate(
-            inp_images_dir=args.images_path, annotations_dir=args.segs_path, checkpoints_path=args.checkpoints_path)
+            inp_images_dir=args.images_path, annotations_dir=args.segs_path,
+            checkpoints_path=args.checkpoints_path)
 
     parser.set_defaults(func=action)
-
-
 
 
 def verify_dataset_action(command_parser):
@@ -119,9 +117,11 @@ def visualize_dataset_action(command_parser):
 
     def action(args):
         visualize_segmentation_dataset(args.images_path, args.segs_path,
-                                    args.n_classes, do_augment=args.do_augment)
+                                       args.n_classes,
+                                       do_augment=args.do_augment)
 
     parser.set_defaults(func=action)
+
 
 def main():
     assert len(sys.argv) >= 2, \

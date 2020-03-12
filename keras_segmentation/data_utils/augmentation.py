@@ -1,12 +1,11 @@
-import random
 import numpy as np
-import cv2
 
 try:
     import imgaug as ia
     from imgaug import augmenters as iaa
 except ImportError:
-    print("Error in loading augmentation, can't import imgaug. Please make sure it is installed.")
+    print("Error in loading augmentation, can't import imgaug."
+          "Please make sure it is installed.")
 
 
 IMAGE_AUGMENTATION_SEQUENCE = None
@@ -15,27 +14,20 @@ IMAGE_AUGMENTATION_NUM_TRIES = 10
 loaded_augmentation_name = ""
 
 
-
 def _load_augmentation_aug_geometric():
-    return iaa.OneOf([ 
-    
-    
-        iaa.Sequential( [ iaa.Fliplr(0.5), iaa.Flipud(0.2) ] ) , 
-
-        iaa.CropAndPad(
-                        percent=(-0.05, 0.1),
-                        pad_mode='constant' ,
-                        pad_cval=(0, 255)
-                    ) , 
-        
-        iaa.Crop( percent=(0.0,0.1 )) , 
-
-        iaa.Crop( percent=(0.3,0.5 )) , 
-        iaa.Crop( percent=(0.3,0.5 )) , 
-        iaa.Crop( percent=(0.3,0.5 )) , 
-
-        iaa.Sequential( [ iaa.Affine(
-                    # scale images to 80-120% of their size, individually per axis
+    return iaa.OneOf([
+        iaa.Sequential([iaa.Fliplr(0.5), iaa.Flipud(0.2)]),
+        iaa.CropAndPad(percent=(-0.05, 0.1),
+                       pad_mode='constant',
+                       pad_cval=(0, 255)),
+        iaa.Crop(percent=(0.0, 0.1)),
+        iaa.Crop(percent=(0.3, 0.5)),
+        iaa.Crop(percent=(0.3, 0.5)),
+        iaa.Crop(percent=(0.3, 0.5)),
+        iaa.Sequential([
+            iaa.Affine(
+                    # scale images to 80-120% of their size,
+                    # individually per axis
                     scale={"x": (0.8, 1.2), "y": (0.8, 1.2)},
                     # translate by -20 to +20 percent (per axis)
                     translate_percent={"x": (-0.2, 0.2), "y": (-0.2, 0.2)},
@@ -45,65 +37,41 @@ def _load_augmentation_aug_geometric():
                     order=[0, 1],
                     # if mode is constant, use a cval between 0 and 255
                     mode='constant',
-                    cval=(0,255) , 
+                    cval=(0, 255),
                     # use any of scikit-image's warping modes
                     # (see 2nd image from the top for examples)
-                ) , 
-
-
-         iaa.Sometimes( 0.3 , iaa.Crop( percent=(0.3,0.5 ))) ]  ) 
-
-    ] )
-
+            ),
+            iaa.Sometimes(0.3, iaa.Crop(percent=(0.3, 0.5)))])
+    ])
 
 
 def _load_augmentation_aug_non_geometric():
-
-    return  iaa.Sequential( [
-            
-    iaa.Sometimes( 0.3 , iaa.Multiply((0.5, 1.5), per_channel=0.5) ) 
-        
-
-     , iaa.Sometimes( 0.2  , iaa.JpegCompression( compression=(70, 99) ) ) 
-
-     # , iaa.Sometimes( 0.1 , iaa.BlendAlphaSimplexNoise(iaa.EdgeDetect(1.0)) ) 
-
-     , iaa.Sometimes( 0.2  , iaa.GaussianBlur( sigma=(0, 3.0) ))  
-
-     , iaa.Sometimes( 0.2 , iaa.MotionBlur(k=15, angle=[-45, 45]) ) 
-
-     , iaa.Sometimes( 0.2  , iaa.MultiplyHue((0.5, 1.5))  ) 
-
-     , iaa.Sometimes( 0.2  , iaa.MultiplySaturation((0.5, 1.5))  ) 
-                 
-     , iaa.Sometimes( 0.34 , iaa.MultiplyHueAndSaturation((0.5, 1.5), per_channel=True)  ) 
-
-     , iaa.Sometimes( 0.34, iaa.Grayscale(alpha=(0.0, 1.0)) ) 
-
-     , iaa.Sometimes( 0.2, iaa.ChangeColorTemperature((1100, 10000)) )  
-
-     , iaa.Sometimes( 0.1 , iaa.GammaContrast((0.5, 2.0)) ) 
-
-     , iaa.Sometimes( 0.2  , iaa.SigmoidContrast(gain=(3, 10), cutoff=(0.4, 0.6))  ) 
-
-     , iaa.Sometimes( 0.1 , iaa.CLAHE()  ) 
-
-     , iaa.Sometimes( 0.1 , iaa.HistogramEqualization() ) 
-
-     , iaa.Sometimes( 0.2  , iaa.LinearContrast((0.5, 2.0), per_channel=0.5)  )  
-
-
-     , iaa.Sometimes( 0.1 , iaa.Emboss(alpha=(0, 1.0), strength=(0, 2.0))  ) 
-                     
-                     ] )
+    return iaa.Sequential([
+        iaa.Sometimes(0.3, iaa.Multiply((0.5, 1.5), per_channel=0.5)),
+        iaa.Sometimes(0.2, iaa.JpegCompression(compression=(70, 99))),
+        iaa.Sometimes(0.2, iaa.GaussianBlur(sigma=(0, 3.0))),
+        iaa.Sometimes(0.2, iaa.MotionBlur(k=15, angle=[-45, 45])),
+        iaa.Sometimes(0.2, iaa.MultiplyHue((0.5, 1.5))),
+        iaa.Sometimes(0.2, iaa.MultiplySaturation((0.5, 1.5))),
+        iaa.Sometimes(0.34, iaa.MultiplyHueAndSaturation((0.5, 1.5),
+                                                         per_channel=True)),
+        iaa.Sometimes(0.34, iaa.Grayscale(alpha=(0.0, 1.0))),
+        iaa.Sometimes(0.2, iaa.ChangeColorTemperature((1100, 10000))),
+        iaa.Sometimes(0.1, iaa.GammaContrast((0.5, 2.0))),
+        iaa.Sometimes(0.2, iaa.SigmoidContrast(gain=(3, 10),
+                                               cutoff=(0.4, 0.6))),
+        iaa.Sometimes(0.1, iaa.CLAHE()),
+        iaa.Sometimes(0.1, iaa.HistogramEqualization()),
+        iaa.Sometimes(0.2, iaa.LinearContrast((0.5, 2.0), per_channel=0.5)),
+        iaa.Sometimes(0.1, iaa.Emboss(alpha=(0, 1.0), strength=(0, 2.0)))
+    ])
 
 
 def _load_augmentation_aug_all2():
-    return iaa.Sequential( [
-        iaa.Sometimes( 0.65 , _load_augmentation_aug_non_geometric() ) , 
-        iaa.Sometimes( 0.65 , _load_augmentation_aug_geometric() )
-    ] )
-
+    return iaa.Sequential([
+        iaa.Sometimes(0.65, _load_augmentation_aug_non_geometric()),
+        iaa.Sometimes(0.65, _load_augmentation_aug_geometric())
+    ])
 
 
 def _load_augmentation_aug_all():
@@ -212,35 +180,31 @@ def _load_augmentation_aug_all():
     )
 
 
+augmentation_functions = {
+    "aug_all": _load_augmentation_aug_all,
+    "aug_all2": _load_augmentation_aug_all2,
+    "aug_geometric": _load_augmentation_aug_geometric,
+    "aug_non_geometric": _load_augmentation_aug_non_geometric
+}
 
 
-augmentation_functions = { 
-    "aug_all":_load_augmentation_aug_all , 
-    "aug_all2" : _load_augmentation_aug_all2 , 
-    "aug_geometric":_load_augmentation_aug_geometric ,
-    "aug_non_geometric":_load_augmentation_aug_non_geometric 
-    }
-
-
-
-def _load_augmentation(augmentation_name="aug_all" ):
+def _load_augmentation(augmentation_name="aug_all"):
 
     global IMAGE_AUGMENTATION_SEQUENCE
 
-    if not augmentation_name in augmentation_functions:
+    if augmentation_name not in augmentation_functions:
         raise ValueError("Augmentation name not supported")
 
     IMAGE_AUGMENTATION_SEQUENCE = augmentation_functions[augmentation_name]()
 
 
-
-
-def _augment_seg(img, seg , augmentation_name="aug_all"  ):
+def _augment_seg(img, seg, augmentation_name="aug_all"):
 
     global loaded_augmentation_name
 
-    if (not IMAGE_AUGMENTATION_SEQUENCE) or ( augmentation_name != loaded_augmentation_name) :
-        _load_augmentation( augmentation_name )
+    if (not IMAGE_AUGMENTATION_SEQUENCE) or\
+       (augmentation_name != loaded_augmentation_name):
+        _load_augmentation(augmentation_name)
         loaded_augmentation_name = augmentation_name
 
     # Create a deterministic augmentation from the random one
@@ -268,5 +232,6 @@ def _try_n_times(fn, n, *args, **kargs):
     return fn(*args, **kargs)
 
 
-def augment_seg(img, seg , augmentation_name="aug_all"  ):
-    return _try_n_times(_augment_seg, IMAGE_AUGMENTATION_NUM_TRIES, img, seg , augmentation_name=augmentation_name )
+def augment_seg(img, seg, augmentation_name="aug_all"):
+    return _try_n_times(_augment_seg, IMAGE_AUGMENTATION_NUM_TRIES,
+                        img, seg, augmentation_name=augmentation_name)
