@@ -4,15 +4,13 @@ from math import ceil
 from sys import exit
 from keras import layers
 from keras.layers import Conv2D, MaxPooling2D, AveragePooling2D
-from keras.layers import BatchNormalization, Activation, Input, Dropout, \
-    ZeroPadding2D, Lambda
+from keras.layers import BatchNormalization, Activation,\
+    Input, Dropout, ZeroPadding2D
 from keras.layers.merge import Concatenate, Add
-from keras.models import Model
-from keras.optimizers import SGD
 import tensorflow as tf
 
 from .config import IMAGE_ORDERING
-from .model_utils import get_segmentation_model, resize_image
+from .model_utils import get_segmentation_model
 
 
 learning_rate = 1e-3  # Layer specific learning rate
@@ -182,12 +180,12 @@ def ResNet(inp, layers):
     res = residual_short(res, 2, pad=1, lvl=3, sub_lvl=1, modify_stride=True)
     for i in range(3):
         res = residual_empty(res, 2, pad=1, lvl=3, sub_lvl=i + 2)
-    if layers is 50:
+    if layers == 50:
         # 4_1 - 4_6
         res = residual_short(res, 4, pad=2, lvl=4, sub_lvl=1)
         for i in range(5):
             res = residual_empty(res, 4, pad=2, lvl=4, sub_lvl=i + 2)
-    elif layers is 101:
+    elif layers == 101:
         # 4_1 - 4_23
         res = residual_short(res, 4, pad=2, lvl=4, sub_lvl=1)
         for i in range(22):

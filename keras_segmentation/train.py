@@ -1,10 +1,9 @@
-import argparse
 import json
 from .data_utils.data_loader import image_segmentation_generator, \
     verify_segmentation_dataset
-import os
 import glob
 import six
+from keras.callbacks import Callback
 
 
 def find_latest_checkpoint(checkpoints_path, fail_safe=True):
@@ -15,26 +14,37 @@ def find_latest_checkpoint(checkpoints_path, fail_safe=True):
     # Get all matching files
     all_checkpoint_files = glob.glob(checkpoints_path + ".*")
     # Filter out entries where the epoc_number part is pure number
-    all_checkpoint_files = list(filter(lambda f: get_epoch_number_from_path(f).isdigit(), all_checkpoint_files))
+    all_checkpoint_files = list(filter(lambda f: get_epoch_number_from_path(f)
+                                       .isdigit(), all_checkpoint_files))
     if not len(all_checkpoint_files):
         # The glob list is empty, don't have a checkpoints_path
         if not fail_safe:
-            raise ValueError("Checkpoint path {0} invalid".format(checkpoints_path))
+            raise ValueError("Checkpoint path {0} invalid"
+                             .format(checkpoints_path))
         else:
             return None
 
     # Find the checkpoint file with the maximum epoch
-    latest_epoch_checkpoint = max(all_checkpoint_files, key=lambda f: int(get_epoch_number_from_path(f)))
+    latest_epoch_checkpoint = max(all_checkpoint_files,
+                                  key=lambda f:
+                                  int(get_epoch_number_from_path(f)))
     return latest_epoch_checkpoint
 
 
-
-def masked_categorical_crossentropy(gt , pr ):
+def masked_categorical_crossentropy(gt, pr):
     from keras.losses import categorical_crossentropy
-    mask = 1-  gt[: , : , 0 ] 
-    return categorical_crossentropy( gt , pr )*mask
+    mask = 1 - gt[:, :, 0]
+    return categorical_crossentropy(gt, pr) * mask
 
 
+class CheckpointsCallback(Callback):
+    def __init__(self, checkpoints_path):
+        self.checkpoints_path = checkpoints_path
+
+    def on_epoch_end(self, epoch, logs=None):
+        if self.checkpoints_path is not None:
+            self.model.save_weights(self.checkpoints_path + "." + str(epoch))
+            print("saved ", self.checkpoints_path + "." + str(epoch))
 
 
 def train(model,
@@ -56,9 +66,10 @@ def train(model,
           steps_per_epoch=512,
           val_steps_per_epoch=512,
           gen_use_multiprocessing=False,
-          ignore_zero_class=False , 
-          optimizer_name='adadelta' , do_augment=False , augmentation_name="aug_all"
-          ):
+          ignore_zero_class=False,
+          optimizer_name='adadelta',
+          do_augment=False,
+          augmentation_name="aug_all"):
 
     from .models.all_models import model_from_name
     # check if user gives model name instead of the model object
@@ -88,7 +99,7 @@ def train(model,
         else:
             loss_k = 'categorical_crossentropy'
 
-        model.compile(loss= loss_k ,
+        model.compile(loss=loss_k,
                       optimizer=optimizer_name,
                       metrics=['accuracy'])
 
@@ -116,37 +127,38 @@ def train(model,
 
     if verify_dataset:
         print("Verifying training dataset")
-        verified = verify_segmentation_dataset(train_images, train_annotations, n_classes)
+        verified = verify_segmentation_dataset(train_images,
+                                               train_annotations,
+                                               n_classes)
         assert verified
         if validate:
             print("Verifying validation dataset")
-            verified = verify_segmentation_dataset(val_images, val_annotations, n_classes)
+            verified = verify_segmentation_dataset(val_images,
+                                                   val_annotations,
+                                                   n_classes)
             assert verified
 
     train_gen = image_segmentation_generator(
         train_images, train_annotations,  batch_size,  n_classes,
-        input_height, input_width, output_height, output_width , do_augment=do_augment ,augmentation_name=augmentation_name )
+        input_height, input_width, output_height, output_width,
+        do_augment=do_augment, augmentation_name=augmentation_name)
 
     if validate:
         val_gen = image_segmentation_generator(
             val_images, val_annotations,  val_batch_size,
             n_classes, input_height, input_width, output_height, output_width)
 
+    callbacks = [
+        CheckpointsCallback(checkpoints_path)
+    ]
+
     if not validate:
-        for ep in range(epochs):
-            print("Starting Epoch ", ep)
-            model.fit_generator(train_gen, steps_per_epoch, epochs=1)
-            if checkpoints_path is not None:
-                model.save_weights(checkpoints_path + "." + str(ep))
-                print("saved ", checkpoints_path + "." + str(ep) )
-            print("Finished Epoch", ep)
+        model.fit_generator(train_gen, steps_per_epoch,
+                            epochs=epochs, callbacks=callbacks)
     else:
-        for ep in range(epochs):
-            print("Starting Epoch ", ep)
-            model.fit_generator(train_gen, steps_per_epoch,
-                                validation_data=val_gen,
-                                validation_steps=val_steps_per_epoch,  epochs=1 , use_multiprocessing=gen_use_multiprocessing)
-            if checkpoints_path is not None:
-                model.save_weights(checkpoints_path + "." + str(ep))
-                print("saved ", checkpoints_path + "." + str(ep) )
-            print("Finished Epoch", ep)
+        model.fit_generator(train_gen,
+                            steps_per_epoch,
+                            validation_data=val_gen,
+                            validation_steps=val_steps_per_epoch,
+                            epochs=epochs, callbacks=callbacks,
+                            use_multiprocessing=gen_use_multiprocessing)

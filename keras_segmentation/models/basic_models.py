@@ -4,6 +4,7 @@ import keras.backend as K
 
 from .config import IMAGE_ORDERING
 
+
 def vanilla_encoder(input_height=224,  input_width=224):
 
     kernel = 3

@@ -2,7 +2,6 @@ import keras
 from keras.models import *
 from keras.layers import *
 from keras import layers
-import keras.backend as K
 
 # Source:
 # https://github.com/fchollet/deep-learning-models/blob/master/resnet50.py
