@@ -177,6 +177,7 @@ def predict_multiple(model=None, inps=None, inp_dir=None, out_dir=None,
         inps = glob.glob(os.path.join(inp_dir, "*.jpg")) + glob.glob(
             os.path.join(inp_dir, "*.png")) + \
             glob.glob(os.path.join(inp_dir, "*.jpeg"))
+        inps = sorted(inps)
 
     assert type(inps) is list
 
