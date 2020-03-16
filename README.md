@@ -313,6 +313,7 @@ Here are a few projects which are using our library :
 * https://github.com/Symefa/FP-Biomedik-Breast-Cancer
 * https://github.com/Alpha-Monocerotis/PDF_FigureTable_Extraction
 * https://github.com/rusito-23/mobile_unet_segmentation
+* https://github.com/Philliec459/ThinSection-image-segmentation-keras
 
 If you use our code in a publicly available project, please add the link here ( by posting an issue or creating a PR )
 
