@@ -4,7 +4,7 @@ import sys
 import argparse
 
 from .train import train
-from .predict import predict, predict_multiple, evaluate
+from .predict import predict, predict_multiple, predict_video, evaluate
 from .data_utils.data_loader import verify_segmentation_dataset
 from .data_utils.visualize_dataset import visualize_segmentation_dataset
 
@@ -78,6 +78,21 @@ def predict_action(command_parser):
     parser.set_defaults(func=action)
 
 
+def predict_video_action(command_parser):
+    parser = command_parser.add_parser('predict_video')
+    parser.add_argument("--checkpoints_path", required=True)
+    parser.add_argument("--src", type=str, default=0, required=False)
+    parser.add_argument("--speed", type=int, default=20, required=False)
+
+    def action(args):
+        return predict_video(src=args.src,
+                             speed=args.speed,
+                             checkpoints_path=args.checkpoints_path,
+                             )
+
+    parser.set_defaults(func=action)
+
+
 def evaluate_model_action(command_parser):
 
     parser = command_parser.add_parser('evaluate_model')
@@ -133,6 +148,7 @@ def main():
     # Add individual commands
     train_action(command_parser)
     predict_action(command_parser)
+    predict_video_action(command_parser)
     verify_dataset_action(command_parser)
     visualize_dataset_action(command_parser)
     evaluate_model_action(command_parser)

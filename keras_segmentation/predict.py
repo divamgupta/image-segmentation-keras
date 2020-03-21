@@ -7,6 +7,7 @@ import six
 import cv2
 import numpy as np
 from tqdm import tqdm
+from time import time
 
 from .train import find_latest_checkpoint
 from .data_utils.data_loader import get_image_array, get_segmentation_array,\
@@ -201,6 +202,44 @@ def predict_multiple(model=None, inps=None, inp_dir=None, out_dir=None,
         all_prs.append(pr)
 
     return all_prs
+
+
+def predict_video(src, speed, checkpoints_path=None, model=None):
+    if model is None and (checkpoints_path is not None):
+        model = model_from_checkpoint_path(checkpoints_path)
+
+    output_width = model.output_width
+    output_height = model.output_height
+    input_width = model.input_width
+    input_height = model.input_height
+    n_classes = model.n_classes
+
+    cap = cv2.VideoCapture(src)
+    colors = class_colors
+    while(True):
+        # Capture frame-by-frame
+        prev_time = time()
+        ret, frame = cap.read()
+        x = get_image_array(frame, input_width, input_height, ordering=IMAGE_ORDERING)
+        pr = model.predict(np.array([x]))[0]
+        pr = pr.reshape((output_height,  output_width, n_classes)).argmax(axis=2)
+        seg_img = np.zeros((output_height, output_width, 3))
+
+        for c in range(n_classes):
+            seg_img[:, :, 0] += ((pr[:, :] == c)*(colors[c][0])).astype('uint8')
+            seg_img[:, :, 1] += ((pr[:, :] == c)*(colors[c][1])).astype('uint8')
+            seg_img[:, :, 2] += ((pr[:, :] == c)*(colors[c][2])).astype('uint8')
+        seg_img = cv2.resize(seg_img, (frame.shape[1], frame.shape[0]))
+        # mix original frame with segmented mask
+        masked = cv2.addWeighted(seg_img.astype(np.uint8), .3, frame, .7, 0)
+        print("FPS: {}".format(1/(time() - prev_time)))
+        # Display the resulting frame
+        cv2.imshow('Frame masked', masked)
+        if cv2.waitKey(speed) & 0xFF == ord('q'):
+            break
+    # When everything done, release the capture
+    cap.release()
+    cv2.destroyAllWindows()
 
 
 def evaluate(model=None, inp_images=None, annotations=None,
