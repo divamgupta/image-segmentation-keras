@@ -204,40 +204,32 @@ def predict_multiple(model=None, inps=None, inp_dir=None, out_dir=None,
     return all_prs
 
 
-def predict_video(src, speed, checkpoints_path=None, model=None):
+def predict_video(model=None, inp=None, speed=20,
+                  checkpoints_path=None, overlay_img=True,
+                  class_names=None, show_legends=False, colors=class_colors,
+                  prediction_width=None, prediction_height=None):
+
     if model is None and (checkpoints_path is not None):
         model = model_from_checkpoint_path(checkpoints_path)
-
-    output_width = model.output_width
-    output_height = model.output_height
-    input_width = model.input_width
-    input_height = model.input_height
     n_classes = model.n_classes
 
-    cap = cv2.VideoCapture(src)
-    colors = class_colors
+    cap = cv2.VideoCapture(inp)
     while(True):
-        # Capture frame-by-frame
         prev_time = time()
         ret, frame = cap.read()
-        x = get_image_array(frame, input_width, input_height, ordering=IMAGE_ORDERING)
-        pr = model.predict(np.array([x]))[0]
-        pr = pr.reshape((output_height,  output_width, n_classes)).argmax(axis=2)
-        seg_img = np.zeros((output_height, output_width, 3))
-
-        for c in range(n_classes):
-            seg_img[:, :, 0] += ((pr[:, :] == c)*(colors[c][0])).astype('uint8')
-            seg_img[:, :, 1] += ((pr[:, :] == c)*(colors[c][1])).astype('uint8')
-            seg_img[:, :, 2] += ((pr[:, :] == c)*(colors[c][2])).astype('uint8')
-        seg_img = cv2.resize(seg_img, (frame.shape[1], frame.shape[0]))
-        # mix original frame with segmented mask
-        masked = cv2.addWeighted(seg_img.astype(np.uint8), .3, frame, .7, 0)
+        pr = predict(
+            model=model, inp=frame,
+            )
+        fused_img = visualize_segmentation(pr, frame, n_classes=n_classes,
+                                           colors=colors, overlay_img=overlay_img,
+                                           show_legends=show_legends,
+                                           class_names=class_names,
+                                           prediction_width=prediction_width,
+                                           prediction_height=prediction_height)
         print("FPS: {}".format(1/(time() - prev_time)))
-        # Display the resulting frame
-        cv2.imshow('Frame masked', masked)
+        cv2.imshow('Frame masked', fused_img)
         if cv2.waitKey(speed) & 0xFF == ord('q'):
             break
-    # When everything done, release the capture
     cap.release()
     cv2.destroyAllWindows()
 

@@ -81,11 +81,11 @@ def predict_action(command_parser):
 def predict_video_action(command_parser):
     parser = command_parser.add_parser('predict_video')
     parser.add_argument("--checkpoints_path", required=True)
-    parser.add_argument("--src", type=str, default=0, required=False)
+    parser.add_argument("--inp", type=str, default=0, required=False)
     parser.add_argument("--speed", type=int, default=20, required=False)
 
     def action(args):
-        return predict_video(src=args.src,
+        return predict_video(inp=args.inp,
                              speed=args.speed,
                              checkpoints_path=args.checkpoints_path,
                              )
