@@ -229,9 +229,7 @@ def predict_video(model=None, inp=None, output=None,
         prev_time = time()
         ret, frame = cap.read()
         if frame is not None:
-            pr = predict(
-                model=model, inp=frame,
-                )
+            pr = predict(model=model, inp=frame)
             fused_img = visualize_segmentation(
                 pr, frame, n_classes=n_classes,
                 colors=colors,
