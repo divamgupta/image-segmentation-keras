@@ -7,6 +7,7 @@ import six
 import cv2
 import numpy as np
 from tqdm import tqdm
+from time import time
 
 from .train import find_latest_checkpoint
 from .data_utils.data_loader import get_image_array, get_segmentation_array,\
@@ -201,6 +202,56 @@ def predict_multiple(model=None, inps=None, inp_dir=None, out_dir=None,
         all_prs.append(pr)
 
     return all_prs
+
+
+def set_video(inp, video_name):
+    cap = cv2.VideoCapture(inp)
+    fps = int(cap.get(cv2.CAP_PROP_FPS))
+    video_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    video_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    size = (video_width, video_height)
+    fourcc = cv2.VideoWriter_fourcc(*"XVID")
+    video = cv2.VideoWriter(video_name, fourcc, fps, size)
+    return cap, video, fps
+
+
+def predict_video(model=None, inp=None, output=None,
+                  checkpoints_path=None, display=False, overlay_img=True,
+                  class_names=None, show_legends=False, colors=class_colors,
+                  prediction_width=None, prediction_height=None):
+
+    if model is None and (checkpoints_path is not None):
+        model = model_from_checkpoint_path(checkpoints_path)
+    n_classes = model.n_classes
+
+    cap, video, fps = set_video(inp, output)
+    while(cap.isOpened()):
+        prev_time = time()
+        ret, frame = cap.read()
+        if frame is not None:
+            pr = predict(model=model, inp=frame)
+            fused_img = visualize_segmentation(
+                pr, frame, n_classes=n_classes,
+                colors=colors,
+                overlay_img=overlay_img,
+                show_legends=show_legends,
+                class_names=class_names,
+                prediction_width=prediction_width,
+                prediction_height=prediction_height
+                )
+        else:
+            break
+        print("FPS: {}".format(1/(time() - prev_time)))
+        if output is not None:
+            video.write(fused_img)
+        if display:
+            cv2.imshow('Frame masked', fused_img)
+            if cv2.waitKey(fps) & 0xFF == ord('q'):
+                break
+    cap.release()
+    if output is not None:
+        video.release()
+    cv2.destroyAllWindows()
 
 
 def evaluate(model=None, inp_images=None, annotations=None,
