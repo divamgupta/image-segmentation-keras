@@ -21,12 +21,12 @@ To run the image:
 
 If you want to train with a dataset on your local machine, or make inference on images or videos, mount a volume to share this data with the docker container:
 
-$ docker run --gpus all -v /path/to/data/folder:/image-segmentation-keras/share -it unet
+    $ docker run --gpus all -v /path/to/data/folder:/image-segmentation-keras/share -it unet
 
 If graphical interface is needed, to show results, like `predict_video --display`, first let docker to use system interface. In your local host, type this line once:
 
-$ xhost +local:docker
+    $ xhost +local:docker
 
 And run the container with access to X11:
 
-$ docker run --gpus all -v /path/to/data/folder:/image-segmentation-keras/share -e DISPLAY=$DISPLAY -v /tmp/.X11-unix/:/tmp/.X11-unix --env QT_X11_NO_MITSHM=1 -it unet
+    $ docker run --gpus all -v /path/to/data/folder:/image-segmentation-keras/share -e DISPLAY=$DISPLAY -v /tmp/.X11-unix/:/tmp/.X11-unix --env QT_X11_NO_MITSHM=1 -it unet
