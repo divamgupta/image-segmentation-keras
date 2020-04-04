@@ -244,6 +244,23 @@ python -m keras_segmentation predict \
 
 ```
 
+
+
+### Video inference
+
+To get predictions of a video
+```shell
+python -m keras_segmentation predict_video \
+ --checkpoints_path="path_to_checkpoints" \
+ --input="path_to_video" \
+ --output_file="path_for_save_inferenced_video" \
+ --display
+```
+
+If you want to make predictions on your webcam, don't use `--input`, or pass your device number: `--input 0`  
+`--display` opens a window with the predicted video. Remove this argument when using a headless system.
+
+
 ### Model Evaluation 
 
 To get the IoU scores 
