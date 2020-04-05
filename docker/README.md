@@ -13,7 +13,7 @@ For GPU support, install compatible NVIDIA drivers with CUDA9.0 and CUDNN 7.6
 
 Build the container:
 
-    $ docker build -t unet .
+    $ docker build -t unet
 
 To run the image:
 
