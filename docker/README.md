@@ -13,15 +13,15 @@ For GPU support, install compatible NVIDIA drivers with CUDA9.0 and CUDNN 7.6
 
 Build the container:
 
-    $ docker build -t unet
+    $ docker build -t isk
 
 To run the image:
 
-    $ docker run --gpus all -it unet
+    $ docker run --gpus all -it isk
 
 If you want to train with a dataset on your local machine, or make inference on images or videos, mount a volume to share this data with the docker container:
 
-    $ docker run --gpus all -v /path/to/data/folder:/image-segmentation-keras/share -it unet
+    $ docker run --gpus all -v /path/to/data/folder:/image-segmentation-keras/share -it isk
 
 If graphical interface is needed, to show results, like `predict_video --display`, first let docker to use system interface. In your local host, type this line once:
 
@@ -29,4 +29,4 @@ If graphical interface is needed, to show results, like `predict_video --display
 
 And run the container with access to X11:
 
-    $ docker run --gpus all -v /path/to/data/folder:/image-segmentation-keras/share -e DISPLAY=$DISPLAY -v /tmp/.X11-unix/:/tmp/.X11-unix --env QT_X11_NO_MITSHM=1 -it unet
+    $ docker run --gpus all -v /path/to/data/folder:/image-segmentation-keras/share -e DISPLAY=$DISPLAY -v /tmp/.X11-unix/:/tmp/.X11-unix --env QT_X11_NO_MITSHM=1 -it isk
