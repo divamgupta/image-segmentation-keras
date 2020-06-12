@@ -303,6 +303,7 @@ Here are a few projects which are using our library :
 * https://github.com/SteliosTsop/QF-image-segmentation-keras [paper](https://arxiv.org/pdf/1908.02242.pdf)
 * https://github.com/willembressers/bouquet_quality
 * https://github.com/jqueguiner/image-segmentation
+* https://github.com/pan0rama/CS230-Microcrystal-Facet-Segmentation
 * https://github.com/theerawatramchuen/Keras_Segmentation
 * https://github.com/neheller/labels18
 * https://github.com/shsh-a/segmentation-over-web
