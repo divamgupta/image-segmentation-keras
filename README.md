@@ -306,6 +306,7 @@ Here are a few projects which are using our library :
 * https://github.com/pan0rama/CS230-Microcrystal-Facet-Segmentation
 * https://github.com/theerawatramchuen/Keras_Segmentation
 * https://github.com/neheller/labels18
+* https://github.com/Divyam10/Face-Matting-using-Unet
 * https://github.com/shsh-a/segmentation-over-web
 * https://github.com/chenwe73/deep_active_learning_segmentation
 * https://github.com/vigneshrajap/vision-based-navigation-agri-fields
