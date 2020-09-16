@@ -79,6 +79,8 @@ apt-get install -y libsm6 libxext6 libxrender-dev
 pip install opencv-python
 ```
 
+Note : For some reason, the models might not give very good accuracy with latest version of Keras, we are looking in the issue. Although it works well with TF 1.14.0 and Keras 2.1.4
+
 ### Installing
 
 Install the module
