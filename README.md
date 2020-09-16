@@ -17,6 +17,11 @@ Link to the full blog post with tutorial : https://divamgupta.com/image-segmenta
   <img src="https://raw.githubusercontent.com/sunshineatnoon/Paper-Collection/master/images/FCN1.png" width="50%" >
 </p>
 
+## Working Google Colab Examples:
+* Python Interface: https://colab.research.google.com/drive/1q_eCYEzKxixpCKH1YDsLnsvgxl92ORcv?usp=sharing
+* CLI Interface: https://colab.research.google.com/drive/1Kpy4QGFZ2ZHm69mPfkmLSUes8kj6Bjyi?usp=sharing
+
+
 ## Our Other Repositories
 - [Attention based Language Translation in Keras](https://github.com/divamgupta/attention-translation-keras)
 - [Ladder Network in Keras](https://github.com/divamgupta/ladder_network_keras)  model achives 98% test accuracy on MNIST with just 100 labeled examples
@@ -78,8 +83,6 @@ Input Image            |  Output Segmentation Image
 apt-get install -y libsm6 libxext6 libxrender-dev
 pip install opencv-python
 ```
-
-Note : For some reason, the models might not give very good accuracy with latest version of Keras, we are looking in the issue. Although it works well with TF 1.14.0 and Keras 2.1.4
 
 ### Installing
 
