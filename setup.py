@@ -4,7 +4,7 @@ import sys
 
 cv_ver = ""
 if sys.version_info.major < 3:
-      cv_ver = "<=3.5.0"
+      cv_ver = "<=4.2.0.32" 
 
 
 setup(name="keras_segmentation",
