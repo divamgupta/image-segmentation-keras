@@ -150,8 +150,10 @@ def train(model,
             n_classes, input_height, input_width, output_height, output_width)
 
     callbacks = [
-        CheckpointsCallback(checkpoints_path)
+        ModelCheckpoint("pet_class_crf.h5", verbose=1, save_weights_only=True,monitor='accuracy'),
+        EarlyStopping(monitor="accuracy", mode='max', min_delta=.005, patience=5, verbose=1)
     ]
+    print('hi')
 
     if not validate:
         model.fit_generator(train_gen, steps_per_epoch,
