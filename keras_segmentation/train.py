@@ -4,7 +4,7 @@ from .data_utils.data_loader import image_segmentation_generator, \
 import glob
 import six
 from keras.callbacks import Callback
-
+from tensorflow.keras.callbacks import ModelCheckpoint
 
 def find_latest_checkpoint(checkpoints_path, fail_safe=True):
 
@@ -152,7 +152,11 @@ def train(model,
 
     if callbacks is None:
         callbacks = [
-            CheckpointsCallback(checkpoints_path)
+            ModelCheckpoint(
+                filepath=checkpoints_path,
+                save_weights_only=True,
+                verbose=True
+            )
         ]
 
     if not validate:
