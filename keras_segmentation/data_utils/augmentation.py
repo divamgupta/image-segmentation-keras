@@ -155,11 +155,11 @@ def _load_augmentation_aug_all():
                 iaa.OneOf([
                     iaa.Multiply(
                                 (0.5, 1.5), per_channel=0.5),
-                    iaa.FrequencyNoiseAlpha(
+                    iaa.BlendAlphaFrequencyNoise(
                         exponent=(-4, 0),
-                        first=iaa.Multiply(
+                        foreground=iaa.Multiply(
                             (0.5, 1.5), per_channel=True),
-                        second=iaa.contrast.LinearContrast(
+                        background=iaa.contrast.LinearContrast(
                             (0.5, 2.0))
                     )
                 ]),
