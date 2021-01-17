@@ -70,7 +70,8 @@ def train(model,
           ignore_zero_class=False,
           optimizer_name='adam',
           do_augment=False,
-          augmentation_name="aug_all"):
+          augmentation_name="aug_all",
+          callbacks=None):
 
     from .models.all_models import model_from_name
     # check if user gives model name instead of the model object
@@ -149,9 +150,10 @@ def train(model,
             val_images, val_annotations,  val_batch_size,
             n_classes, input_height, input_width, output_height, output_width)
 
-    callbacks = [
-        CheckpointsCallback(checkpoints_path)
-    ]
+    if callbacks is None:
+        callbacks = [
+            CheckpointsCallback(checkpoints_path)
+        ]
 
     if not validate:
         model.fit_generator(train_gen, steps_per_epoch,
