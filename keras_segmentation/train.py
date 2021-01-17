@@ -8,6 +8,7 @@ from keras.callbacks import Callback
 from tensorflow.keras.callbacks import ModelCheckpoint
 import tensorflow as tf
 import glob
+import sys
 
 def find_latest_checkpoint(checkpoints_path, fail_safe=True):
     latest_epoch_checkpoint = tf.train.latest_checkpoint(os.path.dirname(checkpoints_path))
@@ -171,12 +172,17 @@ def train(model,
             n_classes, input_height, input_width, output_height, output_width)
 
     if callbacks is None:
-        callbacks = [
-            ModelCheckpoint(
+        default_callback = ModelCheckpoint(
                 filepath=checkpoints_path + ".{epoch:05d}",
                 save_weights_only=True,
                 verbose=True
             )
+
+        if sys.version_info[0] < 3:
+            default_callback = CheckpointsCallback(checkpoints_path)
+
+        callbacks = [
+            default_callback
         ]
 
     if not validate:
