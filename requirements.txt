@@ -2,5 +2,6 @@ numpy
 h5py
 tqdm
 keras
+tensorflow>=2.2
 opencv-python
 tqdm
