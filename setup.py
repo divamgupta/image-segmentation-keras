@@ -28,7 +28,8 @@ setup(name="keras_segmentation",
             "imageio==2.5.0",
             "imgaug>=0.4.0",
             "opencv-python"+cv_ver,
-            "tqdm"],
+            "tqdm",
+            "tensorflow>=2.2.0"],
       extras_require={
             # These requires provide different backends available with Keras
             "tensorflow": ["tensorflow"],
