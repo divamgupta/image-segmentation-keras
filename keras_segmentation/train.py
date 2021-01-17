@@ -130,7 +130,7 @@ def train(model,
     if callbacks is None:
         callbacks = [
             ModelCheckpoint(
-                filepath=checkpoints_path,
+                filepath=checkpoints_path + ".{epoch:05d}",
                 save_weights_only=True,
                 verbose=True
             )
