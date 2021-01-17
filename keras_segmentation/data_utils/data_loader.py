@@ -28,7 +28,7 @@ class DataLoaderError(Exception):
     pass
 
 
-def get_pairs_from_paths(images_path, segs_path, ignore_non_matching=False):
+def get_pairs_from_paths(images_path, segs_path, ignore_non_matching=False, other_inputs_paths=None):
     """ Find all the images from the images_path directory and
         the segmentation images from the segs_path directory
         while checking integrity of data """
@@ -45,6 +45,22 @@ def get_pairs_from_paths(images_path, segs_path, ignore_non_matching=False):
             file_name, file_extension = os.path.splitext(dir_entry)
             image_files.append((file_name, file_extension,
                                 os.path.join(images_path, dir_entry)))
+
+    if other_inputs_paths is not None:
+        other_inputs_files = []
+
+        for i, other_inputs_path in enumerate(other_inputs_paths):
+            temp = []
+
+            for y, dir_entry in enumerate(os.listdir(other_inputs_path)):
+                if os.path.isfile(os.path.join(other_inputs_path, dir_entry)) and \
+                        os.path.splitext(dir_entry)[1] in ACCEPTABLE_IMAGE_FORMATS:
+                    file_name, file_extension = os.path.splitext(dir_entry)
+
+                    temp.append((file_name, file_extension,
+                                 os.path.join(other_inputs_path, dir_entry)))
+
+            other_inputs_files.append(temp)
 
     for dir_entry in os.listdir(segs_path):
         if os.path.isfile(os.path.join(segs_path, dir_entry)) and \
@@ -64,8 +80,25 @@ def get_pairs_from_paths(images_path, segs_path, ignore_non_matching=False):
     # Match the images and segmentations
     for image_file, _, image_full_path in image_files:
         if image_file in segmentation_files:
-            return_value.append((image_full_path,
-                                segmentation_files[image_file][1]))
+            if other_inputs_paths is not None:
+                other_inputs = []
+                for file_paths in other_inputs_files:
+                    success = False
+
+                    for (other_file, _, other_full_path) in file_paths:
+                        if image_file == other_file:
+                            other_inputs.append(other_full_path)
+                            success = True
+                            break
+
+                    if not success:
+                        raise ValueError("There was no matching other input to", image_file, "in directory")
+
+                return_value.append((image_full_path,
+                                     segmentation_files[image_file][1], other_inputs))
+            else:
+                return_value.append((image_full_path,
+                                     segmentation_files[image_file][1]))
         elif ignore_non_matching:
             continue
         else:
@@ -191,9 +224,10 @@ def image_segmentation_generator(images_path, segs_path, batch_size,
                                  output_height, output_width,
                                  do_augment=False,
                                  augmentation_name="aug_all",
-                                 custom_augmentation=None):
+                                 custom_augmentation=None,
+                                 other_inputs_path=None):
 
-    img_seg_pairs = get_pairs_from_paths(images_path, segs_path)
+    img_seg_pairs = get_pairs_from_paths(images_path, segs_path, other_inputs_paths=other_inputs_path)
     random.shuffle(img_seg_pairs)
     zipped = itertools.cycle(img_seg_pairs)
 
