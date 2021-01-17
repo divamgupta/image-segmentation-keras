@@ -50,7 +50,8 @@ def train(model,
           optimizer_name='adam',
           do_augment=False,
           augmentation_name="aug_all",
-          callbacks=None):
+          callbacks=None,
+          custom_augmentation=None):
 
     from .models.all_models import model_from_name
     # check if user gives model name instead of the model object
@@ -126,7 +127,8 @@ def train(model,
     train_gen = image_segmentation_generator(
         train_images, train_annotations,  batch_size,  n_classes,
         input_height, input_width, output_height, output_width,
-        do_augment=do_augment, augmentation_name=augmentation_name)
+        do_augment=do_augment, augmentation_name=augmentation_name,
+        custom_augmentation=custom_augmentation)
 
     if validate:
         val_gen = image_segmentation_generator(

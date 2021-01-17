@@ -220,6 +220,12 @@ def _augment_seg(img, seg, augmentation_name="aug_all"):
     return image_aug, segmap_aug
 
 
+def _custom_augment_seg(img, seg, augmentation_function):
+    augmentation_functions['custom_aug'] = augmentation_function
+
+    return _augment_seg(img, seg, "custom_aug")
+
+
 def _try_n_times(fn, n, *args, **kargs):
     """ Try a function N times """
     attempts = 0
@@ -235,3 +241,8 @@ def _try_n_times(fn, n, *args, **kargs):
 def augment_seg(img, seg, augmentation_name="aug_all"):
     return _try_n_times(_augment_seg, IMAGE_AUGMENTATION_NUM_TRIES,
                         img, seg, augmentation_name=augmentation_name)
+
+
+def custom_augment_seg(img, seg, augmentation_function):
+    return _try_n_times(_custom_augment_seg, IMAGE_AUGMENTATION_NUM_TRIES,
+                        img, seg, augmentation_function=augmentation_function)
