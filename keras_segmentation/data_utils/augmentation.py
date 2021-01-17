@@ -130,7 +130,7 @@ def _load_augmentation_aug_all():
                     0, 2.0)),  # emboss images
                 # search either for all edges or for directed edges,
                 # blend the result with the original image using a blobby mask
-                iaa.BlendAlphaSimplexNoise(iaa.OneOf([
+                iaa.SimplexNoiseAlpha(iaa.OneOf([
                     iaa.EdgeDetect(alpha=(0.5, 1.0)),
                     iaa.DirectedEdgeDetect(
                         alpha=(0.5, 1.0), direction=(0.0, 1.0)),
@@ -159,12 +159,12 @@ def _load_augmentation_aug_all():
                         exponent=(-4, 0),
                         first=iaa.Multiply(
                             (0.5, 1.5), per_channel=True),
-                        second=iaa.contrast.LinearContrast(
+                        second=iaa.ContrastNormalization(
                             (0.5, 2.0))
                     )
                 ]),
                 # improve or worsen the contrast
-                iaa.contrast.LinearContrast((0.5, 2.0), per_channel=0.5),
+                iaa.ContrastNormalization((0.5, 2.0), per_channel=0.5),
                 iaa.Grayscale(alpha=(0.0, 1.0)),
                 # move pixels locally around (with random strengths)
                 sometimes(iaa.ElasticTransformation(
