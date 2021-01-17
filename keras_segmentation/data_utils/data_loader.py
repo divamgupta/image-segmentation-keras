@@ -269,7 +269,8 @@ def image_segmentation_generator(images_path, segs_path, batch_size,
                         ims, seg[:, :, 0] = custom_augment_seg(im, seg[:, :, 0],
                                                                custom_augmentation, other_imgs=oth)
                 else:
-                    ims = [im, *oth]
+                    ims = [im]
+                    ims.extend(oth)
 
                 oth = []
                 for image in ims:
