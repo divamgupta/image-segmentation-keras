@@ -9,7 +9,7 @@ from tensorflow.keras.callbacks import ModelCheckpoint
 import tensorflow as tf
 
 def find_latest_checkpoint(checkpoints_path):
-    return tf.train.latest_checkpoint(checkpoints_path)
+    return tf.train.latest_checkpoint(os.path.dirname(checkpoints_path))
 
 def masked_categorical_crossentropy(gt, pr):
     from keras.losses import categorical_crossentropy
