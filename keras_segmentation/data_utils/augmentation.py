@@ -198,7 +198,7 @@ def _load_augmentation(augmentation_name="aug_all"):
     IMAGE_AUGMENTATION_SEQUENCE = augmentation_functions[augmentation_name]()
 
 
-def _augment_seg(img, seg, augmentation_name="aug_all"):
+def _augment_seg(img, seg, augmentation_name="aug_all", other_imgs=None):
 
     global loaded_augmentation_name
 
@@ -212,6 +212,12 @@ def _augment_seg(img, seg, augmentation_name="aug_all"):
     # Augment the input image
     image_aug = aug_det.augment_image(img)
 
+    if other_imgs is not None:
+        image_aug = [image_aug]
+
+        for other_img in other_imgs:
+            image_aug.append(aug_det.augment_image(other_img))
+
     segmap = ia.SegmentationMapsOnImage(
         seg, shape=img.shape)
     segmap_aug = aug_det.augment_segmentation_maps(segmap)
@@ -220,10 +226,10 @@ def _augment_seg(img, seg, augmentation_name="aug_all"):
     return image_aug, segmap_aug
 
 
-def _custom_augment_seg(img, seg, augmentation_function):
+def _custom_augment_seg(img, seg, augmentation_function, other_imgs=None):
     augmentation_functions['custom_aug'] = augmentation_function
 
-    return _augment_seg(img, seg, "custom_aug")
+    return _augment_seg(img, seg, "custom_aug", other_imgs=other_imgs)
 
 
 def _try_n_times(fn, n, *args, **kargs):
@@ -238,11 +244,13 @@ def _try_n_times(fn, n, *args, **kargs):
     return fn(*args, **kargs)
 
 
-def augment_seg(img, seg, augmentation_name="aug_all"):
+def augment_seg(img, seg, augmentation_name="aug_all", other_imgs=None):
     return _try_n_times(_augment_seg, IMAGE_AUGMENTATION_NUM_TRIES,
-                        img, seg, augmentation_name=augmentation_name)
+                        img, seg, augmentation_name=augmentation_name,
+                        other_imgs=other_imgs)
 
 
-def custom_augment_seg(img, seg, augmentation_function):
+def custom_augment_seg(img, seg, augmentation_function, other_imgs=None):
     return _try_n_times(_custom_augment_seg, IMAGE_AUGMENTATION_NUM_TRIES,
-                        img, seg, augmentation_function=augmentation_function)
+                        img, seg, augmentation_function=augmentation_function,
+                        other_imgs=other_imgs)

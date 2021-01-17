@@ -225,9 +225,9 @@ def image_segmentation_generator(images_path, segs_path, batch_size,
                                  do_augment=False,
                                  augmentation_name="aug_all",
                                  custom_augmentation=None,
-                                 other_inputs_path=None):
+                                 other_inputs_paths=None):
 
-    img_seg_pairs = get_pairs_from_paths(images_path, segs_path, other_inputs_paths=other_inputs_path)
+    img_seg_pairs = get_pairs_from_paths(images_path, segs_path, other_inputs_paths=other_inputs_paths)
     random.shuffle(img_seg_pairs)
     zipped = itertools.cycle(img_seg_pairs)
 
@@ -235,21 +235,49 @@ def image_segmentation_generator(images_path, segs_path, batch_size,
         X = []
         Y = []
         for _ in range(batch_size):
-            im, seg = next(zipped)
+            if other_inputs_paths is None:
+                im, seg = next(zipped)
 
-            im = cv2.imread(im, 1)
-            seg = cv2.imread(seg, 1)
+                im = cv2.imread(im, 1)
+                seg = cv2.imread(seg, 1)
 
-            if do_augment:
-                if custom_augmentation is None:
-                    im, seg[:, :, 0] = augment_seg(im, seg[:, :, 0],
-                                                   augmentation_name)
+                if do_augment:
+                    if custom_augmentation is None:
+                        im, seg[:, :, 0] = augment_seg(im, seg[:, :, 0],
+                                                       augmentation_name)
+                    else:
+                        im, seg[:, :, 0] = custom_augment_seg(im, seg[:, :, 0],
+                                                              custom_augmentation)
+
+                X.append(get_image_array(im, input_width,
+                                         input_height, ordering=IMAGE_ORDERING))
+            else:
+                im, seg, others = next(zipped)
+
+                im = cv2.imread(im, 1)
+                seg = cv2.imread(seg, 1)
+
+                oth = []
+                for f in others:
+                    oth.append(cv2.imread(f, 1))
+
+                if do_augment:
+                    if custom_augmentation is None:
+                        ims, seg[:, :, 0] = augment_seg(im, seg[:, :, 0],
+                                                        augmentation_name, other_imgs=oth)
+                    else:
+                        ims, seg[:, :, 0] = custom_augment_seg(im, seg[:, :, 0],
+                                                               custom_augmentation, other_imgs=oth)
                 else:
-                    im, seg[:, :, 0] = custom_augment_seg(im, seg[:, :, 0],
-                                                          custom_augmentation)
+                    ims = [im, *oth]
 
-            X.append(get_image_array(im, input_width,
-                                     input_height, ordering=IMAGE_ORDERING))
+                oth = []
+                for image in ims:
+                    oth.append(get_image_array(image, input_width,
+                                               input_height, ordering=IMAGE_ORDERING))
+
+                X.append(oth)
+
             Y.append(get_segmentation_array(
                 seg, n_classes, output_width, output_height))
 
