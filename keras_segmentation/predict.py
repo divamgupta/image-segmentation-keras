@@ -31,7 +31,11 @@ def model_from_checkpoint_path(checkpoints_path):
         model_config['n_classes'], input_height=model_config['input_height'],
         input_width=model_config['input_width'])
     print("loaded weights ", latest_weights)
-    model.load_weights(latest_weights).expect_partial()
+    status = model.load_weights(latest_weights)
+
+    if status is not None:
+        status.expect_partial()
+
     return model
 
 
