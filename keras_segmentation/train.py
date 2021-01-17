@@ -104,12 +104,16 @@ def train(model,
         print("Loading weights from ", load_weights)
         model.load_weights(load_weights)
 
+    initial_epoch = 0
+
     if auto_resume_checkpoint and (checkpoints_path is not None):
         latest_checkpoint = find_latest_checkpoint(checkpoints_path)
         if latest_checkpoint is not None:
             print("Loading the weights from latest checkpoint ",
                   latest_checkpoint)
             model.load_weights(latest_checkpoint)
+
+            initial_epoch = int(latest_checkpoint.split('.')[-1])
 
     if verify_dataset:
         print("Verifying training dataset")
@@ -146,11 +150,11 @@ def train(model,
 
     if not validate:
         model.fit(train_gen, steps_per_epoch=steps_per_epoch,
-                  epochs=epochs, callbacks=callbacks)
+                  epochs=epochs, callbacks=callbacks, initial_epoch=initial_epoch)
     else:
         model.fit(train_gen,
                   steps_per_epoch=steps_per_epoch,
                   validation_data=val_gen,
                   validation_steps=val_steps_per_epoch,
                   epochs=epochs, callbacks=callbacks,
-                  use_multiprocessing=gen_use_multiprocessing)
+                  use_multiprocessing=gen_use_multiprocessing, initial_epoch=initial_epoch)
