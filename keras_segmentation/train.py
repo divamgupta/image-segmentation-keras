@@ -8,8 +8,13 @@ from keras.callbacks import Callback
 from tensorflow.keras.callbacks import ModelCheckpoint
 import tensorflow as tf
 
-def find_latest_checkpoint(checkpoints_path):
-    return tf.train.latest_checkpoint(os.path.dirname(checkpoints_path))
+def find_latest_checkpoint(checkpoints_path, fail_safe=True):
+    checkpoint = tf.train.latest_checkpoint(os.path.dirname(checkpoints_path))
+
+    if not fail_safe and checkpoint is None:
+        raise ValueError("Checkpoint path does not exists in", os.path.dirname(checkpoints_path))
+    else:
+        return checkpoint
 
 def masked_categorical_crossentropy(gt, pr):
     from keras.losses import categorical_crossentropy
