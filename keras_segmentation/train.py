@@ -1,4 +1,6 @@
 import json
+import os
+
 from .data_utils.data_loader import image_segmentation_generator, \
     verify_segmentation_dataset
 import six
@@ -83,7 +85,11 @@ def train(model,
                       metrics=['accuracy'])
 
     if checkpoints_path is not None:
-        with open(checkpoints_path+"_config.json", "w") as f:
+        config_file = checkpoints_path + "_config.json"
+
+        os.makedirs(os.path.dirname(config_file), exist_ok=True)
+
+        with open(config_file, "w") as f:
             json.dump({
                 "model_class": model.model_name,
                 "n_classes": n_classes,
