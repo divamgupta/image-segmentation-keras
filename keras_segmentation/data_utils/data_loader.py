@@ -250,6 +250,9 @@ def image_segmentation_generator(images_path, segs_path, batch_size,
                         im, seg[:, :, 0] = custom_augment_seg(im, seg[:, :, 0],
                                                               custom_augmentation)
 
+                if preprocessing is not None:
+                    im = preprocessing(im)
+
                 X.append(get_image_array(im, input_width,
                                          input_height, ordering=IMAGE_ORDERING))
             else:
