@@ -4,7 +4,7 @@ import random
 import six
 import numpy as np
 import cv2
-from collections.abc import Sequence
+from collections import Sequence
 
 try:
     from tqdm import tqdm
