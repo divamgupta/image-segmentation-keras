@@ -149,7 +149,7 @@ class TestVerifySegmentationDataset(unittest.TestCase):
         pass
 
 class TestImageSegmentationGenerator(unittest.TestCase):
-    def setUp(self) -> None:
+    def setUp(self):
         self.train_temp_dir = tempfile.mkdtemp()
         self.test_temp_dir = tempfile.mkdtemp()
         self.other_temp_dir = tempfile.mkdtemp()
@@ -200,7 +200,7 @@ class TestImageSegmentationGenerator(unittest.TestCase):
             cv2.imwrite(extra_file, extra_image)
             i += 1
 
-    def tearDown(self) -> None:
+    def tearDown(self):
         shutil.rmtree(self.train_temp_dir)
         shutil.rmtree(self.test_temp_dir)
         shutil.rmtree(self.other_temp_dir)
