@@ -175,8 +175,6 @@ class TestImageSegmentationGenerator(unittest.TestCase):
         train_file = os.path.join(self.train_temp_dir, "train2.png")
         test_file = os.path.join(self.test_temp_dir, "train2.png")
 
-        self.num_test_images = 2
-
         cv2.imwrite(train_file, train_image)
         cv2.imwrite(test_file, train_image)
 
@@ -214,11 +212,10 @@ class TestImageSegmentationGenerator(unittest.TestCase):
 
     def test_image_segmentation_generator_custom_augmentation(self):
         random.seed(0)
-        image_seg_pairs = img_seg_pairs = data_loader.get_pairs_from_paths(self.train_temp_dir, self.test_temp_dir)
+        image_seg_pairs = data_loader.get_pairs_from_paths(self.train_temp_dir, self.test_temp_dir)
 
         random.seed(0)
         random.shuffle(image_seg_pairs)
-        zipped = itertools.cycle(img_seg_pairs)
 
         random.seed(0)
 
@@ -229,8 +226,8 @@ class TestImageSegmentationGenerator(unittest.TestCase):
         )
 
         i = 0
-        for (aug_im, aug_an), (expt_im_f, expt_an_f) in zip(generator, zipped):
-            if i >= self.num_test_images:
+        for (aug_im, aug_an), (expt_im_f, expt_an_f) in zip(generator, image_seg_pairs):
+            if i >= len(image_seg_pairs):
                 break
 
             expt_im = data_loader.get_image_array(expt_im_f, self.image_size, self.image_size, ordering='channel_last')
@@ -245,13 +242,12 @@ class TestImageSegmentationGenerator(unittest.TestCase):
                 self.other_temp_dir, self.other_temp_dir_2
             ]
         random.seed(0)
-        image_seg_pairs = img_seg_pairs = data_loader.get_pairs_from_paths(self.train_temp_dir,
-                                                                           self.test_temp_dir,
-                                                                          other_inputs_paths=other_paths)
+        image_seg_pairs = data_loader.get_pairs_from_paths(self.train_temp_dir,
+                                                           self.test_temp_dir,
+                                                           other_inputs_paths=other_paths)
 
         random.seed(0)
         random.shuffle(image_seg_pairs)
-        zipped = itertools.cycle(img_seg_pairs)
 
         random.seed(0)
         generator = data_loader.image_segmentation_generator(
@@ -262,8 +258,8 @@ class TestImageSegmentationGenerator(unittest.TestCase):
         )
 
         i = 0
-        for (aug_im, aug_an), (expt_im_f, expt_an_f, expt_oth) in zip(generator, zipped):
-            if i >= self.num_test_images:
+        for (aug_im, aug_an), (expt_im_f, expt_an_f, expt_oth) in zip(generator, image_seg_pairs):
+            if i >= len(image_seg_pairs):
                 break
 
             ims = [expt_im_f]
@@ -284,13 +280,12 @@ class TestImageSegmentationGenerator(unittest.TestCase):
                 self.other_temp_dir, self.other_temp_dir_2
             ]
         random.seed(0)
-        image_seg_pairs = img_seg_pairs = data_loader.get_pairs_from_paths(self.train_temp_dir,
-                                                                           self.test_temp_dir,
-                                                                          other_inputs_paths=other_paths)
+        image_seg_pairs = data_loader.get_pairs_from_paths(self.train_temp_dir,
+                                                           self.test_temp_dir,
+                                                           other_inputs_paths=other_paths)
 
         random.seed(0)
         random.shuffle(image_seg_pairs)
-        zipped = itertools.cycle(img_seg_pairs)
 
         random.seed(0)
         generator = data_loader.image_segmentation_generator(
@@ -301,8 +296,8 @@ class TestImageSegmentationGenerator(unittest.TestCase):
         )
 
         i = 0
-        for (aug_im, aug_an), (expt_im_f, expt_an_f, expt_oth) in zip(generator, zipped):
-            if i >= self.num_test_images:
+        for (aug_im, aug_an), (expt_im_f, expt_an_f, expt_oth) in zip(generator, image_seg_pairs):
+            if i >= len(image_seg_pairs):
                 break
 
             ims = [expt_im_f]
@@ -316,11 +311,10 @@ class TestImageSegmentationGenerator(unittest.TestCase):
             i += 1
 
     def test_image_segmentation_generator_preprocessing(self):
-        image_seg_pairs = img_seg_pairs = data_loader.get_pairs_from_paths(self.train_temp_dir, self.test_temp_dir)
+        image_seg_pairs = data_loader.get_pairs_from_paths(self.train_temp_dir, self.test_temp_dir)
 
         random.seed(0)
         random.shuffle(image_seg_pairs)
-        zipped = itertools.cycle(img_seg_pairs)
 
         random.seed(0)
 
@@ -332,8 +326,8 @@ class TestImageSegmentationGenerator(unittest.TestCase):
         )
 
         i = 0
-        for (aug_im, aug_an), (expt_im_f, expt_an_f) in zip(generator, zipped):
-            if i >= self.num_test_images:
+        for (aug_im, aug_an), (expt_im_f, expt_an_f) in zip(generator, image_seg_pairs):
+            if i >= len(image_seg_pairs):
                 break
 
             expt_im = data_loader.get_image_array(expt_im_f, self.image_size, self.image_size,
@@ -349,13 +343,12 @@ class TestImageSegmentationGenerator(unittest.TestCase):
                 self.train_temp_dir, self.test_temp_dir
             ]
         random.seed(0)
-        image_seg_pairs = img_seg_pairs = data_loader.get_pairs_from_paths(self.train_temp_dir,
+        image_seg_pairs = data_loader.get_pairs_from_paths(self.train_temp_dir,
                                                                            self.test_temp_dir,
                                                                           other_inputs_paths=other_paths)
 
         random.seed(0)
         random.shuffle(image_seg_pairs)
-        zipped = itertools.cycle(img_seg_pairs)
 
         random.seed(0)
         generator = data_loader.image_segmentation_generator(
@@ -366,8 +359,8 @@ class TestImageSegmentationGenerator(unittest.TestCase):
         )
 
         i = 0
-        for (aug_im, aug_an), (expt_im_f, expt_an_f, expt_oth) in zip(generator, zipped):
-            if i >= self.num_test_images:
+        for (aug_im, aug_an), (expt_im_f, expt_an_f, expt_oth) in zip(generator, image_seg_pairs):
+            if i >= len(image_seg_pairs):
                 break
 
             ims = [expt_im_f]
@@ -386,13 +379,12 @@ class TestImageSegmentationGenerator(unittest.TestCase):
                 self.other_temp_dir, self.other_temp_dir_2
             ]
         random.seed(0)
-        image_seg_pairs = img_seg_pairs = data_loader.get_pairs_from_paths(self.train_temp_dir,
+        image_seg_pairs = data_loader.get_pairs_from_paths(self.train_temp_dir,
                                                                            self.test_temp_dir,
                                                                           other_inputs_paths=other_paths)
 
         random.seed(0)
         random.shuffle(image_seg_pairs)
-        zipped = itertools.cycle(img_seg_pairs)
 
         random.seed(0)
         generator = data_loader.image_segmentation_generator(
@@ -403,8 +395,8 @@ class TestImageSegmentationGenerator(unittest.TestCase):
         )
 
         i = 0
-        for (aug_im, aug_an), (expt_im_f, expt_an_f, expt_oth) in zip(generator, zipped):
-            if i >= self.num_test_images:
+        for (aug_im, aug_an), (expt_im_f, expt_an_f, expt_oth) in zip(generator, image_seg_pairs):
+            if i >= len(image_seg_pairs):
                 break
 
             ims = [expt_im_f]
