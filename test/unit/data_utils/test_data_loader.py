@@ -153,6 +153,29 @@ class TestImageSegmentationGenerator(unittest.TestCase):
         self.train_temp_dir = tempfile.mkdtemp()
         self.test_temp_dir = tempfile.mkdtemp()
 
+        self.image_size = 4
+
+        train_image = np.arange(self.image_size * self.image_size)
+        train_image = train_image.reshape((self.image_size, self.image_size))
+
+        train_file = os.path.join(self.train_temp_dir, "train.png")
+        test_file = os.path.join(self.test_temp_dir, "train.png")
+
+        cv2.imwrite(train_file, train_image)
+        cv2.imwrite(test_file, train_image)
+
+        train_image = np.arange(start=self.image_size * self.image_size,
+                                stop=self.image_size * self.image_size * 2)
+        train_image = train_image.reshape((self.image_size,self.image_size))
+
+        train_file = os.path.join(self.train_temp_dir, "train2.png")
+        test_file = os.path.join(self.test_temp_dir, "train2.png")
+
+        self.num_test_images = 2
+
+        cv2.imwrite(train_file, train_image)
+        cv2.imwrite(test_file, train_image)
+
     def tearDown(self) -> None:
         shutil.rmtree(self.train_temp_dir)
         shutil.rmtree(self.test_temp_dir)
@@ -164,6 +187,70 @@ class TestImageSegmentationGenerator(unittest.TestCase):
             ])
 
     def test_image_segmentation_generator_custom_augmentation(self):
+        random.seed(0)
+        image_seg_pairs = img_seg_pairs = data_loader.get_pairs_from_paths(self.train_temp_dir, self.test_temp_dir)
+
+        random.seed(0)
+        random.shuffle(image_seg_pairs)
+        zipped = itertools.cycle(img_seg_pairs)
+
+        random.seed(0)
+
+        generator = data_loader.image_segmentation_generator(
+            self.train_temp_dir, self.test_temp_dir, 1,
+            self.image_size * self.image_size, self.image_size, self.image_size, self.image_size, self.image_size,
+            do_augment=True, custom_augmentation=self.custom_aug
+        )
+
+        i = 0
+        for (aug_im, aug_an), (expt_im_f, expt_an_f) in zip(generator, zipped):
+            if i >= self.num_test_images:
+                break
+
+            expt_im = data_loader.get_image_array(expt_im_f, self.image_size, self.image_size, ordering='channel_last')
+
+            expt_im = cv2.flip(expt_im, flipCode=1)
+            self.assertTrue(np.equal(expt_im, aug_im).all())
+
+            i += 1
+
+    def test_image_segmentation_generator_custom_augmentation_with_other_inputs(self):
+        other_paths = [
+                self.train_temp_dir, self.test_temp_dir
+            ]
+        random.seed(0)
+        image_seg_pairs = img_seg_pairs = data_loader.get_pairs_from_paths(self.train_temp_dir,
+                                                                           self.test_temp_dir,
+                                                                          other_inputs_paths=other_paths)
+
+        random.seed(0)
+        random.shuffle(image_seg_pairs)
+        zipped = itertools.cycle(img_seg_pairs)
+
+        random.seed(0)
+        generator = data_loader.image_segmentation_generator(
+            self.train_temp_dir, self.test_temp_dir, 1,
+            self.image_size * self.image_size, self.image_size, self.image_size, self.image_size,
+            self.image_size,
+            do_augment=True, custom_augmentation=self.custom_aug, other_inputs_paths=other_paths
+        )
+
+        i = 0
+        for (aug_im, aug_an), (expt_im_f, expt_an_f, expt_oth) in zip(generator, zipped):
+            if i >= self.num_test_images:
+                break
+
+            expt_im = data_loader.get_image_array(expt_im_f, self.image_size, self.image_size,
+                                                  ordering='channel_last')
+
+            expt_im = cv2.flip(expt_im, flipCode=1)
+
+            for i in range(aug_im.shape[1]):
+                self.assertTrue(np.equal(expt_im, aug_im[0, i, :, :]).all())
+
+            i += 1
+
+    def test_image_segmentation_generator_preprocessing(self):
         image_size = 4
 
         train_image = np.arange(image_size * image_size)
@@ -215,7 +302,4 @@ class TestImageSegmentationGenerator(unittest.TestCase):
 
         os.remove(train_file)
         os.remove(test_file)
-
-    def test_image_segmentation_generator_preprocessing(self):
-        pass
 
