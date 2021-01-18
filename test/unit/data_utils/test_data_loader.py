@@ -279,4 +279,75 @@ class TestImageSegmentationGenerator(unittest.TestCase):
 
             i += 1
 
+    def test_single_image_segmentation_generator_preprocessing_with_other_inputs(self):
+        other_paths = [
+                self.train_temp_dir, self.test_temp_dir
+            ]
+        random.seed(0)
+        image_seg_pairs = img_seg_pairs = data_loader.get_pairs_from_paths(self.train_temp_dir,
+                                                                           self.test_temp_dir,
+                                                                          other_inputs_paths=other_paths)
+
+        random.seed(0)
+        random.shuffle(image_seg_pairs)
+        zipped = itertools.cycle(img_seg_pairs)
+
+        random.seed(0)
+        generator = data_loader.image_segmentation_generator(
+            self.train_temp_dir, self.test_temp_dir, 1,
+            self.image_size * self.image_size, self.image_size, self.image_size, self.image_size,
+            self.image_size,
+            preprocessing=lambda x: x+1, other_inputs_paths=other_paths
+        )
+
+        i = 0
+        for (aug_im, aug_an), (expt_im_f, expt_an_f, expt_oth) in zip(generator, zipped):
+            if i >= self.num_test_images:
+                break
+
+            expt_im = data_loader.get_image_array(expt_im_f, self.image_size, self.image_size,
+                                                  ordering='channel_last')
+
+            expt_im += 1
+
+            for i in range(aug_im.shape[1]):
+                self.assertTrue(np.equal(expt_im, aug_im[0, i, :, :]).all())
+
+            i += 1
+
+    def test_multi_image_segmentation_generator_preprocessing_with_other_inputs(self):
+        other_paths = [
+                self.train_temp_dir, self.test_temp_dir
+            ]
+        random.seed(0)
+        image_seg_pairs = img_seg_pairs = data_loader.get_pairs_from_paths(self.train_temp_dir,
+                                                                           self.test_temp_dir,
+                                                                          other_inputs_paths=other_paths)
+
+        random.seed(0)
+        random.shuffle(image_seg_pairs)
+        zipped = itertools.cycle(img_seg_pairs)
+
+        random.seed(0)
+        generator = data_loader.image_segmentation_generator(
+            self.train_temp_dir, self.test_temp_dir, 1,
+            self.image_size * self.image_size, self.image_size, self.image_size, self.image_size,
+            self.image_size,
+            preprocessing=[lambda x: x+1, lambda x: x+2, lambda x: x+3], other_inputs_paths=other_paths
+        )
+
+        i = 0
+        for (aug_im, aug_an), (expt_im_f, expt_an_f, expt_oth) in zip(generator, zipped):
+            if i >= self.num_test_images:
+                break
+
+            expt_im = data_loader.get_image_array(expt_im_f, self.image_size, self.image_size,
+                                                  ordering='channel_last')
+
+            for i in range(aug_im.shape[1]):
+                self.assertTrue(np.equal(expt_im + (i + 1), aug_im[0, i, :, :]).all())
+
+            i += 1
+
+
 
