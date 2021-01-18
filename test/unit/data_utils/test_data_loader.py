@@ -1,9 +1,15 @@
+import itertools
 import unittest
 import tempfile
 from shutil import rmtree
 import os
 import six
 from keras_segmentation.data_utils import data_loader
+import random
+import cv2
+from imgaug import augmenters as iaa
+import shutil
+import numpy as np
 
 class TestGetPairsFromPaths(unittest.TestCase):
     """ Test data loader facilities """
@@ -143,8 +149,73 @@ class TestVerifySegmentationDataset(unittest.TestCase):
         pass
 
 class TestImageSegmentationGenerator(unittest.TestCase):
-    def test_image_segmentation_generator(self):
-        """ Stub test
-        TODO(divamgupta): Fill with actual test
-        """
+    def setUp(self) -> None:
+        self.train_temp_dir = tempfile.mkdtemp()
+        self.test_temp_dir = tempfile.mkdtemp()
+
+    def tearDown(self) -> None:
+        shutil.rmtree(self.train_temp_dir)
+        shutil.rmtree(self.test_temp_dir)
+
+    def custom_aug(self):
+        return iaa.Sequential(
+            [
+                iaa.Fliplr(1),  # horizontally flip 100% of all images
+            ])
+
+    def test_image_segmentation_generator_custom_augmentation(self):
+        image_size = 4
+
+        train_image = np.arange(image_size * image_size)
+        train_image = train_image.reshape((image_size, image_size))
+
+        train_file = os.path.join(self.train_temp_dir, "train.png")
+        test_file = os.path.join(self.test_temp_dir, "train.png")
+
+        print(self.train_temp_dir)
+
+        cv2.imwrite(train_file, train_image)
+        cv2.imwrite(test_file, train_image)
+
+        self.assertTrue(np.equal(
+            cv2.imread(train_file)[:, :, 0],
+            train_image
+        ).all(), "Error saving train file")
+        self.assertTrue(np.equal(
+            cv2.imread(test_file)[:, :, 0],
+            train_image
+        ).all(), "Error saving test file")
+
+        image_seg_pairs = img_seg_pairs = data_loader.get_pairs_from_paths(self.train_temp_dir, self.test_temp_dir)
+
+        random.seed(0)
+        random.shuffle(image_seg_pairs)
+        zipped = itertools.cycle(img_seg_pairs)
+
+        random.seed(0)
+
+        generator = data_loader.image_segmentation_generator(
+            self.train_temp_dir, self.test_temp_dir, 1,
+            image_size * image_size, image_size, image_size, image_size, image_size,
+            do_augment=True, custom_augmentation=self.custom_aug
+        )
+
+        i = 0
+        loop = 1
+        for (aug_im, aug_an), (expt_im_f, expt_an_f) in zip(generator, zipped):
+            if i >= loop:
+                break
+
+            expt_im = data_loader.get_image_array(expt_im_f, image_size, image_size, ordering='channel_last')
+
+            expt_im = cv2.flip(expt_im, flipCode=1)
+            self.assertTrue(np.equal(expt_im, aug_im).all())
+
+            i += 1
+
+        os.remove(train_file)
+        os.remove(test_file)
+
+    def test_image_segmentation_generator_preprocessing(self):
         pass
+
