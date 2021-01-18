@@ -4,6 +4,7 @@ import random
 import six
 import numpy as np
 import cv2
+from collections.abc import Sequence
 
 try:
     from tqdm import tqdm
@@ -225,7 +226,7 @@ def image_segmentation_generator(images_path, segs_path, batch_size,
                                  do_augment=False,
                                  augmentation_name="aug_all",
                                  custom_augmentation=None,
-                                 other_inputs_paths=None):
+                                 other_inputs_paths=None, preprocessing=None):
 
     img_seg_pairs = get_pairs_from_paths(images_path, segs_path, other_inputs_paths=other_inputs_paths)
     random.shuffle(img_seg_pairs)
@@ -273,9 +274,17 @@ def image_segmentation_generator(images_path, segs_path, batch_size,
                     ims.extend(oth)
 
                 oth = []
-                for image in ims:
-                    oth.append(get_image_array(image, input_width,
-                                               input_height, ordering=IMAGE_ORDERING))
+                for i, image in enumerate(ims):
+                    oth_im = get_image_array(image, input_width,
+                                             input_height, ordering=IMAGE_ORDERING)
+
+                    if preprocessing is not None:
+                        if isinstance(preprocessing, Sequence):
+                            oth_im = preprocessing[i](oth_im)
+                        else:
+                            oth_im = preprocessing(oth_im)
+
+                    oth.append(oth_im)
 
                 X.append(oth)
 

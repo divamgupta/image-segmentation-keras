@@ -82,7 +82,8 @@ def train(model,
           augmentation_name="aug_all",
           callbacks=None,
           custom_augmentation=None,
-          other_inputs_paths=None):
+          other_inputs_paths=None,
+          preprocessing=None):
 
     from .models.all_models import model_from_name
     # check if user gives model name instead of the model object
@@ -165,13 +166,15 @@ def train(model,
         train_images, train_annotations,  batch_size,  n_classes,
         input_height, input_width, output_height, output_width,
         do_augment=do_augment, augmentation_name=augmentation_name,
-        custom_augmentation=custom_augmentation, other_inputs_paths=other_inputs_paths)
+        custom_augmentation=custom_augmentation, other_inputs_paths=other_inputs_paths,
+        preprocessing=preprocessing)
 
     if validate:
         val_gen = image_segmentation_generator(
             val_images, val_annotations,  val_batch_size,
             n_classes, input_height, input_width, output_height, output_width,
-            other_inputs_paths=other_inputs_paths)
+            other_inputs_paths=other_inputs_paths,
+            preprocessing=preprocessing)
 
     if callbacks is None:
         default_callback = ModelCheckpoint(
