@@ -226,7 +226,8 @@ def image_segmentation_generator(images_path, segs_path, batch_size,
                                  do_augment=False,
                                  augmentation_name="aug_all",
                                  custom_augmentation=None,
-                                 other_inputs_paths=None, preprocessing=None):
+                                 other_inputs_paths=None, preprocessing=None,
+                                 read_image_type=cv2.IMREAD_COLOR):
 
     img_seg_pairs = get_pairs_from_paths(images_path, segs_path, other_inputs_paths=other_inputs_paths)
     random.shuffle(img_seg_pairs)
@@ -239,7 +240,7 @@ def image_segmentation_generator(images_path, segs_path, batch_size,
             if other_inputs_paths is None:
                 im, seg = next(zipped)
 
-                im = cv2.imread(im, 1)
+                im = cv2.imread(im, read_image_type)
                 seg = cv2.imread(seg, 1)
 
                 if do_augment:
