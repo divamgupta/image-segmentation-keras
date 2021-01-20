@@ -117,7 +117,7 @@ def get_pairs_from_paths(images_path, segs_path, ignore_non_matching=False, othe
 
 def get_image_array(image_input,
                     width, height,
-                    imgNorm="sub_mean", ordering='channels_first'):
+                    imgNorm="sub_mean", ordering='channels_first', read_image_type=1):
     """ Load image array from input """
 
     if type(image_input) is np.ndarray:
@@ -127,7 +127,7 @@ def get_image_array(image_input,
         if not os.path.isfile(image_input):
             raise DataLoaderError("get_image_array: path {0} doesn't exist"
                                   .format(image_input))
-        img = cv2.imread(image_input, 1)
+        img = cv2.imread(image_input, read_image_type)
     else:
         raise DataLoaderError("get_image_array: Can't process input type {0}"
                               .format(str(type(image_input))))
@@ -156,7 +156,7 @@ def get_image_array(image_input,
 
 
 def get_segmentation_array(image_input, nClasses,
-                           width, height, no_reshape=False):
+                           width, height, no_reshape=False, read_image_type=1):
     """ Load segmentation array from input """
 
     seg_labels = np.zeros((height, width, nClasses))
@@ -168,7 +168,7 @@ def get_segmentation_array(image_input, nClasses,
         if not os.path.isfile(image_input):
             raise DataLoaderError("get_segmentation_array: "
                                   "path {0} doesn't exist".format(image_input))
-        img = cv2.imread(image_input, 1)
+        img = cv2.imread(image_input, read_image_type)
     else:
         raise DataLoaderError("get_segmentation_array: "
                               "Can't process input type {0}"
@@ -267,12 +267,12 @@ def image_segmentation_generator(images_path, segs_path, batch_size,
             else:
                 im, seg, others = next(zipped)
 
-                im = cv2.imread(im, 1)
+                im = cv2.imread(im, read_image_type)
                 seg = cv2.imread(seg, 1)
 
                 oth = []
                 for f in others:
-                    oth.append(cv2.imread(f, 1))
+                    oth.append(cv2.imread(f, read_image_type))
 
                 if do_augment:
                     if custom_augmentation is None:

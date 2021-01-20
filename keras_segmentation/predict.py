@@ -132,7 +132,8 @@ def visualize_segmentation(seg_arr, inp_img=None, n_classes=None,
 def predict(model=None, inp=None, out_fname=None,
             checkpoints_path=None, overlay_img=False,
             class_names=None, show_legends=False, colors=class_colors,
-            prediction_width=None, prediction_height=None):
+            prediction_width=None, prediction_height=None,
+            read_image_type=1):
 
     if model is None and (checkpoints_path is not None):
         model = model_from_checkpoint_path(checkpoints_path)
@@ -142,9 +143,9 @@ def predict(model=None, inp=None, out_fname=None,
         "Input should be the CV image or the input file name"
 
     if isinstance(inp, six.string_types):
-        inp = cv2.imread(inp)
+        inp = cv2.imread(inp, read_image_type)
 
-    assert len(inp.shape) == 3, "Image should be h,w,3 "
+    assert (len(inp.shape) == 3 or len(inp.shape) == 1 or len(inp.shape) == 4), "Image should be h,w,3 "
 
     output_width = model.output_width
     output_height = model.output_height
@@ -173,7 +174,7 @@ def predict(model=None, inp=None, out_fname=None,
 def predict_multiple(model=None, inps=None, inp_dir=None, out_dir=None,
                      checkpoints_path=None, overlay_img=False,
                      class_names=None, show_legends=False, colors=class_colors,
-                     prediction_width=None, prediction_height=None):
+                     prediction_width=None, prediction_height=None, read_image_type=1):
 
     if model is None and (checkpoints_path is not None):
         model = model_from_checkpoint_path(checkpoints_path)
@@ -201,7 +202,7 @@ def predict_multiple(model=None, inps=None, inp_dir=None, out_dir=None,
                      overlay_img=overlay_img, class_names=class_names,
                      show_legends=show_legends, colors=colors,
                      prediction_width=prediction_width,
-                     prediction_height=prediction_height)
+                     prediction_height=prediction_height, read_image_type=read_image_type)
 
         all_prs.append(pr)
 
@@ -259,7 +260,7 @@ def predict_video(model=None, inp=None, output=None,
 
 
 def evaluate(model=None, inp_images=None, annotations=None,
-             inp_images_dir=None, annotations_dir=None, checkpoints_path=None):
+             inp_images_dir=None, annotations_dir=None, checkpoints_path=None, read_image_type=1):
 
     if model is None:
         assert (checkpoints_path is not None),\
@@ -286,10 +287,10 @@ def evaluate(model=None, inp_images=None, annotations=None,
     n_pixels = np.zeros(model.n_classes)
 
     for inp, ann in tqdm(zip(inp_images, annotations)):
-        pr = predict(model, inp)
+        pr = predict(model, inp, read_image_type=read_image_type)
         gt = get_segmentation_array(ann, model.n_classes,
                                     model.output_width, model.output_height,
-                                    no_reshape=True)
+                                    no_reshape=True, read_image_type=read_image_type)
         gt = gt.argmax(-1)
         pr = pr.flatten()
         gt = gt.flatten()
