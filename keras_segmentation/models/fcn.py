@@ -147,14 +147,14 @@ def fcn_32_resnet50(n_classes,  input_height=416, input_width=608, channels=3):
     return model
 
 
-def fcn_8_mobilenet(n_classes,  input_height=416, input_width=608, channels=3):
+def fcn_8_mobilenet(n_classes,  input_height=224, input_width=224, channels=3):
     model = fcn_8(n_classes, get_mobilenet_encoder,
                   input_height=input_height, input_width=input_width, channels=channels)
     model.model_name = "fcn_8_mobilenet"
     return model
 
 
-def fcn_32_mobilenet(n_classes,  input_height=416, input_width=608, channels=3):
+def fcn_32_mobilenet(n_classes,  input_height=224, input_width=224, channels=3):
     model = fcn_32(n_classes, get_mobilenet_encoder,
                    input_height=input_height, input_width=input_width, channels=channels)
     model.model_name = "fcn_32_mobilenet"
