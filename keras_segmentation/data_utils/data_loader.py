@@ -4,7 +4,11 @@ import random
 import six
 import numpy as np
 import cv2
-from collections import Sequence
+
+try:
+    from collections.abc import Sequence
+except ImportError:
+    from collections import Sequence
 
 try:
     from tqdm import tqdm
