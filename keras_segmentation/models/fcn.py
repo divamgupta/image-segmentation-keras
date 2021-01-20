@@ -49,10 +49,10 @@ def crop(o1, o2, i):
 
 
 def fcn_8(n_classes, encoder=vanilla_encoder, input_height=416,
-          input_width=608):
+          input_width=608, channels=3):
 
     img_input, levels = encoder(
-        input_height=input_height,  input_width=input_width)
+        input_height=input_height,  input_width=input_width, channels=channels)
     [f1, f2, f3, f4, f5] = levels
 
     o = f5
@@ -94,10 +94,10 @@ def fcn_8(n_classes, encoder=vanilla_encoder, input_height=416,
 
 
 def fcn_32(n_classes, encoder=vanilla_encoder, input_height=416,
-           input_width=608):
+           input_width=608, channels=3):
 
     img_input, levels = encoder(
-        input_height=input_height,  input_width=input_width)
+        input_height=input_height,  input_width=input_width, channels=channels)
     [f1, f2, f3, f4, f5] = levels
 
     o = f5
@@ -119,44 +119,44 @@ def fcn_32(n_classes, encoder=vanilla_encoder, input_height=416,
     return model
 
 
-def fcn_8_vgg(n_classes,  input_height=416, input_width=608):
+def fcn_8_vgg(n_classes,  input_height=416, input_width=608, channels=3):
     model = fcn_8(n_classes, get_vgg_encoder,
-                  input_height=input_height, input_width=input_width)
+                  input_height=input_height, input_width=input_width, channels=channels)
     model.model_name = "fcn_8_vgg"
     return model
 
 
-def fcn_32_vgg(n_classes,  input_height=416, input_width=608):
+def fcn_32_vgg(n_classes,  input_height=416, input_width=608, channels=3):
     model = fcn_32(n_classes, get_vgg_encoder,
-                   input_height=input_height, input_width=input_width)
+                   input_height=input_height, input_width=input_width, channels=channels)
     model.model_name = "fcn_32_vgg"
     return model
 
 
-def fcn_8_resnet50(n_classes,  input_height=416, input_width=608):
+def fcn_8_resnet50(n_classes,  input_height=416, input_width=608, channels=3):
     model = fcn_8(n_classes, get_resnet50_encoder,
-                  input_height=input_height, input_width=input_width)
+                  input_height=input_height, input_width=input_width, channels=channels)
     model.model_name = "fcn_8_resnet50"
     return model
 
 
-def fcn_32_resnet50(n_classes,  input_height=416, input_width=608):
+def fcn_32_resnet50(n_classes,  input_height=416, input_width=608, channels=3):
     model = fcn_32(n_classes, get_resnet50_encoder,
-                   input_height=input_height, input_width=input_width)
+                   input_height=input_height, input_width=input_width, channels=channels)
     model.model_name = "fcn_32_resnet50"
     return model
 
 
-def fcn_8_mobilenet(n_classes,  input_height=416, input_width=608):
+def fcn_8_mobilenet(n_classes,  input_height=416, input_width=608, channels=3):
     model = fcn_8(n_classes, get_mobilenet_encoder,
-                  input_height=input_height, input_width=input_width)
+                  input_height=input_height, input_width=input_width, channels=channels)
     model.model_name = "fcn_8_mobilenet"
     return model
 
 
-def fcn_32_mobilenet(n_classes,  input_height=416, input_width=608):
+def fcn_32_mobilenet(n_classes,  input_height=416, input_width=608, channels=3):
     model = fcn_32(n_classes, get_mobilenet_encoder,
-                   input_height=input_height, input_width=input_width)
+                   input_height=input_height, input_width=input_width, channels=channels)
     model.model_name = "fcn_32_mobilenet"
     return model
 

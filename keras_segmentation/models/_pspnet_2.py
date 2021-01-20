@@ -257,11 +257,11 @@ def build_pyramid_pooling_module(res, input_shape):
 
 
 def _build_pspnet(nb_classes, resnet_layers, input_shape,
-                  activation='softmax'):
+                  activation='softmax', channels=3):
 
     assert IMAGE_ORDERING == 'channels_last'
 
-    inp = Input((input_shape[0], input_shape[1], 3))
+    inp = Input((input_shape[0], input_shape[1], channels))
 
     res = ResNet(inp, layers=resnet_layers)
 
