@@ -137,9 +137,13 @@ def get_image_array(image_input,
     elif imgNorm == "sub_mean":
         img = cv2.resize(img, (width, height))
         img = img.astype(np.float32)
-        img[:, :, 0] -= 103.939
-        img[:, :, 1] -= 116.779
-        img[:, :, 2] -= 123.68
+        img = np.atleast_3d(img)
+
+        means = [103.939, 116.779, 123.68]
+
+        for i in range(min(img.shape[2], len(means))):
+            img[:, :, i] -= means[i]
+
         img = img[:, :, ::-1]
     elif imgNorm == "divide":
         img = cv2.resize(img, (width, height))
