@@ -179,6 +179,6 @@ def get_resnet50_encoder(input_height=224,  input_width=224,
     if pretrained == 'imagenet':
         weights_path = keras.utils.get_file(
             pretrained_url.split("/")[-1], pretrained_url)
-        Model(img_input, x).load_weights(weights_path)
+        Model(img_input, x).load_weights(weights_path, by_name=True, skip_mismatch=True)
 
     return img_input, [f1, f2, f3, f4, f5]
