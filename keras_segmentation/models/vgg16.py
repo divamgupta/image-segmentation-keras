@@ -14,15 +14,15 @@ elif IMAGE_ORDERING == 'channels_last':
                      "vgg16_weights_tf_dim_ordering_tf_kernels_notop.h5"
 
 
-def get_vgg_encoder(input_height=224,  input_width=224, pretrained='imagenet'):
+def get_vgg_encoder(input_height=224,  input_width=224, pretrained='imagenet', channels=3):
 
     assert input_height % 32 == 0
     assert input_width % 32 == 0
 
     if IMAGE_ORDERING == 'channels_first':
-        img_input = Input(shape=(3, input_height, input_width))
+        img_input = Input(shape=(channels, input_height, input_width))
     elif IMAGE_ORDERING == 'channels_last':
-        img_input = Input(shape=(input_height, input_width, 3))
+        img_input = Input(shape=(input_height, input_width, channels))
 
     x = Conv2D(64, (3, 3), activation='relu', padding='same',
                name='block1_conv1', data_format=IMAGE_ORDERING)(img_input)
@@ -76,6 +76,6 @@ def get_vgg_encoder(input_height=224,  input_width=224, pretrained='imagenet'):
     if pretrained == 'imagenet':
         VGG_Weights_path = keras.utils.get_file(
             pretrained_url.split("/")[-1], pretrained_url)
-        Model(img_input, x).load_weights(VGG_Weights_path)
+        Model(img_input, x).load_weights(VGG_Weights_path, by_name=True, skip_mismatch=True)
 
     return img_input, [f1, f2, f3, f4, f5]

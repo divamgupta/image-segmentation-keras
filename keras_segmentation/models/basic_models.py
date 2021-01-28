@@ -5,7 +5,7 @@ import keras.backend as K
 from .config import IMAGE_ORDERING
 
 
-def vanilla_encoder(input_height=224,  input_width=224):
+def vanilla_encoder(input_height=224,  input_width=224, channels=3):
 
     kernel = 3
     filter_size = 64
@@ -13,9 +13,9 @@ def vanilla_encoder(input_height=224,  input_width=224):
     pool_size = 2
 
     if IMAGE_ORDERING == 'channels_first':
-        img_input = Input(shape=(3, input_height, input_width))
+        img_input = Input(shape=(channels, input_height, input_width))
     elif IMAGE_ORDERING == 'channels_last':
-        img_input = Input(shape=(input_height, input_width, 3))
+        img_input = Input(shape=(input_height, input_width, channels))
 
     x = img_input
     levels = []

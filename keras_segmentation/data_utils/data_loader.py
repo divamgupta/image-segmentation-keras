@@ -6,6 +6,11 @@ import numpy as np
 import cv2
 
 try:
+    from collections.abc import Sequence
+except ImportError:
+    from collections import Sequence
+
+try:
     from tqdm import tqdm
 except ImportError:
     print("tqdm not found, disabling progress bars")
@@ -15,7 +20,7 @@ except ImportError:
 
 
 from ..models.config import IMAGE_ORDERING
-from .augmentation import augment_seg
+from .augmentation import augment_seg, custom_augment_seg
 
 DATA_LOADER_SEED = 0
 
@@ -28,7 +33,7 @@ class DataLoaderError(Exception):
     pass
 
 
-def get_pairs_from_paths(images_path, segs_path, ignore_non_matching=False):
+def get_pairs_from_paths(images_path, segs_path, ignore_non_matching=False, other_inputs_paths=None):
     """ Find all the images from the images_path directory and
         the segmentation images from the segs_path directory
         while checking integrity of data """
@@ -45,6 +50,22 @@ def get_pairs_from_paths(images_path, segs_path, ignore_non_matching=False):
             file_name, file_extension = os.path.splitext(dir_entry)
             image_files.append((file_name, file_extension,
                                 os.path.join(images_path, dir_entry)))
+
+    if other_inputs_paths is not None:
+        other_inputs_files = []
+
+        for i, other_inputs_path in enumerate(other_inputs_paths):
+            temp = []
+
+            for y, dir_entry in enumerate(os.listdir(other_inputs_path)):
+                if os.path.isfile(os.path.join(other_inputs_path, dir_entry)) and \
+                        os.path.splitext(dir_entry)[1] in ACCEPTABLE_IMAGE_FORMATS:
+                    file_name, file_extension = os.path.splitext(dir_entry)
+
+                    temp.append((file_name, file_extension,
+                                 os.path.join(other_inputs_path, dir_entry)))
+
+            other_inputs_files.append(temp)
 
     for dir_entry in os.listdir(segs_path):
         if os.path.isfile(os.path.join(segs_path, dir_entry)) and \
@@ -64,8 +85,25 @@ def get_pairs_from_paths(images_path, segs_path, ignore_non_matching=False):
     # Match the images and segmentations
     for image_file, _, image_full_path in image_files:
         if image_file in segmentation_files:
-            return_value.append((image_full_path,
-                                segmentation_files[image_file][1]))
+            if other_inputs_paths is not None:
+                other_inputs = []
+                for file_paths in other_inputs_files:
+                    success = False
+
+                    for (other_file, _, other_full_path) in file_paths:
+                        if image_file == other_file:
+                            other_inputs.append(other_full_path)
+                            success = True
+                            break
+
+                    if not success:
+                        raise ValueError("There was no matching other input to", image_file, "in directory")
+
+                return_value.append((image_full_path,
+                                     segmentation_files[image_file][1], other_inputs))
+            else:
+                return_value.append((image_full_path,
+                                     segmentation_files[image_file][1]))
         elif ignore_non_matching:
             continue
         else:
@@ -79,7 +117,7 @@ def get_pairs_from_paths(images_path, segs_path, ignore_non_matching=False):
 
 def get_image_array(image_input,
                     width, height,
-                    imgNorm="sub_mean", ordering='channels_first'):
+                    imgNorm="sub_mean", ordering='channels_first', read_image_type=1):
     """ Load image array from input """
 
     if type(image_input) is np.ndarray:
@@ -89,7 +127,7 @@ def get_image_array(image_input,
         if not os.path.isfile(image_input):
             raise DataLoaderError("get_image_array: path {0} doesn't exist"
                                   .format(image_input))
-        img = cv2.imread(image_input, 1)
+        img = cv2.imread(image_input, read_image_type)
     else:
         raise DataLoaderError("get_image_array: Can't process input type {0}"
                               .format(str(type(image_input))))
@@ -99,9 +137,13 @@ def get_image_array(image_input,
     elif imgNorm == "sub_mean":
         img = cv2.resize(img, (width, height))
         img = img.astype(np.float32)
-        img[:, :, 0] -= 103.939
-        img[:, :, 1] -= 116.779
-        img[:, :, 2] -= 123.68
+        img = np.atleast_3d(img)
+
+        means = [103.939, 116.779, 123.68]
+
+        for i in range(min(img.shape[2], len(means))):
+            img[:, :, i] -= means[i]
+
         img = img[:, :, ::-1]
     elif imgNorm == "divide":
         img = cv2.resize(img, (width, height))
@@ -114,7 +156,7 @@ def get_image_array(image_input,
 
 
 def get_segmentation_array(image_input, nClasses,
-                           width, height, no_reshape=False):
+                           width, height, no_reshape=False, read_image_type=1):
     """ Load segmentation array from input """
 
     seg_labels = np.zeros((height, width, nClasses))
@@ -126,7 +168,7 @@ def get_segmentation_array(image_input, nClasses,
         if not os.path.isfile(image_input):
             raise DataLoaderError("get_segmentation_array: "
                                   "path {0} doesn't exist".format(image_input))
-        img = cv2.imread(image_input, 1)
+        img = cv2.imread(image_input, read_image_type)
     else:
         raise DataLoaderError("get_segmentation_array: "
                               "Can't process input type {0}"
@@ -190,9 +232,12 @@ def image_segmentation_generator(images_path, segs_path, batch_size,
                                  n_classes, input_height, input_width,
                                  output_height, output_width,
                                  do_augment=False,
-                                 augmentation_name="aug_all"):
+                                 augmentation_name="aug_all",
+                                 custom_augmentation=None,
+                                 other_inputs_paths=None, preprocessing=None,
+                                 read_image_type=cv2.IMREAD_COLOR):
 
-    img_seg_pairs = get_pairs_from_paths(images_path, segs_path)
+    img_seg_pairs = get_pairs_from_paths(images_path, segs_path, other_inputs_paths=other_inputs_paths)
     random.shuffle(img_seg_pairs)
     zipped = itertools.cycle(img_seg_pairs)
 
@@ -200,17 +245,61 @@ def image_segmentation_generator(images_path, segs_path, batch_size,
         X = []
         Y = []
         for _ in range(batch_size):
-            im, seg = next(zipped)
+            if other_inputs_paths is None:
+                im, seg = next(zipped)
 
-            im = cv2.imread(im, 1)
-            seg = cv2.imread(seg, 1)
+                im = cv2.imread(im, read_image_type)
+                seg = cv2.imread(seg, 1)
 
-            if do_augment:
-                im, seg[:, :, 0] = augment_seg(im, seg[:, :, 0],
-                                               augmentation_name)
+                if do_augment:
+                    if custom_augmentation is None:
+                        im, seg[:, :, 0] = augment_seg(im, seg[:, :, 0],
+                                                       augmentation_name)
+                    else:
+                        im, seg[:, :, 0] = custom_augment_seg(im, seg[:, :, 0],
+                                                              custom_augmentation)
 
-            X.append(get_image_array(im, input_width,
-                                     input_height, ordering=IMAGE_ORDERING))
+                if preprocessing is not None:
+                    im = preprocessing(im)
+
+                X.append(get_image_array(im, input_width,
+                                         input_height, ordering=IMAGE_ORDERING))
+            else:
+                im, seg, others = next(zipped)
+
+                im = cv2.imread(im, read_image_type)
+                seg = cv2.imread(seg, 1)
+
+                oth = []
+                for f in others:
+                    oth.append(cv2.imread(f, read_image_type))
+
+                if do_augment:
+                    if custom_augmentation is None:
+                        ims, seg[:, :, 0] = augment_seg(im, seg[:, :, 0],
+                                                        augmentation_name, other_imgs=oth)
+                    else:
+                        ims, seg[:, :, 0] = custom_augment_seg(im, seg[:, :, 0],
+                                                               custom_augmentation, other_imgs=oth)
+                else:
+                    ims = [im]
+                    ims.extend(oth)
+
+                oth = []
+                for i, image in enumerate(ims):
+                    oth_im = get_image_array(image, input_width,
+                                             input_height, ordering=IMAGE_ORDERING)
+
+                    if preprocessing is not None:
+                        if isinstance(preprocessing, Sequence):
+                            oth_im = preprocessing[i](oth_im)
+                        else:
+                            oth_im = preprocessing(oth_im)
+
+                    oth.append(oth_im)
+
+                X.append(oth)
+
             Y.append(get_segmentation_array(
                 seg, n_classes, output_width, output_height))
 

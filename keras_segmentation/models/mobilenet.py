@@ -57,7 +57,7 @@ def _depthwise_conv_block(inputs, pointwise_conv_filters, alpha,
 
 
 def get_mobilenet_encoder(input_height=224, input_width=224,
-                          pretrained='imagenet'):
+                          pretrained='imagenet', channels=3):
 
     # todo add more alpha and stuff
 
@@ -76,7 +76,7 @@ def get_mobilenet_encoder(input_height=224, input_width=224,
     depth_multiplier = 1
     dropout = 1e-3
 
-    img_input = Input(shape=(input_height, input_width, 3))
+    img_input = Input(shape=(input_height, input_width, channels))
 
     x = _conv_block(img_input, 32, alpha, strides=(2, 2))
     x = _depthwise_conv_block(x, 64, alpha, depth_multiplier, block_id=1)
@@ -112,6 +112,6 @@ def get_mobilenet_encoder(input_height=224, input_width=224,
         weight_path = BASE_WEIGHT_PATH + model_name
         weights_path = keras.utils.get_file(model_name, weight_path)
 
-        Model(img_input, x).load_weights(weights_path)
+        Model(img_input, x).load_weights(weights_path, by_name=True, skip_mismatch=True)
 
     return img_input, [f1, f2, f3, f4, f5]

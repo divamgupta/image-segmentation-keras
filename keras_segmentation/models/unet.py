@@ -15,12 +15,12 @@ elif IMAGE_ORDERING == 'channels_last':
     MERGE_AXIS = -1
 
 
-def unet_mini(n_classes, input_height=360, input_width=480):
+def unet_mini(n_classes, input_height=360, input_width=480, channels=3):
 
     if IMAGE_ORDERING == 'channels_first':
-        img_input = Input(shape=(3, input_height, input_width))
+        img_input = Input(shape=(channels, input_height, input_width))
     elif IMAGE_ORDERING == 'channels_last':
-        img_input = Input(shape=(input_height, input_width, 3))
+        img_input = Input(shape=(input_height, input_width, channels))
 
     conv1 = Conv2D(32, (3, 3), data_format=IMAGE_ORDERING,
                    activation='relu', padding='same')(img_input)
@@ -67,10 +67,10 @@ def unet_mini(n_classes, input_height=360, input_width=480):
 
 
 def _unet(n_classes, encoder, l1_skip_conn=True, input_height=416,
-          input_width=608):
+          input_width=608, channels=3):
 
     img_input, levels = encoder(
-        input_height=input_height, input_width=input_width)
+        input_height=input_height, input_width=input_width, channels=channels)
     [f1, f2, f3, f4, f5] = levels
 
     o = f4
@@ -108,36 +108,36 @@ def _unet(n_classes, encoder, l1_skip_conn=True, input_height=416,
     return model
 
 
-def unet(n_classes, input_height=416, input_width=608, encoder_level=3):
+def unet(n_classes, input_height=416, input_width=608, encoder_level=3, channels=3):
 
     model = _unet(n_classes, vanilla_encoder,
-                  input_height=input_height, input_width=input_width)
+                  input_height=input_height, input_width=input_width, channels=channels)
     model.model_name = "unet"
     return model
 
 
-def vgg_unet(n_classes, input_height=416, input_width=608, encoder_level=3):
+def vgg_unet(n_classes, input_height=416, input_width=608, encoder_level=3, channels=3):
 
     model = _unet(n_classes, get_vgg_encoder,
-                  input_height=input_height, input_width=input_width)
+                  input_height=input_height, input_width=input_width, channels=channels)
     model.model_name = "vgg_unet"
     return model
 
 
 def resnet50_unet(n_classes, input_height=416, input_width=608,
-                  encoder_level=3):
+                  encoder_level=3, channels=3):
 
     model = _unet(n_classes, get_resnet50_encoder,
-                  input_height=input_height, input_width=input_width)
+                  input_height=input_height, input_width=input_width, channels=channels)
     model.model_name = "resnet50_unet"
     return model
 
 
 def mobilenet_unet(n_classes, input_height=224, input_width=224,
-                   encoder_level=3):
+                   encoder_level=3, channels=3):
 
     model = _unet(n_classes, get_mobilenet_encoder,
-                  input_height=input_height, input_width=input_width)
+                  input_height=input_height, input_width=input_width, channels=channels)
     model.model_name = "mobilenet_unet"
     return model
 

@@ -42,13 +42,13 @@ def pool_block(feats, pool_factor):
     return x
 
 
-def _pspnet(n_classes, encoder,  input_height=384, input_width=576):
+def _pspnet(n_classes, encoder,  input_height=384, input_width=576, channels=3):
 
     assert input_height % 192 == 0
     assert input_width % 192 == 0
 
     img_input, levels = encoder(
-        input_height=input_height,  input_width=input_width)
+        input_height=input_height,  input_width=input_width, channels=channels)
     [f1, f2, f3, f4, f5] = levels
 
     o = f5
@@ -74,31 +74,31 @@ def _pspnet(n_classes, encoder,  input_height=384, input_width=576):
     return model
 
 
-def pspnet(n_classes,  input_height=384, input_width=576):
+def pspnet(n_classes,  input_height=384, input_width=576, channels=3):
 
     model = _pspnet(n_classes, vanilla_encoder,
-                    input_height=input_height, input_width=input_width)
+                    input_height=input_height, input_width=input_width, channels=channels)
     model.model_name = "pspnet"
     return model
 
 
-def vgg_pspnet(n_classes,  input_height=384, input_width=576):
+def vgg_pspnet(n_classes,  input_height=384, input_width=576, channels=3):
 
     model = _pspnet(n_classes, get_vgg_encoder,
-                    input_height=input_height, input_width=input_width)
+                    input_height=input_height, input_width=input_width, channels=channels)
     model.model_name = "vgg_pspnet"
     return model
 
 
-def resnet50_pspnet(n_classes,  input_height=384, input_width=576):
+def resnet50_pspnet(n_classes,  input_height=384, input_width=576, channels=3):
 
     model = _pspnet(n_classes, get_resnet50_encoder,
-                    input_height=input_height, input_width=input_width)
+                    input_height=input_height, input_width=input_width, channels=channels)
     model.model_name = "resnet50_pspnet"
     return model
 
 
-def pspnet_50(n_classes,  input_height=473, input_width=473):
+def pspnet_50(n_classes,  input_height=473, input_width=473, channels=3):
     from ._pspnet_2 import _build_pspnet
 
     nb_classes = n_classes
@@ -106,12 +106,12 @@ def pspnet_50(n_classes,  input_height=473, input_width=473):
     input_shape = (input_height, input_width)
     model = _build_pspnet(nb_classes=nb_classes,
                           resnet_layers=resnet_layers,
-                          input_shape=input_shape)
+                          input_shape=input_shape, channels=channels)
     model.model_name = "pspnet_50"
     return model
 
 
-def pspnet_101(n_classes,  input_height=473, input_width=473):
+def pspnet_101(n_classes,  input_height=473, input_width=473, channels=3):
     from ._pspnet_2 import _build_pspnet
 
     nb_classes = n_classes
@@ -119,7 +119,7 @@ def pspnet_101(n_classes,  input_height=473, input_width=473):
     input_shape = (input_height, input_width)
     model = _build_pspnet(nb_classes=nb_classes,
                           resnet_layers=resnet_layers,
-                          input_shape=input_shape)
+                          input_shape=input_shape, channels=channels)
     model.model_name = "pspnet_101"
     return model
 
