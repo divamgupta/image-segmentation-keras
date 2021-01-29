@@ -303,6 +303,133 @@ new_model.train(
 
 ```
 
+## Adding custom augmentation function to training
+
+The following example shows how to define a custom augmentation function for training.
+
+```python
+
+from keras_segmentation.models.unet import vgg_unet
+from imgaug import augmenters as iaa
+
+def custom_augmentation():
+    return  iaa.Sequential(
+        [
+            # apply the following augmenters to most images
+            iaa.Fliplr(0.5),  # horizontally flip 50% of all images
+            iaa.Flipud(0.5), # horizontally flip 50% of all images
+        ])
+
+model = vgg_unet(n_classes=51 ,  input_height=416, input_width=608)
+
+model.train(
+    train_images =  "dataset1/images_prepped_train/",
+    train_annotations = "dataset1/annotations_prepped_train/",
+    checkpoints_path = "/tmp/vgg_unet_1" , epochs=5, 
+    do_augment=True, # enable augmentation 
+    custom_augmentation=custom_augmentation # sets the augmention function to use
+)
+```
+## Custom number of input channels
+
+The following example shows how to set the number of input channels.
+
+```python
+
+from keras_segmentation.models.unet import vgg_unet
+
+model = vgg_unet(n_classes=51 ,  input_height=416, input_width=608, 
+                 channels=1 # Sets the number of input channels
+                 )
+
+model.train(
+    train_images =  "dataset1/images_prepped_train/",
+    train_annotations = "dataset1/annotations_prepped_train/",
+    checkpoints_path = "/tmp/vgg_unet_1" , epochs=5, 
+    read_image_type=0  # Sets how opencv will read the images
+                       # cv2.IMREAD_COLOR = 1 (rgb),
+                       # cv2.IMREAD_GRAYSCALE = 0,
+                       # cv2.IMREAD_UNCHANGED = -1 (4 channels like RGBA)
+)
+```
+
+## Custom preprocessing
+
+The following example shows how to set a custom image preprocessing function.
+
+```python
+
+from keras_segmentation.models.unet import vgg_unet
+
+def image_preprocessing(image):
+    return image + 1
+
+model = vgg_unet(n_classes=51 ,  input_height=416, input_width=608)
+
+model.train(
+    train_images =  "dataset1/images_prepped_train/",
+    train_annotations = "dataset1/annotations_prepped_train/",
+    checkpoints_path = "/tmp/vgg_unet_1" , epochs=5,
+    preprocessing=image_preprocessing # Sets the preprocessing function
+)
+```
+
+## Custom callbacks
+
+The following example shows how to set custom callbacks for the model training.
+
+```python
+
+from keras_segmentation.models.unet import vgg_unet
+from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping
+
+model = vgg_unet(n_classes=51 ,  input_height=416, input_width=608 )
+
+# When using custom callbacks, the default checkpoint saver is removed
+callbacks = [
+    ModelCheckpoint(
+                filepath="checkpoints/" + model.name + ".{epoch:05d}",
+                save_weights_only=True,
+                verbose=True
+            ),
+    EarlyStopping()
+]
+
+model.train(
+    train_images =  "dataset1/images_prepped_train/",
+    train_annotations = "dataset1/annotations_prepped_train/",
+    checkpoints_path = "/tmp/vgg_unet_1" , epochs=5,
+    callbacks=callbacks
+)
+```
+
+## Multi input image input
+
+The following example shows how to add additional image inputs for models.
+
+```python
+
+from keras_segmentation.models.unet import vgg_unet
+
+model = vgg_unet(n_classes=51 ,  input_height=416, input_width=608)
+
+model.train(
+    train_images =  "dataset1/images_prepped_train/",
+    train_annotations = "dataset1/annotations_prepped_train/",
+    checkpoints_path = "/tmp/vgg_unet_1" , epochs=5,
+    other_inputs_paths=[
+        "/path/to/other/directory"
+    ],
+    
+    
+#     Ability to add preprocessing
+    preprocessing=[lambda x: x+1, lambda x: x+2, lambda x: x+3], # Different prepocessing for each input
+#     OR
+    preprocessing=lambda x: x+1, # Same preprocessing for each input
+)
+```
+
+
 ## Projects using keras-segmentation
 Here are a few projects which are using our library :
 * https://github.com/SteliosTsop/QF-image-segmentation-keras [paper](https://arxiv.org/pdf/1908.02242.pdf)
