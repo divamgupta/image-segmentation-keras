@@ -7,3 +7,4 @@ opencv-python
 tqdm
 imageio>=2.9.0
 imgaug>=0.4.0
+pandas
