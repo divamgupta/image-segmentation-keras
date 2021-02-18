@@ -5,5 +5,5 @@ keras>=2.3.0
 tensorflow>=2.2
 opencv-python
 tqdm
-imageio>=2.9.0
+imageio>=2.5.0
 imgaug>=0.4.0
