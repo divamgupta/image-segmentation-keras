@@ -73,9 +73,9 @@ Input Image            |  Output Segmentation Image
 
 ### Prerequisites
 
-* Keras 2.0
-* opencv for python
-* Theano / Tensorflow / CNTK
+* Keras ( recommended version : 2.4.3 )
+* OpenCV for Python
+* Tensorflow ( recommended  version : 2.4.1 )
 
 ```shell
 apt-get install -y libsm6 libxext6 libxrender-dev
@@ -93,7 +93,7 @@ pip install keras-segmentation
 or 
 
 ```shell
-pip install git+https://github.com/divamgupta/image-segmentation-keras
+pip install --upgrade git+https://github.com/divamgupta/image-segmentation-keras
 ```
 
 ### or
