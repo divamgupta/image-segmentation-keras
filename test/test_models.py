@@ -6,6 +6,10 @@ from keras_segmentation.data_utils.data_loader import \
     verify_segmentation_dataset, image_segmentation_generator
 from keras_segmentation.predict import predict_multiple, predict, evaluate
 
+
+from keras_segmentation.model_compression import perform_distilation
+from keras_segmentation.pretrained import pspnet_50_ADE_20K  
+
 tr_im = "test/example_dataset/images_prepped_train"
 tr_an = "test/example_dataset/annotations_prepped_train"
 te_im = "test/example_dataset/images_prepped_test"
@@ -90,6 +94,54 @@ def test_model():
                   annotations_dir=te_an,
                   checkpoints_path=check_path)
     assert ev['frequency_weighted_IU'] > 0.01
+
+
+def test_kd():
+
+    model_name = "fcn_8"
+    h = 224
+    w = 256
+    n_c = 100
+    check_path1 = tempfile.mktemp()
+
+    m1 = all_models.model_from_name[model_name](
+                                            n_c, input_height=h, input_width=w)
+
+
+
+    model_name = "unet_mini"
+    h = 124
+    w = 156
+    n_c = 100
+    check_path2 = tempfile.mktemp()
+
+    m2 = all_models.model_from_name[model_name](
+                                            n_c, input_height=h, input_width=w)
+
+
+    m1.train(train_images=tr_im,
+            train_annotations=tr_an,
+            steps_per_epoch=2,
+            epochs=2,
+            checkpoints_path=check_path1
+            )
+
+    perform_distilation(m1 ,m2, tr_im , distilation_loss='kl' , 
+                        batch_size =2 ,checkpoints_path=check_path2  , epochs = 2 , steps_per_epoch=2, )
+
+
+
+
+def test_pretrained():
+    
+
+    model = pspnet_50_ADE_20K() 
+
+    out = model.predict_segmentation(
+        inp=te_im+"/0016E5_07959.png",
+        out_fname="/tmp/out.png"
+    )
+
 
 # def test_models():
 
