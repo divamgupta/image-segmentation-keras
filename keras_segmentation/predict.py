@@ -189,6 +189,11 @@ def predict_multiple(model=None, inps=None, inp_dir=None, out_dir=None,
 
     all_prs = []
 
+    if not out_dir is None:
+        if not os.path.exists(out_dir):
+            os.makedirs(out_dir)
+
+
     for i, inp in enumerate(tqdm(inps)):
         if out_dir is None:
             out_fname = None
