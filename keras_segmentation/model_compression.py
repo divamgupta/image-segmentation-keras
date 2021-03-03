@@ -6,6 +6,7 @@ import numpy as np
 import six 
 import os 
 import json 
+import sys 
 
 from .data_utils.data_loader import image_segmentation_generator
 from .predict import model_from_checkpoint_path
@@ -77,6 +78,9 @@ def fit_generator_custom( model , gen , epochs , steps_per_epoch , callback=None
             
 def perform_distilation(teacher_model ,student_model, data_path , distilation_loss='kl' , 
                         batch_size = 6 ,checkpoints_path=None  , epochs = 32 , steps_per_epoch=512, ):
+
+
+    assert sys.version_info.major >= 3 , "Python 2 not supported"
 
     if isinstance( distilation_loss , six.string_types):
         if distilation_loss == "l1":

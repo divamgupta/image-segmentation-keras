@@ -1,6 +1,8 @@
 import numpy as np
 import tempfile
 
+import sys 
+
 from keras_segmentation.models import all_models
 from keras_segmentation.data_utils.data_loader import \
     verify_segmentation_dataset, image_segmentation_generator
@@ -97,6 +99,10 @@ def test_model():
 
 
 def test_kd():
+
+    if sys.version_info.major < 3:
+        # KD wont work with python 2 
+        return 
 
     model_name = "fcn_8"
     h = 224
