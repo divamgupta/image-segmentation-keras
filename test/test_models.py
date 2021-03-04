@@ -3,6 +3,8 @@ import tempfile
 
 import sys 
 
+import keras
+
 from keras_segmentation.models import all_models
 from keras_segmentation.data_utils.data_loader import \
     verify_segmentation_dataset, image_segmentation_generator
@@ -16,6 +18,28 @@ tr_im = "test/example_dataset/images_prepped_train"
 tr_an = "test/example_dataset/annotations_prepped_train"
 te_im = "test/example_dataset/images_prepped_test"
 te_an = "test/example_dataset/annotations_prepped_test"
+
+
+
+def test_models():
+
+    n_c = 100
+
+    models = [ ( "unet_mini" , 124 , 156   )  , ( "vgg_unet" , 224 , 224*2   ) , 
+        ( 'resnet50_pspnet', 192*2 , 192*3 ) , ( 'mobilenet_unet', 224 , 224 ),( 'segnet', 224 , 224*2 ),( 'vgg_segnet', 224 , 224*2 ) ,( 'fcn_32', 224 , 224*2 ) ,( 'fcn_8_vgg', 224 , 224*2 )   ]
+
+    for model_name  , h , w in models:
+        m = all_models.model_from_name[model_name]( n_c, input_height=h, input_width=w)
+
+        m.train(train_images=tr_im,
+            train_annotations=tr_an,
+            steps_per_epoch=2,
+            epochs=2 )
+
+        keras.backend.clear_session()
+
+
+
 
 
 def test_verify():
@@ -136,6 +160,20 @@ def test_kd():
                         batch_size =2 ,checkpoints_path=check_path2  , epochs = 2 , steps_per_epoch=2, )
 
 
+    perform_distilation(m1 ,m2, tr_im , distilation_loss='l2' , 
+                        batch_size =2 ,checkpoints_path=check_path2  , epochs = 2 , steps_per_epoch=2, )
+
+
+    perform_distilation(m1 ,m2, tr_im , distilation_loss='l2' , 
+                        batch_size =2 ,checkpoints_path=check_path2  , epochs = 2 , steps_per_epoch=2, feats_distilation_loss='pa' )
+
+
+
+
+
+
+
+
 
 
 def test_pretrained():
@@ -148,21 +186,6 @@ def test_pretrained():
         out_fname="/tmp/out.png"
     )
 
-
-def test_models():
-
-    n_c = 100
-
-    models = [ ( "unet_mini" , 124 , 156   )  , ( "vgg_unet" , 224 , 224*2   ) , 
-        ( 'resnet50_pspnet', 192*2 , 192*3 ) ,( 'mobilenet_unet', 224 , 224 ),( 'segnet', 224 , 224*2 ),( 'vgg_segnet', 224 , 224*2 ) ,( 'fcn_32', 224 , 224*2 ) ,( 'fcn_8_vgg', 224 , 224*2 )   ]
-
-    for model_name  , h , w in models:
-        m = all_models.model_from_name[model_name]( n_c, input_height=h, input_width=w)
-
-        m.train(train_images=tr_im,
-            train_annotations=tr_an,
-            steps_per_epoch=2,
-            epochs=2 )
 
 
 
