@@ -149,6 +149,27 @@ def test_pretrained():
     )
 
 
+def test_models():
+
+    n_c = 3
+
+    models = [ ( "unet_mini" , 124 , 156   )  , ( "vgg_unet" , 224 , 224*2   ) , 
+        ( 'resnet50_pspnet', 224 , 224*2 ) ,( 'mobilenet_unet', 224 , 224*2 ),( 'segnet', 224 , 224*2 ),( 'vgg_segnet', 224 , 224*2 ) ,( 'fcn_32', 224 , 224*2 )   ]
+
+    for model_name  , h , w in models:
+        m = all_models.model_from_name[model_name]( n_c, input_height=h, input_width=w)
+
+        m.train(train_images=tr_im,
+            train_annotations=tr_an,
+            steps_per_epoch=2,
+            epochs=2 )
+
+
+
+
+
+
+
 # def test_models():
 
 
