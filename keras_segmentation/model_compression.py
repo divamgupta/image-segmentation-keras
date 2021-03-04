@@ -9,8 +9,6 @@ import json
 import sys 
 
 from .data_utils.data_loader import image_segmentation_generator
-from .predict import model_from_checkpoint_path
-from .models.unet import unet_mini
 from .train import CheckpointsCallback 
 
 
