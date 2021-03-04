@@ -11,7 +11,7 @@ import sys
 from .data_utils.data_loader import image_segmentation_generator
 from .train import CheckpointsCallback 
 
-
+from keras.models import Model 
 
 class Distiller(keras.Model):
     def __init__(self, student, teacher , distilation_loss ):
