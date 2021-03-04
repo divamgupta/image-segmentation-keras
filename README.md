@@ -301,6 +301,29 @@ new_model.train(
 
 ```
 
+
+
+## Knowledge distillation for compressing the model
+
+The following example shows transfer the knowledge from a larger ( and more accurate ) model to a smaller model. In most cases the smaller model trained via knowledge distilation is more accurate compared to the same model trained using vanilla supervised learning. 
+
+```python
+from keras_segmentation.predict import model_from_checkpoint_path
+from keras_segmentation.models.unet import unet_mini
+from keras_segmentation.model_compression import perform_distilation
+
+model_large = model_from_checkpoint_path( "/checkpoints/path/of/trained/model" )
+model_small = unet_mini( n_classes=51, input_height=300, input_width=400  )
+
+perform_distilation ( data_path="/path/to/large_image_set/" , checkpoints_path="path/to/save/checkpoints" , 
+    teacher_model=model_large ,  student_model=model_small  , distilation_loss='kl' , feats_distilation_loss='pa' )
+
+```
+
+
+
+
+
 ## Adding custom augmentation function to training
 
 The following example shows how to define a custom augmentation function for training.
