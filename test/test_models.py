@@ -151,7 +151,7 @@ def test_pretrained():
 
 def test_models():
 
-    n_c = 3
+    n_c = 100
 
     models = [ ( "unet_mini" , 124 , 156   )  , ( "vgg_unet" , 224 , 224*2   ) , 
         ( 'resnet50_pspnet', 224 , 224*2 ) ,( 'mobilenet_unet', 224 , 224*2 ),( 'segnet', 224 , 224*2 ),( 'vgg_segnet', 224 , 224*2 ) ,( 'fcn_32', 224 , 224*2 ) ,( 'fcn_8_vgg', 224 , 224*2 )   ]
