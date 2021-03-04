@@ -56,7 +56,7 @@ def unet_mini(n_classes, input_height=360, input_width=480, channels=3):
                    activation='relu', padding='same')(up2)
     conv5 = Dropout(0.2)(conv5)
     conv5 = Conv2D(32, (3, 3), data_format=IMAGE_ORDERING,
-                   activation='relu', padding='same')(conv5)
+                   activation='relu', padding='same' , name="seg_feats")(conv5)
 
     o = Conv2D(n_classes, (1, 1), data_format=IMAGE_ORDERING,
                padding='same')(conv5)
@@ -97,7 +97,7 @@ def _unet(n_classes, encoder, l1_skip_conn=True, input_height=416,
         o = (concatenate([o, f1], axis=MERGE_AXIS))
 
     o = (ZeroPadding2D((1, 1), data_format=IMAGE_ORDERING))(o)
-    o = (Conv2D(64, (3, 3), padding='valid', activation='relu', data_format=IMAGE_ORDERING))(o)
+    o = (Conv2D(64, (3, 3), padding='valid', activation='relu', data_format=IMAGE_ORDERING, name="seg_feats"))(o)
     o = (BatchNormalization())(o)
 
     o = Conv2D(n_classes, (3, 3), padding='same',

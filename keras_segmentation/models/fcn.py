@@ -83,7 +83,7 @@ def fcn_8(n_classes, encoder=vanilla_encoder, input_height=416,
     o2 = (Conv2D(n_classes,  (1, 1), kernel_initializer='he_normal',
                  data_format=IMAGE_ORDERING))(o2)
     o2, o = crop(o2, o, img_input)
-    o = Add()([o2, o])
+    o = Add( name="seg_feats" )([o2, o])
 
     o = Conv2DTranspose(n_classes, kernel_size=(16, 16),  strides=(
         8, 8), use_bias=False, data_format=IMAGE_ORDERING)(o)
@@ -110,7 +110,7 @@ def fcn_32(n_classes, encoder=vanilla_encoder, input_height=416,
     o = Dropout(0.5)(o)
 
     o = (Conv2D(n_classes,  (1, 1), kernel_initializer='he_normal',
-                data_format=IMAGE_ORDERING))(o)
+                data_format=IMAGE_ORDERING , name="seg_feats" ))(o)
     o = Conv2DTranspose(n_classes, kernel_size=(64, 64),  strides=(
         32, 32), use_bias=False,  data_format=IMAGE_ORDERING)(o)
 

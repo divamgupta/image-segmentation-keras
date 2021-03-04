@@ -62,7 +62,7 @@ def _pspnet(n_classes, encoder,  input_height=384, input_width=576, channels=3):
 
     o = Concatenate(axis=MERGE_AXIS)(pool_outs)
 
-    o = Conv2D(512, (1, 1), data_format=IMAGE_ORDERING, use_bias=False)(o)
+    o = Conv2D(512, (1, 1), data_format=IMAGE_ORDERING, use_bias=False , name="seg_feats" )(o)
     o = BatchNormalization()(o)
     o = Activation('relu')(o)
 

@@ -32,7 +32,7 @@ def segnet_decoder(f, n_classes, n_up=3):
 
     o = (UpSampling2D((2, 2), data_format=IMAGE_ORDERING))(o)
     o = (ZeroPadding2D((1, 1), data_format=IMAGE_ORDERING))(o)
-    o = (Conv2D(64, (3, 3), padding='valid', data_format=IMAGE_ORDERING))(o)
+    o = (Conv2D(64, (3, 3), padding='valid', data_format=IMAGE_ORDERING, name="seg_feats"))(o)
     o = (BatchNormalization())(o)
 
     o = Conv2D(n_classes, (3, 3), padding='same',

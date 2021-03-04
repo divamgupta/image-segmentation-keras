@@ -29,8 +29,23 @@ class_colors = [(random.randint(0, 255), random.randint(
     0, 255), random.randint(0, 255)) for _ in range(5000)]
 
 
+ACCEPTABLE_IMAGE_FORMATS = [".jpg", ".jpeg", ".png", ".bmp"]
+ACCEPTABLE_SEGMENTATION_FORMATS = [".png", ".bmp"]
+
+
 class DataLoaderError(Exception):
     pass
+
+
+
+def get_image_list_from_path(images_path ):
+    image_files = []
+    for dir_entry in os.listdir(images_path):
+            if os.path.isfile(os.path.join(images_path, dir_entry)) and \
+                    os.path.splitext(dir_entry)[1] in ACCEPTABLE_IMAGE_FORMATS:
+                file_name, file_extension = os.path.splitext(dir_entry)
+                image_files.append(os.path.join(images_path, dir_entry))
+    return image_files
 
 
 def get_pairs_from_paths(images_path, segs_path, ignore_non_matching=False, other_inputs_paths=None):
@@ -38,8 +53,7 @@ def get_pairs_from_paths(images_path, segs_path, ignore_non_matching=False, othe
         the segmentation images from the segs_path directory
         while checking integrity of data """
 
-    ACCEPTABLE_IMAGE_FORMATS = [".jpg", ".jpeg", ".png", ".bmp"]
-    ACCEPTABLE_SEGMENTATION_FORMATS = [".png", ".bmp"]
+
 
     image_files = []
     segmentation_files = {}
@@ -235,23 +249,39 @@ def image_segmentation_generator(images_path, segs_path, batch_size,
                                  augmentation_name="aug_all",
                                  custom_augmentation=None,
                                  other_inputs_paths=None, preprocessing=None,
-                                 read_image_type=cv2.IMREAD_COLOR):
+                                 read_image_type=cv2.IMREAD_COLOR , ignore_segs=False ):
+    
 
-    img_seg_pairs = get_pairs_from_paths(images_path, segs_path, other_inputs_paths=other_inputs_paths)
-    random.shuffle(img_seg_pairs)
-    zipped = itertools.cycle(img_seg_pairs)
+    if not ignore_segs:
+        img_seg_pairs = get_pairs_from_paths(images_path, segs_path, other_inputs_paths=other_inputs_paths)
+        random.shuffle(img_seg_pairs)
+        zipped = itertools.cycle(img_seg_pairs)
+    else:
+        img_list = get_image_list_from_path( images_path )
+        random.shuffle( img_list )
+        img_list_gen = itertools.cycle( img_list )
+
 
     while True:
         X = []
         Y = []
         for _ in range(batch_size):
             if other_inputs_paths is None:
-                im, seg = next(zipped)
+
+                if ignore_segs:
+                    im = next( img_list_gen )
+                    seg = None 
+                else:
+                    im, seg = next(zipped)
+                    seg = cv2.imread(seg, 1)
 
                 im = cv2.imread(im, read_image_type)
-                seg = cv2.imread(seg, 1)
+                
 
                 if do_augment:
+
+                    assert ignore_segs == False , "Not supported yet"
+
                     if custom_augmentation is None:
                         im, seg[:, :, 0] = augment_seg(im, seg[:, :, 0],
                                                        augmentation_name)
@@ -265,6 +295,9 @@ def image_segmentation_generator(images_path, segs_path, batch_size,
                 X.append(get_image_array(im, input_width,
                                          input_height, ordering=IMAGE_ORDERING))
             else:
+
+                assert ignore_segs == False , "Not supported yet"
+
                 im, seg, others = next(zipped)
 
                 im = cv2.imread(im, read_image_type)
@@ -300,7 +333,11 @@ def image_segmentation_generator(images_path, segs_path, batch_size,
 
                 X.append(oth)
 
-            Y.append(get_segmentation_array(
-                seg, n_classes, output_width, output_height))
+            if not ignore_segs:
+                Y.append(get_segmentation_array(
+                    seg, n_classes, output_width, output_height))
 
-        yield np.array(X), np.array(Y)
+        if ignore_segs:
+            yield np.array(X)
+        else:
+            yield np.array(X), np.array(Y)
