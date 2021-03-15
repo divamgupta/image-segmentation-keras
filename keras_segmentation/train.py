@@ -122,7 +122,7 @@ def train(model,
         config_file = checkpoints_path + "_config.json"
         dir_name = os.path.dirname(config_file)
 
-        if not os.path.exists(dir_name) and len( dir_name ) > 0 :
+        if ( not os.path.exists(dir_name) )  and len( dir_name ) > 0 :
             os.makedirs(dir_name)
 
         with open(config_file, "w") as f:
