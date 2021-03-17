@@ -85,14 +85,15 @@ pip install opencv-python
 
 Install the module
 
-```shell
-pip install keras-segmentation
-```
-
-or 
-
+Recommended way:
 ```shell
 pip install --upgrade git+https://github.com/divamgupta/image-segmentation-keras
+```
+
+### or 
+
+```shell
+pip install keras-segmentation
 ```
 
 ### or
