@@ -3,6 +3,7 @@ from .data_utils.data_loader import image_segmentation_generator, \
     verify_segmentation_dataset
 import glob
 import six
+from keras.metrics import MeanIoU
 from keras.callbacks import Callback, ModelCheckpoint, EarlyStopping
 
 
@@ -102,7 +103,7 @@ def train(model,
 
         model.compile(loss=loss_k,
                       optimizer=optimizer_name,
-                      metrics=['accuracy'])
+                      metrics=[MeanIoU(num_classes=2)])
 
     if checkpoints_path is not None:
         with open(checkpoints_path+"_config.json", "w") as f:
