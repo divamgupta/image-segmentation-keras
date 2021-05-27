@@ -293,14 +293,35 @@ new_model = pspnet_50( n_classes=51 )
 
 transfer_weights( pretrained_model , new_model  ) # transfer weights from pre-trained model to your model
 
-new_model.train(
+history = new_model.train(
     train_images="dataset1/images_prepped_train/",
     train_annotations="dataset1/annotations_prepped_train/",
     checkpoints_path="/tmp/vgg_unet_1", epochs=5
 )
-
-
 ```
+
+Note that `history` is a [History](https://www.tensorflow.org/api_docs/python/tf/keras/callbacks/History?) object which 
+contain logs from the training, so once the training finishes you can plot the loss and accuracy as usual:
+
+```python
+import matplotlib.pyplot as plt
+
+fig, (ax0, ax1) = plt.subplots(1,2, figsize=(12,4))
+
+ax0.plot(history.history['loss'], label='train loss')
+ax0.set_title('Loss function')
+ax0.set_xlabel('epochs')
+ax0.set_ylabel('loss')
+ax0.legend()
+
+ax1.plot(history.history['accuracy'], label='train acc')
+ax1.set_title('Accuracy')
+ax1.set_xlabel('epochs')
+ax1.set_ylabel('loss')
+ax1.legend()
+
+plt.show()
+```  
 
 
 
