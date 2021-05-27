@@ -6,9 +6,9 @@ from .data_utils.data_loader import image_segmentation_generator, \
 import six
 from keras.callbacks import Callback
 from tensorflow.keras.callbacks import ModelCheckpoint
-import tensorflow as tf
 import glob
 import sys
+
 
 def find_latest_checkpoint(checkpoints_path, fail_safe=True):
 
@@ -41,6 +41,7 @@ def find_latest_checkpoint(checkpoints_path, fail_safe=True):
 
     return latest_epoch_checkpoint
 
+
 def masked_categorical_crossentropy(gt, pr):
     from keras.losses import categorical_crossentropy
     mask = 1 - gt[:, :, 0]
@@ -48,6 +49,7 @@ def masked_categorical_crossentropy(gt, pr):
 
 
 class CheckpointsCallback(Callback):
+
     def __init__(self, checkpoints_path):
         self.checkpoints_path = checkpoints_path
 
@@ -124,7 +126,7 @@ def train(model,
         config_file = checkpoints_path + "_config.json"
         dir_name = os.path.dirname(config_file)
 
-        if ( not os.path.exists(dir_name) )  and len( dir_name ) > 0 :
+        if (not os.path.exists(dir_name)) and len(dir_name) > 0:
             os.makedirs(dir_name)
 
         with open(config_file, "w") as f:
@@ -179,14 +181,14 @@ def train(model,
             other_inputs_paths=other_inputs_paths,
             preprocessing=preprocessing, read_image_type=read_image_type)
 
-    if callbacks is None and (not checkpoints_path is  None) :
+    if callbacks is None and (checkpoints_path is not None):
         default_callback = ModelCheckpoint(
                 filepath=checkpoints_path + ".{epoch:05d}",
                 save_weights_only=True,
                 verbose=True
             )
 
-        if sys.version_info[0] < 3: # for pyhton 2 
+        if sys.version_info[0] < 3:  # for python 2
             default_callback = CheckpointsCallback(checkpoints_path)
 
         callbacks = [
@@ -197,12 +199,14 @@ def train(model,
         callbacks = []
 
     if not validate:
-        model.fit(train_gen, steps_per_epoch=steps_per_epoch,
-                  epochs=epochs, callbacks=callbacks, initial_epoch=initial_epoch)
+        history = model.fit(train_gen, steps_per_epoch=steps_per_epoch,
+                            epochs=epochs, callbacks=callbacks, initial_epoch=initial_epoch)
     else:
-        model.fit(train_gen,
-                  steps_per_epoch=steps_per_epoch,
-                  validation_data=val_gen,
-                  validation_steps=val_steps_per_epoch,
-                  epochs=epochs, callbacks=callbacks,
-                  use_multiprocessing=gen_use_multiprocessing, initial_epoch=initial_epoch)
+        history = model.fit(train_gen,
+                            steps_per_epoch=steps_per_epoch,
+                            validation_data=val_gen,
+                            validation_steps=val_steps_per_epoch,
+                            epochs=epochs, callbacks=callbacks,
+                            use_multiprocessing=gen_use_multiprocessing, initial_epoch=initial_epoch)
+
+    return history
