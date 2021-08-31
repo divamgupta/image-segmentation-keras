@@ -7,8 +7,39 @@ import six
 from keras.callbacks import Callback
 from tensorflow.keras.callbacks import ModelCheckpoint
 import tensorflow as tf
+from tensorflow.keras import backend as K
 import glob
 import sys
+
+
+def dice_coef(y_true, y_pred):
+    """
+    Function to calculate dice coefficient
+
+    Parameters
+    ----------
+    y_true : numpy array of actual masks
+    y_pred : numpy array of predicted masks
+
+    Returns
+    -------
+    dice coefficient
+    """
+    y_true_f = K.flatten(y_true)
+    y_pred_f = K.flatten(y_pred)
+    intersection = K.sum(y_true_f * y_pred_f)
+    return  (2. * intersection + K.epsilon()) / (K.sum(y_true_f) + K.sum(y_pred_f) + K.epsilon())
+
+
+def dice_coef_loss(y_true, y_pred):
+    return 1-dice_coef(y_true, y_pred)
+
+def soft_dice_loss(y_true, y_pred, axis=(1, 2, 3)):
+    dice_numerator = 2. * K.sum(y_true * y_pred, axis=axis) + 0.00001
+    dice_denominator = K.sum(y_true ** 2, axis=axis) + K.sum(y_pred ** 2, axis=axis) + 0.00001
+    dice_loss = 1 - K.mean((dice_numerator) / (dice_denominator))
+    return dice_loss
+
 
 def find_latest_checkpoint(checkpoints_path, fail_safe=True):
 
