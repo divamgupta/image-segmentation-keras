@@ -1,7 +1,7 @@
 from keras.models import *
 from keras.layers import *
-import keras.backend as K
-import keras
+import tensorflow.keras.backend as K
+import tensorflow.keras as keras
 
 from .config import IMAGE_ORDERING
 
