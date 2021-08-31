@@ -106,3 +106,7 @@ ENV/
 
 # VSCode settings
 .vscode/
+.idea/image-segmentation-keras.iml
+.idea/inspectionProfiles/profiles_settings.xml
+.idea/modules.xml
+.idea/inspectionProfiles/Project_Default.xml
