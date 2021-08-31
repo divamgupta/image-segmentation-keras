@@ -177,7 +177,7 @@ def custom_fun():
 model.train(
     train_images =  "dataset1/images_prepped_train/",
     train_annotations = "dataset1/annotations_prepped_train/",
-    checkpoints_path = "/tmp/vgg_unet_1" , epochs=5, loss_fun = custom_fun() #dice or soft_dice
+    checkpoints_path = "/tmp/vgg_unet_1" , epochs=5, loss_fun = custom_fun() #dice or soft_dice, default = 'categorical_crossentropy'
 )
 
 out = model.predict_segmentation(
@@ -238,7 +238,7 @@ python -m keras_segmentation train \
  --input_height=320 \
  --input_width=640 \
  --model_name="vgg_unet"
- --loss_fun= "dice" or "soft_dice"
+ --loss_fun= "dice" or "soft_dice" #default = 'categorical_crossentropy'
 ```
 
 Choose model_name from the table above
