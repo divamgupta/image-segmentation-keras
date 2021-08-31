@@ -10,26 +10,7 @@ import tensorflow as tf
 from tensorflow.keras import backend as K
 import glob
 import sys
-
-
-def dice_coef(y_true, y_pred):
-    """
-    Function to calculate dice coefficient
-
-    Parameters
-    ----------
-    y_true : numpy array of actual masks
-    y_pred : numpy array of predicted masks
-
-    Returns
-    -------
-    dice coefficient
-    """
-    y_true_f = K.flatten(y_true)
-    y_pred_f = K.flatten(y_pred)
-    intersection = K.sum(y_true_f * y_pred_f)
-    return  (2. * intersection + K.epsilon()) / (K.sum(y_true_f) + K.sum(y_pred_f) + K.epsilon())
-
+from metrics import dice_coef
 
 def dice_coef_loss(y_true, y_pred):
     return 1-dice_coef(y_true, y_pred)
@@ -109,6 +90,7 @@ def train(model,
           gen_use_multiprocessing=False,
           ignore_zero_class=False,
           optimizer_name='adam',
+          loss_fun ='categorical_crossentropy',
           do_augment=False,
           augmentation_name="aug_all",
           callbacks=None,
@@ -145,11 +127,11 @@ def train(model,
         if ignore_zero_class:
             loss_k = masked_categorical_crossentropy
         else:
-            loss_k = 'categorical_crossentropy'
+            loss_k = loss_fun #'categorical_crossentropy'
 
         model.compile(loss=loss_k,
                       optimizer=optimizer_name,
-                      metrics=['accuracy'])
+                      metrics=['accuracy',dice_coef])
 
     if checkpoints_path is not None:
         config_file = checkpoints_path + "_config.json"
