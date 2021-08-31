@@ -1,4 +1,4 @@
-import keras
+import tensorflow.keras as keras
 import tensorflow as tf
 
 from tqdm import tqdm 
