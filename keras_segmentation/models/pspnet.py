@@ -1,8 +1,8 @@
 import numpy as np
-import keras
-from keras.models import *
-from keras.layers import *
-import keras.backend as K
+import tensorflow.keras
+from tensorflow.keras.models import *
+from tensorflow.keras.layers import *
+import tensorflow.keras.backend as K
 
 from .config import IMAGE_ORDERING
 from .model_utils import get_segmentation_model, resize_image

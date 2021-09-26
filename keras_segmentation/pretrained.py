@@ -1,4 +1,4 @@
-import keras
+import tensorflow.keras
 
 from .models.all_models import model_from_name
 

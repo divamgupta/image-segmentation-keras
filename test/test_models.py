@@ -3,7 +3,7 @@ import tempfile
 
 import sys 
 
-import keras
+import tensorflow.keras
 
 from keras_segmentation.models import all_models
 from keras_segmentation.data_utils.data_loader import \
