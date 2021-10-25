@@ -31,7 +31,7 @@ ENV CONDA_PREFIX=/miniconda/envs/$CONDA_DEFAULT_ENV
 ENV PATH=$CONDA_PREFIX/bin:$PATH
 ENV CONDA_AUTO_UPDATE_CONDA=false
 
-RUN conda install -y ipython tensorflow-gpu=1.14.0 keras=2.3.1
+RUN conda install -y ipython tensorflow-gpu=2.6.0
 
 # install model library
 RUN git clone https://github.com/divamgupta/image-segmentation-keras.git
