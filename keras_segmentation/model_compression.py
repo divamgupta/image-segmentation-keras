@@ -1,4 +1,4 @@
-import keras
+import tensorflow.keras as keras
 import tensorflow as tf
 
 from tqdm import tqdm 
@@ -11,7 +11,7 @@ import sys
 from .data_utils.data_loader import image_segmentation_generator
 from .train import CheckpointsCallback 
 
-from keras.models import Model 
+from tensorflow.keras.models import Model
 
 
 

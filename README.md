@@ -4,7 +4,7 @@
 [![Downloads](https://pepy.tech/badge/keras-segmentation)](https://pepy.tech/project/keras-segmentation)
 [![Build Status](https://travis-ci.org/divamgupta/image-segmentation-keras.png)](https://travis-ci.org/divamgupta/image-segmentation-keras)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](http://perso.crans.org/besson/LICENSE.html)
-[![Twitter](https://img.shields.io/twitter/url.svg?label=Follow%20%40divamgupta&style=social&url=https%3A%2F%2Ftwitter.com%2Fdivamgupta)](https://twitter.com/divamgupta)
+[![Twitter](https://img.shields.io/twitter/url.svg?label=Follow%20%40sushantag9&style=social&url=https%3A%2F%2Ftwitter.com%2Fdivamgupta)](https://twitter.com/sushantag9)
 
 
 
@@ -175,10 +175,14 @@ from keras_segmentation.models.unet import vgg_unet
 
 model = vgg_unet(n_classes=51 ,  input_height=416, input_width=608  )
 
+def custom_fun():
+    #some loss function
+    pass
+
 model.train(
     train_images =  "dataset1/images_prepped_train/",
     train_annotations = "dataset1/annotations_prepped_train/",
-    checkpoints_path = "/tmp/vgg_unet_1" , epochs=5
+    checkpoints_path = "/tmp/vgg_unet_1" , epochs=5, loss_fun = custom_fun() #dice or soft_dice, default = 'categorical_crossentropy'
 )
 
 out = model.predict_segmentation(
@@ -191,9 +195,14 @@ plt.imshow(out)
 
 # evaluating the model 
 print(model.evaluate_segmentation( inp_images_dir="dataset1/images_prepped_test/"  , annotations_dir="dataset1/annotations_prepped_test/" ) )
-
 ```
+### Custom loss function
 
+#### Available loss function:
+    
+- Dice loss (usage: `loss_fun = dice`)
+- Soft Dice Loss (usage: `loss_fun = soft_dice`)
+- and others available in [Losses](https://keras.io/api/losses/)
 
 ## Usage via command line
 You can also use the tool just using command line
@@ -234,6 +243,7 @@ python -m keras_segmentation train \
  --input_height=320 \
  --input_width=640 \
  --model_name="vgg_unet"
+ --loss_fun= "dice" or "soft_dice" #default = 'categorical_crossentropy'
 ```
 
 Choose model_name from the table above
