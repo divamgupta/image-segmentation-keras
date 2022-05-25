@@ -407,7 +407,7 @@ The following example shows how to set custom callbacks for the model training.
 ```python
 
 from keras_segmentation.models.unet import vgg_unet
-from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping
+from keras.callbacks import ModelCheckpoint, EarlyStopping
 
 model = vgg_unet(n_classes=51 ,  input_height=416, input_width=608 )
 
