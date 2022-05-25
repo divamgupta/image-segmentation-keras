@@ -1,5 +1,5 @@
 import keras
-
+import tensorflow
 from .models.all_models import model_from_name
 
 
@@ -26,7 +26,7 @@ def resnet_pspnet_VOC12_v0_1():
     REPO_URL = "https://github.com/divamgupta/image-segmentation-keras"
     MODEL_PATH = "pretrained_model_1/r2_voc12_resnetpspnet_384x576.24"
     model_url = "{0}/releases/download/{1}".format(REPO_URL, MODEL_PATH)
-    latest_weights = keras.utils.get_file(model_url.split("/")[-1], model_url)
+    latest_weights = tf.keras.utils.get_file(model_url.split("/")[-1], model_url)
 
     return model_from_checkpoint_path(model_config, latest_weights)
 
@@ -43,7 +43,7 @@ def pspnet_50_ADE_20K():
 
     model_url = "https://www.dropbox.com/s/" \
                 "0uxn14y26jcui4v/pspnet50_ade20k.h5?dl=1"
-    latest_weights = keras.utils.get_file("pspnet50_ade20k.h5", model_url)
+    latest_weights = tf.keras.utils.get_file("pspnet50_ade20k.h5", model_url)
 
     return model_from_checkpoint_path(model_config, latest_weights)
 
@@ -59,7 +59,7 @@ def pspnet_101_cityscapes():
 
     model_url = "https://www.dropbox.com/s/" \
                 "c17g94n946tpalb/pspnet101_cityscapes.h5?dl=1"
-    latest_weights = keras.utils.get_file("pspnet101_cityscapes.h5", model_url)
+    latest_weights = tf.keras.utils.get_file("pspnet101_cityscapes.h5", model_url)
 
     return model_from_checkpoint_path(model_config, latest_weights)
 
@@ -75,6 +75,6 @@ def pspnet_101_voc12():
 
     model_url = "https://www.dropbox.com/s/" \
                 "uvqj2cjo4b9c5wg/pspnet101_voc2012.h5?dl=1"
-    latest_weights = keras.utils.get_file("pspnet101_voc2012.h5", model_url)
+    latest_weights = tf.keras.utils.get_file("pspnet101_voc2012.h5", model_url)
 
     return model_from_checkpoint_path(model_config, latest_weights)
