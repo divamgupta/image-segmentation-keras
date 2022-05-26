@@ -157,7 +157,7 @@ def perform_distilation(teacher_model ,student_model, data_path , distilation_lo
                                      output_height=None, output_width=None , ignore_segs=True)
 
     distill_model.compile(
-        optimizer=keras.optimizers.Adam(),
+        optimizer='adam',
         metrics=[ distilation_loss  ]
     )
     
