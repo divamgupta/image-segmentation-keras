@@ -10,7 +10,7 @@
 
 Implementation of various Deep Image Segmentation models in keras.
 
-### News : Functionality of this repository will be soon integrated with https://liner.ai . Check it out! 
+### News : Some functionality of this repository has been integrated with https://liner.ai . Check it out! 
 
 
 
@@ -25,17 +25,14 @@ Link to the full blog post with tutorial : https://divamgupta.com/image-segmenta
 * Python Interface: https://colab.research.google.com/drive/1q_eCYEzKxixpCKH1YDsLnsvgxl92ORcv?usp=sharing
 * CLI Interface: https://colab.research.google.com/drive/1Kpy4QGFZ2ZHm69mPfkmLSUes8kj6Bjyi?usp=sharing
 
+## Training using GUI interface
+You can also train segmentation models on your computer with https://liner.ai  
 
-## Our Other Repositories
-- [Attention based Language Translation in Keras](https://github.com/divamgupta/attention-translation-keras)
-- [Ladder Network in Keras](https://github.com/divamgupta/ladder_network_keras)  model achives 98% test accuracy on MNIST with just 100 labeled examples
+Train   |  Inference / Export
+:-------------------------:|:-------------------------:
+![https://liner.ai ](sample_images/liner_dataset.png)  |  ![https://liner.ai ](sample_images/liner_testing.png)
+![https://liner.ai ](sample_images/liner_training.png)  |  ![https://liner.ai ](sample_images/liner_export.png)
 
-### Top Contributors
-
-* [Divam Gupta](https://divamgupta.com) [![Twitter](https://img.shields.io/twitter/url.svg?label=Follow%20%40divamgupta&style=social&url=https%3A%2F%2Ftwitter.com%2Fdivamgupta)](https://twitter.com/divamgupta)
-* [Rounaq Jhunjhunu wala](https://github.com/rjalfa)
-* [Marius Juston](https://github.com/Marius-Juston)
-* [JaledMC](https://github.com/JaledMC)
 
 ## Models
 
