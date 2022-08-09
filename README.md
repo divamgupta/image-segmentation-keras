@@ -49,6 +49,8 @@ Following models are supported:
 | fcn_8_mobilenet  | MobileNet         | FCN32              |
 | fcn_32_mobilenet | MobileNet         | FCN32              |
 | pspnet           | Vanilla CNN       | PSPNet             |
+| pspnet_50        | Vanilla CNN       | PSPNet             |
+| pspnet_101       | Vanilla CNN       | PSPNet             |
 | vgg_pspnet       | VGG 16            | PSPNet             |
 | resnet50_pspnet  | Resnet-50         | PSPNet             |
 | unet_mini        | Vanilla Mini CNN  | U-Net              |
