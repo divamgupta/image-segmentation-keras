@@ -19,10 +19,8 @@ random.seed(DATA_LOADER_SEED)
 
 
 def model_from_checkpoint_path(checkpoints_path):
-
     from .models.all_models import model_from_name
-    assert (os.path.isfile(checkpoints_path+"_config.json")
-            ), "Checkpoint not found."
+    assert (os.path.isfile(os.path.join(checkpoints_path, "_config.json"))), "Checkpoint not found."
     model_config = json.loads(
         open(checkpoints_path+"_config.json", "r").read())
     latest_weights = find_latest_checkpoint(checkpoints_path)
