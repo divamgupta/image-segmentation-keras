@@ -6,16 +6,16 @@ from .data_utils.data_loader import image_segmentation_generator, \
 import six
 from keras.callbacks import Callback
 from keras.callbacks import ModelCheckpoint
-import tensorflow as tf
 import glob
 import sys
+
 
 def find_latest_checkpoint(checkpoints_path, fail_safe=True):
 
     # This is legacy code, there should always be a "checkpoint" file in your directory
 
     def get_epoch_number_from_path(path):
-        return path.replace(checkpoints_path, "").strip(".")
+        return os.path.basename(path).replace(".index", "").strip(".")
 
     # Get all matching files
     all_checkpoint_files = glob.glob(checkpoints_path + ".*")
@@ -40,6 +40,7 @@ def find_latest_checkpoint(checkpoints_path, fail_safe=True):
                                   int(get_epoch_number_from_path(f)))
 
     return latest_epoch_checkpoint
+
 
 def masked_categorical_crossentropy(gt, pr):
     from keras.losses import categorical_crossentropy
