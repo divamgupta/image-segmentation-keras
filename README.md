@@ -10,7 +10,7 @@
 
 Implementation of various Deep Image Segmentation models in keras.
 
-### News : Some functionality of this repository has been integrated with https://liner.ai . Check it out! 
+### News : Some functionality of this repository has been integrated with https://liner.ai . Check it out!! 
 
 
 
