@@ -1,5 +1,6 @@
 from . import pspnet
 from . import unet
+from . import unet3_plus
 from . import segnet
 from . import fcn
 model_from_name = {}
@@ -34,6 +35,8 @@ model_from_name["unet"] = unet.unet
 model_from_name["vgg_unet"] = unet.vgg_unet
 model_from_name["resnet50_unet"] = unet.resnet50_unet
 model_from_name["mobilenet_unet"] = unet.mobilenet_unet
+
+model_from_name["unet3_plus"] = unet3_plus.unet3_plus
 
 
 model_from_name["segnet"] = segnet.segnet
