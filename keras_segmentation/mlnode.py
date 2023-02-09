@@ -23,7 +23,7 @@ class MlNodeKerasSeg(MlNodeSeg):
         """
         
         # self.model = tf.keras.models.load_model(self.weights_path)
-        breakpoint()
+
         from keras_segmentation.models.unet import vgg_unet
         self.model = vgg_unet(n_classes=2 ,  input_height=416, input_width=608  )
         self.weights_path = os.path.join(self.weight_dir,'vgg_unet.h5')
@@ -38,7 +38,6 @@ class MlNodeKerasSeg(MlNodeSeg):
         eg:
         pred_batch = self.model.predict(img_batch)
         """
-        breakpoint()
         pred_batch = self.model.predict_multiple(inps = img_batch, out_dir = "Results")
         return pred_batch
 
