@@ -8,6 +8,8 @@ from workflow.seg_node.mlnode import MlNodeSeg
 import os
 import numpy as np
 from pathlib import Path
+from cvutils.gpu_utils import select_device
+select_device(memory_limit=3000, use_gpu=True, framework="tensorflow")
 
 
 class MlNodeKerasSeg(MlNodeSeg):
@@ -21,7 +23,6 @@ class MlNodeKerasSeg(MlNodeSeg):
         eg:
         model = tf.keras.models.load_model('/tmp/model')
         """
-        
         # self.model = tf.keras.models.load_model(self.weights_path)
 
         from keras_segmentation.models.unet import vgg_unet
