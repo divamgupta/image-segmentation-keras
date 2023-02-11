@@ -104,7 +104,7 @@ python setup.py install
 
 ## Quick Demo
 
-`python keras_segmentation/examples/demo.py`
+`python image-segmentation-keras/examples/demo.py`
 
 ## Pre-trained models
 
