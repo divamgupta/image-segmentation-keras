@@ -3,16 +3,15 @@ inheriting seg/mlnode"""
 
 from typing import Optional
 import tensorflow as tf
-from workflow.seg_node.mlnode import MlNodeSeg
-
 import os
 import numpy as np
 from pathlib import Path
 from cvutils.gpu_utils import select_device
+from cvutils.workflow.seg_mlnode import SegMlNode
 select_device(memory_limit=3000, use_gpu=True, framework="tensorflow")
 
 
-class MlNodeKerasSeg(MlNodeSeg):
+class KerasSegMlNode(SegMlNode):
     """mlnode of segutils"""
     def __init__(self, projectname: str, node_name: str, workspace: Path, project_config_path: Optional[Path] = None, load_model_flag: bool = True, dump_results_flag: bool = False, show_flag: bool = False, git_flag: bool = True, gpu_flag: bool = True, db_stash_flag: bool = False, db_pull_flag: bool = True, wt_stash_flag: bool = False, wt_pull_flag: bool = True, print_flag: bool = True, run_mode: str = "infer", debug_level: int = 0, full_db_flag: bool = False, dump_parent_crops_flag: bool = False, all_nodes=None, remove_fp: bool = False, framework: str = "tensorflow") -> None:
         super().__init__(projectname, node_name, workspace, project_config_path, load_model_flag, dump_results_flag, show_flag, git_flag, gpu_flag, db_stash_flag, db_pull_flag, wt_stash_flag, wt_pull_flag, print_flag, run_mode, debug_level, full_db_flag, dump_parent_crops_flag, all_nodes, remove_fp, framework)
