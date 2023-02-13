@@ -1,4 +1,4 @@
-# Image Segmentation Keras : Implementation of Segnet, FCN, UNet, PSPNet and other models in Keras testing push
+# Image Segmentation Keras : Implementation of Segnet, FCN, UNet, PSPNet and other models in Keras
 
 [![PyPI version](https://badge.fury.io/py/keras-segmentation.svg)](https://badge.fury.io/py/keras-segmentation)
 [![Downloads](https://pepy.tech/badge/keras-segmentation)](https://pepy.tech/project/keras-segmentation)
