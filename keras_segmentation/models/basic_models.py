@@ -5,7 +5,7 @@ from tensorflow.keras.layers import *
 from .config import IMAGE_ORDERING
 
 
-def vanilla_encoder(input_height=224,  input_width=224, channels=3):
+def vanilla_encoder(input_height=224,  input_width=224, channels=3, pre_trained= None):
 
     kernel = 3
     filter_size = 64
