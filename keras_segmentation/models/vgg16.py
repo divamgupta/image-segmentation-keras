@@ -13,7 +13,7 @@ elif IMAGE_ORDERING == 'channels_last':
                      "vgg16_weights_tf_dim_ordering_tf_kernels_notop.h5"
 
 
-def get_vgg_encoder(input_height=224,  input_width=224, pretrained='imagenet', channels=3):
+def get_vgg_encoder(input_height=224,  input_width=224, pre_trained='imagenet', channels=3):
 
     assert input_height % 32 == 0
     assert input_width % 32 == 0
@@ -72,7 +72,7 @@ def get_vgg_encoder(input_height=224,  input_width=224, pretrained='imagenet', c
                      data_format=IMAGE_ORDERING)(x)
     f5 = x
 
-    if pretrained == 'imagenet':
+    if pre_trained == 'imagenet':
         VGG_Weights_path = tf.keras.utils.get_file(
             pretrained_url.split("/")[-1], pretrained_url)
         Model(img_input, x).load_weights(VGG_Weights_path, by_name=True, skip_mismatch=True)

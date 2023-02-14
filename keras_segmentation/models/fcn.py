@@ -52,7 +52,7 @@ def fcn_8(n_classes, encoder=vanilla_encoder, input_height=416,
           input_width=608, channels=3, pre_trained=None):
 
     img_input, levels = encoder(
-        input_height=input_height,  input_width=input_width, channels=channels)
+        input_height=input_height,  input_width=input_width, channels=channels, pre_trained=pre_trained)
     [f1, f2, f3, f4, f5] = levels
 
     o = f5
@@ -97,7 +97,7 @@ def fcn_32(n_classes, encoder=vanilla_encoder, input_height=416,
            input_width=608, channels=3, pre_trained=None):
 
     img_input, levels = encoder(
-        input_height=input_height,  input_width=input_width, channels=channels)
+        input_height=input_height,  input_width=input_width, channels=channels, pre_trained=pre_trained)
     [f1, f2, f3, f4, f5] = levels
 
     o = f5

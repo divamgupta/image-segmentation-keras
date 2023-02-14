@@ -110,7 +110,7 @@ def pspnet_50(n_classes,  input_height=473, input_width=473, channels=3, pre_tra
     return model
 
 
-def pspnet_101(n_classes,  input_height=473, input_width=473, channels=3. pre_trained=None):
+def pspnet_101(n_classes,  input_height=473, input_width=473, channels=3, pre_trained=None):
     from ._pspnet_2 import _build_pspnet
 
     nb_classes = n_classes
