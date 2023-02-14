@@ -201,7 +201,7 @@ def predict_multiple(model=None, inps=None, inp_dir=None, out_dir=None,
             if isinstance(inp, six.string_types):
                 out_fname = os.path.join(out_dir, os.path.basename(inp))
             else:
-                out_fname = os.path.join(out_dir, str(i) + ".jpg")
+                out_fname = os.path.join(out_dir, str(random.randint(0, 1000)) + ".jpg")
 
         pr = predict(model, inp, out_fname,
                      overlay_img=overlay_img, class_names=class_names,

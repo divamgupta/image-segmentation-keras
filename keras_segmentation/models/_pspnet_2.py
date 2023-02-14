@@ -2,12 +2,13 @@
 
 from math import ceil
 from sys import exit
-from keras import layers
-from keras.layers import Conv2D, MaxPooling2D, AveragePooling2D
-from keras.layers import BatchNormalization, Activation,\
-    Input, Dropout, ZeroPadding2D
-from keras.layers.merge import Concatenate, Add
 import tensorflow as tf
+from tensorflow.keras import layers
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, AveragePooling2D
+from tensorflow.keras.layers import BatchNormalization, Activation,\
+    Input, Dropout, ZeroPadding2D
+from tensorflow.keras.layers import Concatenate, Add
+
 
 from .config import IMAGE_ORDERING
 from .model_utils import get_segmentation_model
@@ -257,7 +258,7 @@ def build_pyramid_pooling_module(res, input_shape):
 
 
 def _build_pspnet(nb_classes, resnet_layers, input_shape,
-                  activation='softmax', channels=3):
+                  activation='softmax', channels=3, pre_trained=None):
 
     assert IMAGE_ORDERING == 'channels_last'
 

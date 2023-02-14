@@ -1,4 +1,4 @@
-# Image Segmentation Keras : Implementation of Segnet, FCN, UNet, PSPNet and other models in Keras.
+# Image Segmentation Keras : Implementation of Segnet, FCN, UNet, PSPNet and other models in Keras
 
 [![PyPI version](https://badge.fury.io/py/keras-segmentation.svg)](https://badge.fury.io/py/keras-segmentation)
 [![Downloads](https://pepy.tech/badge/keras-segmentation)](https://pepy.tech/project/keras-segmentation)
@@ -6,33 +6,29 @@
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](http://perso.crans.org/besson/LICENSE.html)
 [![Twitter](https://img.shields.io/twitter/url.svg?label=Follow%20%40divamgupta&style=social&url=https%3A%2F%2Ftwitter.com%2Fdivamgupta)](https://twitter.com/divamgupta)
 
-
-
 Implementation of various Deep Image Segmentation models in keras.
 
-### News : Some functionality of this repository has been integrated with https://liner.ai . Check it out!! 
-
-
+## News : Some functionality of this repository has been integrated with <https://liner.ai> . Check it out
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/sunshineatnoon/Paper-Collection/master/images/FCN1.png" width="50%" >
 </p>
 
-Link to the full blog post with tutorial : https://divamgupta.com/image-segmentation/2019/06/06/deep-learning-semantic-segmentation-keras.html
+Link to the full blog post with tutorial : <https://divamgupta.com/image-segmentation/2019/06/06/deep-learning-semantic-segmentation-keras.html>
 
+## Working Google Colab Examples
 
-## Working Google Colab Examples:
-* Python Interface: https://colab.research.google.com/drive/1q_eCYEzKxixpCKH1YDsLnsvgxl92ORcv?usp=sharing
-* CLI Interface: https://colab.research.google.com/drive/1Kpy4QGFZ2ZHm69mPfkmLSUes8kj6Bjyi?usp=sharing
+* Python Interface: <https://colab.research.google.com/drive/1q_eCYEzKxixpCKH1YDsLnsvgxl92ORcv?usp=sharing>
+* CLI Interface: <https://colab.research.google.com/drive/1Kpy4QGFZ2ZHm69mPfkmLSUes8kj6Bjyi?usp=sharing>
 
 ## Training using GUI interface
-You can also train segmentation models on your computer with https://liner.ai  
+
+You can also train segmentation models on your computer with <https://liner.ai>  
 
 Train   |  Inference / Export
 :-------------------------:|:-------------------------:
 ![https://liner.ai ](sample_images/liner_dataset.png)  |  ![https://liner.ai ](sample_images/liner_testing.png)
 ![https://liner.ai ](sample_images/liner_training.png)  |  ![https://liner.ai ](sample_images/liner_export.png)
-
 
 ## Models
 
@@ -63,22 +59,19 @@ Following models are supported:
 | resnet50_segnet  | Resnet-50         | Segnet             |
 | mobilenet_segnet | MobileNet         | Segnet             |
 
-
 Example results for the pre-trained models provided :
 
 Input Image            |  Output Segmentation Image
 :-------------------------:|:-------------------------:
-![](sample_images/1_input.jpg)  |  ![](sample_images/1_output.png)
-![](sample_images/3_input.jpg)  |  ![](sample_images/3_output.png)
-
+![sample_images/1_input.jpg](sample_images/1_input.jpg)  |  ![sample_images/1_input.jpg](sample_images/1_output.png)
+![sample_images/3_input.jpg](sample_images/3_input.jpg)  |  ![sample_images/3_input.jpg](sample_images/3_output.png)
 
 ## Getting Started
 
 ### Prerequisites
 
-* Keras ( recommended version : 2.4.3 )
-* OpenCV for Python
-* Tensorflow ( recommended  version : 2.4.1 )
+* Tensorflow
+* OpenCV
 
 ```shell
 apt-get install -y libsm6 libxext6 libxrender-dev
@@ -90,17 +83,18 @@ pip install opencv-python
 Install the module
 
 Recommended way:
+
 ```shell
 pip install --upgrade git+https://github.com/divamgupta/image-segmentation-keras
 ```
 
-### or 
+### or-1
 
 ```shell
 pip install keras-segmentation
 ```
 
-### or
+### or-2
 
 ```shell
 git clone https://github.com/divamgupta/image-segmentation-keras
@@ -108,8 +102,12 @@ cd image-segmentation-keras
 python setup.py install
 ```
 
+## Quick Demo
 
-## Pre-trained models:
+`python image-segmentation-keras/examples/demo.py`
+
+## Pre-trained models
+
 ```python
 from keras_segmentation.pretrained import pspnet_50_ADE_20K , pspnet_101_cityscapes, pspnet_101_voc12
 
@@ -122,18 +120,16 @@ model = pspnet_101_voc12() # load the pretrained model trained on Pascal VOC 201
 # load any of the 3 pretrained models
 
 out = model.predict_segmentation(
-    inp="input_image.jpg",
+    inp="keras_segmentation/sample_images/1_input.jpg",
     out_fname="out.png"
 )
-
 ```
-
 
 ### Preparing the data for training
 
 You need to make two folders
 
-*  Images Folder - For all the training images
+* Images Folder - For all the training images
 * Annotations Folder - For the corresponding ground truth segmentation images
 
 The filenames of the annotation images should be same as the filenames of the RGB images.
@@ -160,10 +156,9 @@ Only use bmp or png format for the annotation images.
 
 Download and extract the following:
 
-https://drive.google.com/file/d/0B0d9ZiqAgFkiOHR1NTJhWVJMNEU/view?usp=sharing
+<https://drive.google.com/file/d/0B0d9ZiqAgFkiOHR1NTJhWVJMNEU/view?usp=sharing>
 
 You will get a folder named dataset1/
-
 
 ## Using the python module
 
@@ -193,14 +188,13 @@ print(model.evaluate_segmentation( inp_images_dir="dataset1/images_prepped_test/
 
 ```
 
-
 ## Usage via command line
+
 You can also use the tool just using command line
 
 ### Visualizing the prepared data
 
 You can also visualize your prepared annotations for verification of the prepared data.
-
 
 ```shell
 python -m keras_segmentation verify_dataset \
@@ -215,8 +209,6 @@ python -m keras_segmentation visualize_dataset \
  --segs_path="dataset1/annotations_prepped_train/"  \
  --n_classes=50
 ```
-
-
 
 ### Training the Model
 
@@ -237,8 +229,6 @@ python -m keras_segmentation train \
 
 Choose model_name from the table above
 
-
-
 ### Getting the predictions
 
 To get the predictions of a trained model
@@ -251,11 +241,10 @@ python -m keras_segmentation predict \
 
 ```
 
-
-
 ### Video inference
 
 To get predictions of a video
+
 ```shell
 python -m keras_segmentation predict_video \
  --checkpoints_path="path_to_checkpoints" \
@@ -267,10 +256,9 @@ python -m keras_segmentation predict_video \
 If you want to make predictions on your webcam, don't use `--input`, or pass your device number: `--input 0`  
 `--display` opens a window with the predicted video. Remove this argument when using a headless system.
 
+### Model Evaluation
 
-### Model Evaluation 
-
-To get the IoU scores 
+To get the IoU scores
 
 ```shell
 python -m keras_segmentation evaluate_model \
@@ -278,8 +266,6 @@ python -m keras_segmentation evaluate_model \
  --images_path="dataset1/images_prepped_test/" \
  --segs_path="dataset1/annotations_prepped_test/"
 ```
-
-
 
 ## Fine-tuning from existing segmentation model
 
@@ -301,15 +287,11 @@ new_model.train(
     train_annotations = "dataset1/annotations_prepped_train/",
     checkpoints_path = "/tmp/vgg_unet_1" , epochs=5
 )
-
-
 ```
-
-
 
 ## Knowledge distillation for compressing the model
 
-The following example shows transfer the knowledge from a larger ( and more accurate ) model to a smaller model. In most cases the smaller model trained via knowledge distilation is more accurate compared to the same model trained using vanilla supervised learning. 
+The following example shows transfer the knowledge from a larger ( and more accurate ) model to a smaller model. In most cases the smaller model trained via knowledge distilation is more accurate compared to the same model trained using vanilla supervised learning.
 
 ```python
 from keras_segmentation.predict import model_from_checkpoint_path
@@ -323,10 +305,6 @@ perform_distilation ( data_path="/path/to/large_image_set/" , checkpoints_path="
     teacher_model=model_large ,  student_model=model_small  , distilation_loss='kl' , feats_distilation_loss='pa' )
 
 ```
-
-
-
-
 
 ## Adding custom augmentation function to training
 
@@ -355,6 +333,7 @@ model.train(
     custom_augmentation=custom_augmentation # sets the augmention function to use
 )
 ```
+
 ## Custom number of input channels
 
 The following example shows how to set the number of input channels.
@@ -454,44 +433,44 @@ model.train(
 )
 ```
 
-
 ## Projects using keras-segmentation
+
 Here are a few projects which are using our library :
-* https://github.com/SteliosTsop/QF-image-segmentation-keras [paper](https://arxiv.org/pdf/1908.02242.pdf)
-* https://github.com/willembressers/bouquet_quality
-* https://github.com/jqueguiner/image-segmentation
-* https://github.com/pan0rama/CS230-Microcrystal-Facet-Segmentation
-* https://github.com/theerawatramchuen/Keras_Segmentation
-* https://github.com/neheller/labels18
-* https://github.com/Divyam10/Face-Matting-using-Unet
-* https://github.com/shsh-a/segmentation-over-web
-* https://github.com/chenwe73/deep_active_learning_segmentation
-* https://github.com/vigneshrajap/vision-based-navigation-agri-fields
-* https://github.com/ronalddas/Pneumonia-Detection
-* https://github.com/Aiwiscal/ECG_UNet
-* https://github.com/TianzhongSong/Unet-for-Person-Segmentation
-* https://github.com/Guyanqi/GMDNN
-* https://github.com/kozemzak/prostate-lesion-segmentation
-* https://github.com/lixiaoyu12138/fcn-date
-* https://github.com/sagarbhokre/LyftChallenge
-* https://github.com/TianzhongSong/Person-Segmentation-Keras
-* https://github.com/divyanshpuri02/COCO_2018-Stuff-Segmentation-Challenge
-* https://github.com/XiangbingJi/Stanford-cs230-final-project
-* https://github.com/lsh1994/keras-segmentation
-* https://github.com/SpirinEgor/mobile_semantic_segmentation
-* https://github.com/LeadingIndiaAI/COCO-DATASET-STUFF-SEGMENTATION-CHALLENGE
-* https://github.com/lidongyue12138/Image-Segmentation-by-Keras
-* https://github.com/laoj2/segnet_crfasrnn
-* https://github.com/rancheng/AirSimProjects
-* https://github.com/RadiumScriptTang/cartoon_segmentation
-* https://github.com/dquail/NerveSegmentation
-* https://github.com/Bhomik/SemanticHumanMatting
-* https://github.com/Symefa/FP-Biomedik-Breast-Cancer
-* https://github.com/Alpha-Monocerotis/PDF_FigureTable_Extraction
-* https://github.com/rusito-23/mobile_unet_segmentation
-* https://github.com/Philliec459/ThinSection-image-segmentation-keras
-* https://github.com/imsadia/cv-assignment-three.git
-* https://github.com/kejitan/ESVGscale
+
+* <https://github.com/SteliosTsop/QF-image-segmentation-keras> [paper](https://arxiv.org/pdf/1908.02242.pdf)
+* <https://github.com/willembressers/bouquet_quality>
+* <https://github.com/jqueguiner/image-segmentation>
+* <https://github.com/pan0rama/CS230-Microcrystal-Facet-Segmentation>
+* <https://github.com/theerawatramchuen/Keras_Segmentation>
+* <https://github.com/neheller/labels18>
+* <https://github.com/Divyam10/Face-Matting-using-Unet>
+* <https://github.com/shsh-a/segmentation-over-web>
+* <https://github.com/chenwe73/deep_active_learning_segmentation>
+* <https://github.com/vigneshrajap/vision-based-navigation-agri-fields>
+* <https://github.com/ronalddas/Pneumonia-Detection>
+* <https://github.com/Aiwiscal/ECG_UNet>
+* <https://github.com/TianzhongSong/Unet-for-Person-Segmentation>
+* <https://github.com/Guyanqi/GMDNN>
+* <https://github.com/kozemzak/prostate-lesion-segmentation>
+* <https://github.com/lixiaoyu12138/fcn-date>
+* <https://github.com/sagarbhokre/LyftChallenge>
+* <https://github.com/TianzhongSong/Person-Segmentation-Keras>
+* <https://github.com/divyanshpuri02/COCO_2018-Stuff-Segmentation-Challenge>
+* <https://github.com/XiangbingJi/Stanford-cs230-final-project>
+* <https://github.com/lsh1994/keras-segmentation>
+* <https://github.com/SpirinEgor/mobile_semantic_segmentation>
+* <https://github.com/LeadingIndiaAI/COCO-DATASET-STUFF-SEGMENTATION-CHALLENGE>
+* <https://github.com/lidongyue12138/Image-Segmentation-by-Keras>
+* <https://github.com/laoj2/segnet_crfasrnn>
+* <https://github.com/rancheng/AirSimProjects>
+* <https://github.com/RadiumScriptTang/cartoon_segmentation>
+* <https://github.com/dquail/NerveSegmentation>
+* <https://github.com/Bhomik/SemanticHumanMatting>
+* <https://github.com/Symefa/FP-Biomedik-Breast-Cancer>
+* <https://github.com/Alpha-Monocerotis/PDF_FigureTable_Extraction>
+* <https://github.com/rusito-23/mobile_unet_segmentation>
+* <https://github.com/Philliec459/ThinSection-image-segmentation-keras>
+* <https://github.com/imsadia/cv-assignment-three.git>
+* <https://github.com/kejitan/ESVGscale>
 
 If you use our code in a publicly available project, please add the link here ( by posting an issue or creating a PR )
-

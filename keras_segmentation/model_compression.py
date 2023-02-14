@@ -1,4 +1,3 @@
-import keras
 import tensorflow as tf
 
 from tqdm import tqdm 
@@ -11,7 +10,7 @@ import sys
 from .data_utils.data_loader import image_segmentation_generator
 from .train import CheckpointsCallback 
 
-from keras.models import Model 
+from tf.keras.models import Model 
 
 
 
@@ -44,7 +43,7 @@ def pairwise_dist_loss( feats_t , feats_s ):
 
 
 
-class Distiller(keras.Model):
+class Distiller(tf.keras.Model):
     def __init__(self, student, teacher , distilation_loss , feats_distilation_loss=None , feats_distilation_loss_w=0.1   ):
         super(Distiller, self).__init__()
         self.teacher = teacher
@@ -141,7 +140,7 @@ def perform_distilation(teacher_model ,student_model, data_path , distilation_lo
                         feats_distilation_loss=None , feats_distilation_loss_w=0.1  ):
     
     
-    losses_dict = { 'l1':keras.losses.MeanAbsoluteError() , "l2": keras.losses.MeanSquaredError() , "kl":keras.losses.KLDivergence() , 'pa':pairwise_dist_loss }
+    losses_dict = { 'l1':tf.keras.losses.MeanAbsoluteError() , "l2": tf.keras.losses.MeanSquaredError() , "kl":tf.keras.losses.KLDivergence() , 'pa':pairwise_dist_loss }
 
     if isinstance( distilation_loss , six.string_types):
         distilation_loss = losses_dict[ distilation_loss ]

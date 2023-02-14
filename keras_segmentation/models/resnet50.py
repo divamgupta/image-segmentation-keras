@@ -1,7 +1,6 @@
-import keras
-from keras.models import *
-from keras.layers import *
-from keras import layers
+from tensorflow.keras.models import *
+from tensorflow.keras.layers import *
+from tensorflow.keras import layers
 import tensorflow as tf
 
 # Source:
@@ -121,7 +120,7 @@ def conv_block(input_tensor, kernel_size, filters, stage, block,
 
 
 def get_resnet50_encoder(input_height=224,  input_width=224,
-                         pretrained='imagenet',
+                         pre_trained='imagenet',
                          include_top=True, weights='imagenet',
                          input_tensor=None, input_shape=None,
                          pooling=None,
@@ -177,7 +176,7 @@ def get_resnet50_encoder(input_height=224,  input_width=224,
         (7, 7), data_format=IMAGE_ORDERING, name='avg_pool')(x)
     # f6 = x
 
-    if pretrained == 'imagenet':
+    if pre_trained == 'imagenet':
         weights_path = tf.keras.utils.get_file(
             pretrained_url.split("/")[-1], pretrained_url)
         Model(img_input, x).load_weights(weights_path, by_name=True, skip_mismatch=True)

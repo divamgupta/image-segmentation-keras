@@ -1,7 +1,6 @@
-from keras.models import *
-from keras.layers import *
-import keras.backend as K
-import keras
+from tensorflow.keras.models import *
+from tensorflow.keras.layers import *
+import tensorflow.keras.backend as K
 import tensorflow as tf
 from .config import IMAGE_ORDERING
 
@@ -57,7 +56,7 @@ def _depthwise_conv_block(inputs, pointwise_conv_filters, alpha,
 
 
 def get_mobilenet_encoder(input_height=224, input_width=224,
-                          pretrained='imagenet', channels=3):
+                          pre_trained='imagenet', channels=3):
 
     # todo add more alpha and stuff
 
@@ -103,7 +102,7 @@ def get_mobilenet_encoder(input_height=224, input_width=224,
     x = _depthwise_conv_block(x, 1024, alpha, depth_multiplier, block_id=13)
     f5 = x
 
-    if pretrained == 'imagenet':
+    if pre_trained == 'imagenet':
         model_name = 'mobilenet_%s_%d_tf_no_top.h5' % ('1_0', 224)
 
         weight_path = BASE_WEIGHT_PATH + model_name

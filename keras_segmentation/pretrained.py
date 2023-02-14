@@ -1,4 +1,3 @@
-import keras
 import tensorflow as tf
 from .models.all_models import model_from_name
 

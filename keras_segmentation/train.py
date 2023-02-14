@@ -4,8 +4,8 @@ import os
 from .data_utils.data_loader import image_segmentation_generator, \
     verify_segmentation_dataset
 import six
-from keras.callbacks import Callback
-from keras.callbacks import ModelCheckpoint
+from tensorflow.keras.callbacks import Callback
+from tensorflow.keras.callbacks import ModelCheckpoint
 import tensorflow as tf
 import glob
 import sys
@@ -42,7 +42,7 @@ def find_latest_checkpoint(checkpoints_path, fail_safe=True):
     return latest_epoch_checkpoint
 
 def masked_categorical_crossentropy(gt, pr):
-    from keras.losses import categorical_crossentropy
+    from tf.keras.losses import categorical_crossentropy
     mask = 1 - gt[:, :, 0]
     return categorical_crossentropy(gt, pr) * mask
 
@@ -53,8 +53,8 @@ class CheckpointsCallback(Callback):
 
     def on_epoch_end(self, epoch, logs=None):
         if self.checkpoints_path is not None:
-            self.model.save_weights(self.checkpoints_path + "." + str(epoch))
-            print("saved ", self.checkpoints_path + "." + str(epoch))
+            self.model.save_weights(self.checkpoints_path)
+            print("saved ", self.checkpoints_path)
 
 
 def train(model,
@@ -120,22 +120,22 @@ def train(model,
                       optimizer=optimizer_name,
                       metrics=['accuracy'])
 
-    if checkpoints_path is not None:
-        config_file = checkpoints_path + "_config.json"
-        dir_name = os.path.dirname(config_file)
+    # if checkpoints_path is not None:
+    #     config_file = checkpoints_path + "_config.json"
+    #     dir_name = os.path.dirname(config_file)
 
-        if ( not os.path.exists(dir_name) )  and len( dir_name ) > 0 :
-            os.makedirs(dir_name)
+    #     if ( not os.path.exists(dir_name) )  and len( dir_name ) > 0 :
+    #         os.makedirs(dir_name)
 
-        with open(config_file, "w") as f:
-            json.dump({
-                "model_class": model.model_name,
-                "n_classes": n_classes,
-                "input_height": input_height,
-                "input_width": input_width,
-                "output_height": output_height,
-                "output_width": output_width
-            }, f)
+    #     with open(config_file, "w") as f:
+    #         json.dump({
+    #             "model_class": model.model_name,
+    #             "n_classes": n_classes,
+    #             "input_height": input_height,
+    #             "input_width": input_width,
+    #             "output_height": output_height,
+    #             "output_width": output_width
+    #         }, f)
 
     if load_weights is not None and len(load_weights) > 0:
         print("Loading weights from ", load_weights)
@@ -180,10 +180,18 @@ def train(model,
             preprocessing=preprocessing, read_image_type=read_image_type)
 
     if callbacks is None and (not checkpoints_path is  None) :
+        # default_callback = ModelCheckpoint(
+            #     filepath=checkpoints_path,
+            #     save_weights_only=True,
+            #     verbose=True
+            # )
         default_callback = ModelCheckpoint(
-                filepath=checkpoints_path + ".{epoch:05d}",
+                filepath=os.path.join(checkpoints_path),
                 save_weights_only=True,
-                verbose=True
+                save_best_only=True,
+                verbose=True,
+                mode='max',
+                monitor='val_accuracy'
             )
 
         if sys.version_info[0] < 3: # for pyhton 2 

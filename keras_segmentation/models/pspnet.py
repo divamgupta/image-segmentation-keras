@@ -1,8 +1,7 @@
 import numpy as np
-import keras
-from keras.models import *
-from keras.layers import *
-import keras.backend as K
+from tensorflow.keras.models import *
+from tensorflow.keras.layers import *
+import tensorflow.keras.backend as K
 
 from .config import IMAGE_ORDERING
 from .model_utils import get_segmentation_model, resize_image
@@ -42,7 +41,7 @@ def pool_block(feats, pool_factor):
     return x
 
 
-def _pspnet(n_classes, encoder,  input_height=384, input_width=576, channels=3):
+def _pspnet(n_classes, encoder,  input_height=384, input_width=576, channels=3, pre_trained=None):
 
     assert input_height % 192 == 0
     assert input_width % 192 == 0
@@ -74,31 +73,31 @@ def _pspnet(n_classes, encoder,  input_height=384, input_width=576, channels=3):
     return model
 
 
-def pspnet(n_classes,  input_height=384, input_width=576, channels=3):
+def pspnet(n_classes,  input_height=384, input_width=576, channels=3, pre_trained=None):
 
     model = _pspnet(n_classes, vanilla_encoder,
-                    input_height=input_height, input_width=input_width, channels=channels)
+                    input_height=input_height, input_width=input_width, channels=channels, pre_trained=pre_trained)
     model.model_name = "pspnet"
     return model
 
 
-def vgg_pspnet(n_classes,  input_height=384, input_width=576, channels=3):
+def vgg_pspnet(n_classes,  input_height=384, input_width=576, channels=3,pre_trained=None):
 
     model = _pspnet(n_classes, get_vgg_encoder,
-                    input_height=input_height, input_width=input_width, channels=channels)
+                    input_height=input_height, input_width=input_width, channels=channels, pre_trained=pre_trained)
     model.model_name = "vgg_pspnet"
     return model
 
 
-def resnet50_pspnet(n_classes,  input_height=384, input_width=576, channels=3):
+def resnet50_pspnet(n_classes,  input_height=384, input_width=576, channels=3, pre_trained=None):
 
     model = _pspnet(n_classes, get_resnet50_encoder,
-                    input_height=input_height, input_width=input_width, channels=channels)
+                    input_height=input_height, input_width=input_width, channels=channels, pre_trained=pre_trained)
     model.model_name = "resnet50_pspnet"
     return model
 
 
-def pspnet_50(n_classes,  input_height=473, input_width=473, channels=3):
+def pspnet_50(n_classes,  input_height=473, input_width=473, channels=3, pre_trained=None):
     from ._pspnet_2 import _build_pspnet
 
     nb_classes = n_classes
@@ -106,12 +105,12 @@ def pspnet_50(n_classes,  input_height=473, input_width=473, channels=3):
     input_shape = (input_height, input_width)
     model = _build_pspnet(nb_classes=nb_classes,
                           resnet_layers=resnet_layers,
-                          input_shape=input_shape, channels=channels)
+                          input_shape=input_shape, channels=channels, pre_trained=pre_trained)
     model.model_name = "pspnet_50"
     return model
 
 
-def pspnet_101(n_classes,  input_height=473, input_width=473, channels=3):
+def pspnet_101(n_classes,  input_height=473, input_width=473, channels=3, pre_trained=None):
     from ._pspnet_2 import _build_pspnet
 
     nb_classes = n_classes
@@ -119,7 +118,7 @@ def pspnet_101(n_classes,  input_height=473, input_width=473, channels=3):
     input_shape = (input_height, input_width)
     model = _build_pspnet(nb_classes=nb_classes,
                           resnet_layers=resnet_layers,
-                          input_shape=input_shape, channels=channels)
+                          input_shape=input_shape, channels=channels, pre_trained=pre_trained)
     model.model_name = "pspnet_101"
     return model
 
