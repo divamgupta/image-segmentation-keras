@@ -6,7 +6,7 @@ from keras import layers
 from keras.layers import Conv2D, MaxPooling2D, AveragePooling2D
 from keras.layers import BatchNormalization, Activation,\
     Input, Dropout, ZeroPadding2D
-from keras.layers.merge import Concatenate, Add
+from keras.layers import Concatenate, Add
 import tensorflow as tf
 
 from .config import IMAGE_ORDERING
