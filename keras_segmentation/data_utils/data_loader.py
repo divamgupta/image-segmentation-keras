@@ -4,6 +4,7 @@ import random
 import six
 import numpy as np
 import cv2
+import imageio
 
 try:
     from collections.abc import Sequence
@@ -142,6 +143,8 @@ def get_image_array(image_input,
             raise DataLoaderError("get_image_array: path {0} doesn't exist"
                                   .format(image_input))
         img = cv2.imread(image_input, read_image_type)
+    elif isinstance(image_input, imageio.core.util.Array):
+        img = np.asarray(image_input)
     else:
         raise DataLoaderError("get_image_array: Can't process input type {0}"
                               .format(str(type(image_input))))
