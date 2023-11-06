@@ -145,6 +145,9 @@ def predict(model=None, inp=None, out_fname=None,
     if isinstance(inp, six.string_types):
         inp = cv2.imread(inp, read_image_type)
 
+    if read_image_type == cv2.IMREAD_GRAYSCALE:
+        inp = np.reshape(inp, (inp.shape[0], inp.shape[1], 1))
+
     assert (len(inp.shape) == 3 or len(inp.shape) == 1 or len(inp.shape) == 4), "Image should be h,w,3 "
 
     output_width = model.output_width
