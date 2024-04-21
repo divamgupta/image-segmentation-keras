@@ -106,7 +106,7 @@ Install the module
 
 Recommended way:
 ```shell
-pip install --upgrade git+https://github.com/divamgupta/image-segmentation-keras
+pip install --upgrade git+https://github.com/Farahinha00/image-segmentation-keras
 ```
 
 ### or 
