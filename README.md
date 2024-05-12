@@ -252,6 +252,33 @@ python -m keras_segmentation train \
 
 Choose model_name from the table above
 
+### Save and load the model
+To save model , the checkpoint path will auto save model , but in case got error about .h5 extention you can modify the train.py line 184 from .{epoch:05d} to .weights.h5 
+and checkpoint path to include file name ex: checkpoints_path = "checkpoint_dir/filename"
+then to load the model again later : 
+```shell
+from keras_segmentation.pretrained import model_from_checkpoint_path
+
+model_config = {
+        
+        "input_height": <number>,
+        "input_width": <number>,
+        "n_classes": <number>,
+        "model_class": "vgg_unet",
+        
+    }
+
+model = model_from_checkpoint_path(model_config, "checkpoint/t.weights.h5")
+
+resimg = model.predict_segmentation("target_dataset/big_images/big_1.jpg")
+#resimg = model.predict_segmentation("farm/farm.jpg")
+
+# Display the segmented image
+plt.imshow(resimg)
+plt.axis('off')  # Turn off axis
+plt.show()
+
+```
 
 
 ### Getting the predictions
