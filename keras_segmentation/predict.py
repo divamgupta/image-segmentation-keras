@@ -10,17 +10,31 @@ from tqdm import tqdm
 from time import time
 
 from .train import find_latest_checkpoint
-from .data_utils.data_loader import get_image_array, get_segmentation_array,\
+from .data_utils.data_loader import get_image_array, get_segmentation_array, \
     DATA_LOADER_SEED, class_colors, get_pairs_from_paths
 from .models.config import IMAGE_ORDERING
-
 
 random.seed(DATA_LOADER_SEED)
 
 
-def model_from_checkpoint_path(checkpoints_path):
-
+def load_segmentation_model(model_config: dict, weights: str):
     from .models.all_models import model_from_name
+
+    model = model_from_name[model_config['model_class']](
+        model_config['n_classes'], input_height=model_config['input_height'],
+        input_width=model_config['input_width'])
+    print("loaded weights ", weights)
+    status = model.load_weights(weights)
+
+    if status is not None:
+        status.expect_partial()
+
+    return model
+
+
+def model_from_checkpoint_path(checkpoints_path):
+    from .models.all_models import model_from_name
+
     assert (os.path.isfile(checkpoints_path+"_config.json")
             ), "Checkpoint not found."
     model_config = json.loads(
@@ -76,7 +90,8 @@ def get_legends(class_names, colors=class_colors):
 def overlay_seg_image(inp_img, seg_img):
     orininal_h = inp_img.shape[0]
     orininal_w = inp_img.shape[1]
-    seg_img = cv2.resize(seg_img, (orininal_w, orininal_h), interpolation=cv2.INTER_NEAREST)
+    seg_img = cv2.resize(seg_img, (orininal_w, orininal_h),
+                         interpolation=cv2.INTER_NEAREST)
 
     fused_img = (inp_img/2 + seg_img/2).astype('uint8')
     return fused_img
@@ -108,10 +123,12 @@ def visualize_segmentation(seg_arr, inp_img=None, n_classes=None,
     if inp_img is not None:
         original_h = inp_img.shape[0]
         original_w = inp_img.shape[1]
-        seg_img = cv2.resize(seg_img, (original_w, original_h), interpolation=cv2.INTER_NEAREST)
+        seg_img = cv2.resize(seg_img, (original_w, original_h),
+                             interpolation=cv2.INTER_NEAREST)
 
     if (prediction_height is not None) and (prediction_width is not None):
-        seg_img = cv2.resize(seg_img, (prediction_width, prediction_height), interpolation=cv2.INTER_NEAREST)
+        seg_img = cv2.resize(
+            seg_img, (prediction_width, prediction_height), interpolation=cv2.INTER_NEAREST)
         if inp_img is not None:
             inp_img = cv2.resize(inp_img,
                                  (prediction_width, prediction_height))
@@ -139,13 +156,14 @@ def predict(model=None, inp=None, out_fname=None,
         model = model_from_checkpoint_path(checkpoints_path)
 
     assert (inp is not None)
-    assert ((type(inp) is np.ndarray) or isinstance(inp, six.string_types)),\
+    assert ((type(inp) is np.ndarray) or isinstance(inp, six.string_types)), \
         "Input should be the CV image or the input file name"
 
     if isinstance(inp, six.string_types):
         inp = cv2.imread(inp, read_image_type)
 
-    assert (len(inp.shape) == 3 or len(inp.shape) == 1 or len(inp.shape) == 4), "Image should be h,w,3 "
+    assert (len(inp.shape) == 3 or len(inp.shape) ==
+            1 or len(inp.shape) == 4), "Image should be h,w,3 "
 
     output_width = model.output_width
     output_height = model.output_height
@@ -193,7 +211,6 @@ def predict_multiple(model=None, inps=None, inp_dir=None, out_dir=None,
         if not os.path.exists(out_dir):
             os.makedirs(out_dir)
 
-
     for i, inp in enumerate(tqdm(inps)):
         if out_dir is None:
             out_fname = None
@@ -235,7 +252,7 @@ def predict_video(model=None, inp=None, output=None,
     n_classes = model.n_classes
 
     cap, video, fps = set_video(inp, output)
-    while(cap.isOpened()):
+    while (cap.isOpened()):
         prev_time = time()
         ret, frame = cap.read()
         if frame is not None:
@@ -248,7 +265,7 @@ def predict_video(model=None, inp=None, output=None,
                 class_names=class_names,
                 prediction_width=prediction_width,
                 prediction_height=prediction_height
-                )
+            )
         else:
             break
         print("FPS: {}".format(1/(time() - prev_time)))
@@ -268,14 +285,14 @@ def evaluate(model=None, inp_images=None, annotations=None,
              inp_images_dir=None, annotations_dir=None, checkpoints_path=None, read_image_type=1):
 
     if model is None:
-        assert (checkpoints_path is not None),\
-                "Please provide the model or the checkpoints_path"
+        assert (checkpoints_path is not None), \
+            "Please provide the model or the checkpoints_path"
         model = model_from_checkpoint_path(checkpoints_path)
 
     if inp_images is None:
-        assert (inp_images_dir is not None),\
-                "Please provide inp_images or inp_images_dir"
-        assert (annotations_dir is not None),\
+        assert (inp_images_dir is not None), \
+            "Please provide inp_images or inp_images_dir"
+        assert (annotations_dir is not None), \
             "Please provide inp_images or inp_images_dir"
 
         paths = get_pairs_from_paths(inp_images_dir, annotations_dir)
